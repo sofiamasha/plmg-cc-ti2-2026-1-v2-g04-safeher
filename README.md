@@ -18,7 +18,7 @@ Além disso, a plataforma permite a **avaliação de empresas**, criando um índ
 ## 🌼👨‍🏫 **Professores responsáveis**
 
 * 🌷 **Humberto Torres**
-* 🌷 **Ilo AMy**
+* 🌷 **Ilo Amy**
 
 ---
 
