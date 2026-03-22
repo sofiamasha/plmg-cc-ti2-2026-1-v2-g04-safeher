@@ -8,7 +8,7 @@ Além disso, a plataforma permite a **avaliação de empresas**, criando um índ
 
 ## 🌷👩‍💻 **Alunos integrantes da equipe**
 
-* 🌸 **Camille Vitória**
+* 🌸 **Kamilly Vitória**
 * 🌸 **Lana Santos da Silva**
 * 🌸 **Maria Fernanda Oliveira**
 * 🌸 **Sofia de Abreu Botelho**
