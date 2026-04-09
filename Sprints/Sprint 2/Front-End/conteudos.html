@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeHer</title>
+    <link rel="stylesheet" href="global.css">
+    <style>
+        .article-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: 0.3s;
+            cursor: pointer;
+            border: 2px solid transparent;
+            display: flex;
+            flex-direction: column;
+        }
+        .article-card:hover {
+            border-color: var(--pink-primary);
+            transform: translateY(-8px);
+        }
+        .article-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        .badge-category {
+            background: var(--pink-light);
+            color: var(--pink-dark);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+        .article-title {
+            font-size: 20px;
+            color: var(--pink-dark);
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+        .article-excerpt {
+            font-size: 15px;
+            color: var(--text-gray);
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+        .read-more {
+            color: var(--pink-primary);
+            font-weight: 600;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.3s;
+        }
+        .read-more:hover {
+            gap: 12px;
+        }
+        .acervo-card {
+            background: var(--pink-light);
+            border: 2px dashed var(--pink-primary);
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+        }
+        .acervo-card:hover {
+            background: #FDEEF4;
+            border-style: solid;
+        }
+        .acervo-icon {
+            font-size: 56px;
+            color: var(--pink-primary);
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="sh-header">
+            <a href="index.html" class="sh-logo">
+                <img src="logo.png" alt="SafeHer Logo" class="sh-logo-img">
+            </a>
+            <div class="sh-nav">
+                <a href="index.html">Início</a>
+                <a href="denuncias.html">Denúncias</a>
+                <a href="avaliacoes.html">Avaliações</a>
+                <a href="api.html">API</a>
+                <a href="conteudos.html" class="active">Conteúdos</a>
+                <a href="vagas.html">Vagas</a>
+                <a href="login.html" class="sh-btn" style="color: white;">Entrar</a>
+                <a href="escolha-cadastro.html" class="sh-btn-outline">Criar conta</a>
+            </div>
+        </header>
+
+        <main>
+            <div style="margin-bottom: 40px;">
+                <h2 class="sh-title">Conteúdos e Seus Direitos</h2>
+                <p class="sh-subtitle">Informação é a sua maior ferramenta de defesa. Leia artigos, conheça as leis e saiba como se proteger no ambiente corporativo e além.</p>
+            </div>
+
+            <div class="three-cols">
+                <div class="article-card">
+                    <img src="resources/images/rights_article_1.jpeg" class="article-img" alt="Direitos da Mulher" onerror="this.onerror=null; this.src='resources/images/fallback.svg';">
+                    <div class="badge-category">Guia Legal</div>
+                    <h3 class="article-title">Conheça os seus direitos na CLT</h3>
+                    <p class="article-excerpt">Entenda detalhadamente o que a lei garante em relação a igualdade salarial, licença-maternidade e proteção contra demissão arbitrária e preconceito.</p>
+                    <a href="#" class="read-more">Ler artigo completo <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+
+                <div class="article-card">
+                    <img src="resources/images/rights_article_2.jpeg" class="article-img" alt="Apoio Mútuo" onerror="this.onerror=null; this.src='resources/images/fallback.svg';">
+                    <div class="badge-category">Saúde Mental</div>
+                    <h3 class="article-title">Como identificar o Assédio Moral</h3>
+                    <p class="article-excerpt">O assédio nem sempre é explícito ou óbvio. Aprenda a reconhecer microagressões, gaslighting e outras situações tóxicas recorrentes no dia a dia.</p>
+                    <a href="#" class="read-more">Ler artigo completo <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+
+                <div class="article-card acervo-card">
+                    <i class="fa-solid fa-folder-open acervo-icon"></i>
+                    <h3 class="article-title">Acervo Completo</h3>
+                    <p class="article-excerpt" style="flex-grow: 0;">Tenha acesso a mais de 150 artigos detalhados, cartilhas em PDF para baixar e vídeos com dicas de especialistas em direito do trabalho.</p>
+                    <button class="sh-btn">Explorar Biblioteca</button>
+                </div>
+            </div>
+        </main>
+    </div>
+    <footer class="sh-footer">
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <a href="index.html">
+                    <img src="logo.png" alt="SafeHer" class="sh-logo-img" style="filter: brightness(0) invert(1);">
+                </a>
+                <p>Protegendo mulheres, denunciando abusos e transformando o ambiente corporativo com transparência e justiça.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Nossas Redes Sociais</h4>
+                <div class="social-icons">
+                    <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                    <a href="#" aria-label="Twitter/X"><i class="fa-brands fa-twitter"></i></a>
+                </div>
+            </div>
+            <div class="footer-emergency">
+                <h4>Contatos de Emergência</h4>
+                <p><i class="fa-solid fa-phone"></i> <strong>180</strong> - Central de Atendimento à Mulher</p>
+                <p><i class="fa-solid fa-phone"></i> <strong>190</strong> - Polícia Militar</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 SafeHer. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+</body>
+</html>

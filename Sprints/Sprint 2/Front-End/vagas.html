@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeHer</title>
+    <link rel="stylesheet" href="global.css">
+    <style>
+        .job-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--white);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+            margin-bottom: 20px;
+            border-left: 6px solid var(--pink-primary);
+            border-right: 2px solid transparent;
+            border-top: 2px solid transparent;
+            border-bottom: 2px solid transparent;
+            transition: 0.3s;
+        }
+        .job-card:hover {
+            transform: translateX(5px);
+            border-color: var(--pink-primary);
+            border-left-width: 8px;
+            box-shadow: 0 10px 25px rgba(227, 58, 127, 0.1);
+        }
+        .job-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--pink-dark);
+            margin-bottom: 8px;
+        }
+        .job-company {
+            font-size: 15px;
+            color: var(--text-gray);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+        .job-meta {
+            display: flex;
+            gap: 24px;
+            margin-top: 16px;
+            font-size: 14px;
+            color: var(--text-gray);
+            flex-wrap: wrap;
+        }
+        .job-meta span {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #f5f5f5;
+            padding: 6px 12px;
+            border-radius: 6px;
+        }
+        .badge-safe {
+            background: var(--pink-light);
+            color: var(--pink-dark);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-left: 12px;
+        }
+        .filters {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        @media (max-width: 768px) {
+            .job-card {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+            .job-card .sh-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="sh-header">
+            <a href="index.html" class="sh-logo">
+                <img src="logo.png" alt="SafeHer Logo" class="sh-logo-img">
+            </a>
+            <div class="sh-nav">
+                <a href="index.html">Início</a>
+                <a href="denuncias.html">Denúncias</a>
+                <a href="avaliacoes.html">Avaliações</a>
+                <a href="api.html">API</a>
+                <a href="conteudos.html">Conteúdos</a>
+                <a href="vagas.html" class="active">Vagas</a>
+                <a href="login.html" class="sh-btn" style="color: white;">Entrar</a>
+                <a href="escolha-cadastro.html" class="sh-btn-outline">Criar conta</a>
+            </div>
+        </header>
+
+        <main>
+            <div class="filters">
+                <div>
+                    <h2 class="sh-title">Vagas Éticas</h2>
+                    <p class="sh-subtitle" style="margin-bottom: 0;">Oportunidades de carreira exclusivas em empresas rigorosamente certificadas e bem avaliadas pela nossa comunidade de mulheres.</p>
+                </div>
+                <button class="sh-btn-outline" style="white-space: nowrap;"><i class="fa-solid fa-filter"></i> Filtrar Vagas</button>
+            </div>
+
+            <div style="margin-bottom: 60px;">
+                <div class="job-card">
+                    <div>
+                        <h3 class="job-title">Desenvolvedora Front-end Sênior</h3>
+                        <div class="job-company">
+                            <i class="fa-solid fa-building" style="color: var(--pink-primary);"></i> Empresa Alpha
+                            <span class="badge-safe"><i class="fa-solid fa-shield-heart"></i> Empresa Segura (Nota: 4.8)</span>
+                        </div>
+                        <div class="job-meta">
+                            <span><i class="fa-solid fa-location-dot" style="color: var(--pink-primary);"></i> 100% Remoto</span>
+                            <span><i class="fa-regular fa-money-bill-1" style="color: #27C93F;"></i> R$ 9.000 - R$ 12.000</span>
+                            <span><i class="fa-regular fa-clock"></i> Tempo Integral</span>
+                            <span><i class="fa-solid fa-laptop-code"></i> Tecnologia</span>
+                        </div>
+                    </div>
+                    <button class="sh-btn">Candidatar-se Agora</button>
+                </div>
+
+                <div class="job-card">
+                    <div>
+                        <h3 class="job-title">Gerente de Projetos de TI (Agile)</h3>
+                        <div class="job-company">
+                            <i class="fa-solid fa-industry" style="color: var(--pink-primary);"></i> Global Tech
+                            <span class="badge-safe"><i class="fa-solid fa-shield-heart"></i> Empresa Segura (Nota: 4.2)</span>
+                        </div>
+                        <div class="job-meta">
+                            <span><i class="fa-solid fa-location-dot" style="color: var(--pink-primary);"></i> Híbrido (São Paulo, SP)</span>
+                            <span><i class="fa-regular fa-money-bill-1" style="color: #27C93F;"></i> A combinar</span>
+                            <span><i class="fa-solid fa-briefcase"></i> CLT</span>
+                            <span><i class="fa-solid fa-users-gear"></i> Gestão</span>
+                        </div>
+                    </div>
+                    <button class="sh-btn">Candidatar-se Agora</button>
+                </div>
+
+                <div class="job-card">
+                    <div>
+                        <h3 class="job-title">UX/UI Designer Pleno</h3>
+                        <div class="job-company">
+                            <i class="fa-solid fa-building-columns" style="color: var(--pink-primary);"></i> FinTech Brasil
+                            <span class="badge-safe"><i class="fa-solid fa-shield-heart"></i> Empresa Segura (Nota: 4.5)</span>
+                        </div>
+                        <div class="job-meta">
+                            <span><i class="fa-solid fa-location-dot" style="color: var(--pink-primary);"></i> 100% Remoto</span>
+                            <span><i class="fa-regular fa-money-bill-1" style="color: #27C93F;"></i> R$ 6.000 - R$ 8.000</span>
+                            <span><i class="fa-solid fa-briefcase"></i> PJ</span>
+                            <span><i class="fa-solid fa-pen-nib"></i> Design</span>
+                        </div>
+                    </div>
+                    <button class="sh-btn">Candidatar-se Agora</button>
+                </div>
+
+                <div style="text-align: center; margin-top: 40px;">
+                    <button class="sh-btn-outline" style="padding: 12px 32px;">Carregar Mais Vagas <i class="fa-solid fa-chevron-down" style="margin-left: 8px;"></i></button>
+                </div>
+            </div>
+        </main>
+    </div>
+    <footer class="sh-footer">
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <a href="index.html">
+                    <img src="logo.png" alt="SafeHer" class="sh-logo-img" style="filter: brightness(0) invert(1);">
+                </a>
+                <p>Protegendo mulheres, denunciando abusos e transformando o ambiente corporativo com transparência e justiça.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Nossas Redes Sociais</h4>
+                <div class="social-icons">
+                    <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                    <a href="#" aria-label="Twitter/X"><i class="fa-brands fa-twitter"></i></a>
+                </div>
+            </div>
+            <div class="footer-emergency">
+                <h4>Contatos de Emergência</h4>
+                <p><i class="fa-solid fa-phone"></i> <strong>180</strong> - Central de Atendimento à Mulher</p>
+                <p><i class="fa-solid fa-phone"></i> <strong>190</strong> - Polícia Militar</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 SafeHer. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+</body>
+</html>

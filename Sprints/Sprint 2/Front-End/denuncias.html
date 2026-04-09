@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeHer</title>
+    <link rel="stylesheet" href="global.css">
+</head>
+<body>
+    <div class="container">
+        <header class="sh-header">
+            <a href="index.html" class="sh-logo">
+                <img src="logo.png" alt="SafeHer Logo" class="sh-logo-img">
+            </a>
+            <div class="sh-nav">
+                <a href="index.html">Início</a>
+                <a href="denuncias.html" class="active">Denúncias</a>
+                <a href="avaliacoes.html">Avaliações</a>
+                <a href="api.html">API</a>
+                <a href="conteudos.html">Conteúdos</a>
+                <a href="vagas.html">Vagas</a>
+                <a href="login.html" class="sh-btn" style="color: white;">Entrar</a>
+                <a href="escolha-cadastro.html" class="sh-btn-outline">Criar conta</a>
+            </div>
+        </header>
+
+        <main>
+            <div class="split-layout">
+                <div>
+                    <h2 class="sh-title">Fazer uma Denúncia</h2>
+                    <p class="sh-subtitle">Seu relato é seguro, anônimo e fundamental para construirmos ambientes de trabalho melhores e protegermos outras mulheres.</p>
+
+                    <div class="sh-card">
+                        <form action="processa-denuncia.html" method="POST">
+                            <label for="empresa" class="sh-label">Empresa</label>
+                            <input type="text" id="empresa" class="sh-input" placeholder="Qual empresa você deseja denunciar?" value="Tech Solutions S.A.">
+
+                            <label for="tipoAbuso" class="sh-label">Tipo de Abuso / Problema</label>
+                            <select id="tipoAbuso" class="sh-input">
+                                <option>Assédio Moral</option>
+                                <option>Assédio Sexual</option>
+                                <option>Desigualdade Salarial</option>
+                                <option>Machismo / Misoginia</option>
+                                <option>Maternidade Desrespeitada</option>
+                            </select>
+
+                            <label for="relato" class="sh-label">Seu Relato (Totalmente Anônimo)</label>
+                            <textarea id="relato" class="sh-input" rows="5" placeholder="Descreva o que aconteceu em detalhes. Não se preocupe, seus dados não serão compartilhados..."></textarea>
+
+                            <button type="submit" class="sh-btn" style="width: 100%; padding: 16px;">Enviar Denúncia Anônima</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="image-container" style="text-align: center;">
+                    <img src="resources/images/reporting_illustration.jpeg" alt="Ilustração de mulher usando notebook e ícone de segurança" onerror="this.onerror=null; this.src='resources/images/fallback.svg';" style="max-width: 100%; height: auto; border-radius: 20px;">
+                </div>
+            </div>
+        </main>
+    </div>
+    <footer class="sh-footer">
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <a href="index.html">
+                    <img src="logo.png" alt="SafeHer" class="sh-logo-img" style="filter: brightness(0) invert(1);">
+                </a>
+                <p>Protegendo mulheres, denunciando abusos e transformando o ambiente corporativo com transparência e justiça.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Nossas Redes Sociais</h4>
+                <div class="social-icons">
+                    <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                    <a href="#" aria-label="Twitter/X"><i class="fa-brands fa-twitter"></i></a>
+                </div>
+            </div>
+            <div class="footer-emergency">
+                <h4>Contatos de Emergência</h4>
+                <p><i class="fa-solid fa-phone"></i> <strong>180</strong> - Central de Atendimento à Mulher</p>
+                <p><i class="fa-solid fa-phone"></i> <strong>190</strong> - Polícia Militar</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 SafeHer. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+</body>
+</html>

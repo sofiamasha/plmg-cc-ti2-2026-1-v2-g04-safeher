@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeHer</title>
+    <link rel="stylesheet" href="global.css">
+    <style>
+        .stars {
+            color: #FFB800;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        .badge {
+            background: var(--pink-light);
+            color: var(--pink-dark);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 16px;
+        }
+        .company-name {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+        .company-email {
+            font-size: 14px;
+            color: var(--text-gray);
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="main-wrapper">
+        <div class="container">
+            <header class="sh-header">
+                <a href="index.html" class="sh-logo">
+                    <img src="logo.png" alt="SafeHer Logo" class="sh-logo-img">
+                </a>
+                <div class="sh-nav">
+                    <a href="index.html">Início</a>
+                    <a href="denuncias.html">Denúncias</a>
+                    <a href="avaliacoes.html" class="active">Avaliações</a>
+                    <a href="api.html">API</a>
+                    <a href="conteudos.html">Conteúdos</a>
+                    <a href="vagas.html">Vagas</a>
+                    <a href="login.html" class="sh-btn" style="color: white;">Entrar</a>
+                    <a href="escolha-cadastro.html" class="sh-btn-outline">Criar conta</a>
+                </div>
+            </header>
+
+            <main>
+                <div style="text-align: center; max-width: 800px; margin: 0 auto;">
+                    <h2 class="sh-title">Avaliação de Empresas</h2>
+                    <p class="sh-subtitle" style="margin: 0 auto 40px;">Descubra quais são as empresas mais seguras e leia relatos reais de outras mulheres.</p>
+                    <div class="search-bar">
+                        <input type="text" class="search-input" placeholder="Qual empresa você deseja pesquisar?">
+                        <button class="search-btn" style="position: absolute; right: 8px; top: 8px; background: var(--pink-primary); color: white; border: none; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; font-size: 18px;"><i class="fa-solid fa-search"></i></button>
+                    </div>
+                </div>
+
+                <div class="three-cols">
+                    <div class="company-card">
+                        <div class="badge"><i class="fa-solid fa-shield-heart"></i> Selo Empresa Segura</div>
+                        <div class="company-logo">
+                            <img src="resources/images/logo-escudo.png" alt="Escudo" style="width: 55px; height: auto;">
+                        </div>
+                        <h3 class="company-name">Empresa Alpha</h3>
+                        <p class="company-email">Tecnologia & Softwares</p>
+                        <div class="stars">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+                        </div>
+                        <p style="font-weight: 700; color: var(--pink-dark);">Nota: 4.8/5.0</p>
+                    </div>
+
+                    <div class="company-card">
+                        <div class="badge"><i class="fa-solid fa-shield-heart"></i> Selo Empresa Segura</div>
+                        <div class="company-logo">
+                            <img src="resources/images/logo-escudo.png" alt="Escudo" style="width: 55px; height: auto;">
+                        </div>
+                        <h3 class="company-name">Global Tech</h3>
+                        <p class="company-email">Consultoria TI</p>
+                        <div class="stars">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star"></i>
+                        </div>
+                        <p style="font-weight: 700; color: var(--pink-dark);">Nota: 4.2/5.0</p>
+                    </div>
+
+                    <div class="company-card" style="opacity: 0.8;">
+                        <div class="badge" style="background: #FCE8E8; color: #D32F2F;"><i class="fa-solid fa-triangle-exclamation"></i> Empresa em Alerta</div>
+                        <div class="company-logo">
+                            <img src="resources/images/logo-escudo.png" alt="Escudo" style="width: 55px; height: auto;">
+                        </div>
+                        <h3 class="company-name">Corp Services</h3>
+                        <p class="company-email">Serviços Financeiros</p>
+                        <div class="stars">
+                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
+                        </div>
+                        <p style="font-weight: 700; color: #D32F2F;">Nota: 2.1/5.0</p>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <footer class="sh-footer">
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <a href="index.html">
+                    <img src="LOGOSEMFUNDO.png" alt="SafeHer" class="sh-logo-img" style="filter: brightness(0) invert(1);">
+                </a>
+                <p>Protegendo mulheres, denunciando abusos e transformando o ambiente corporativo com tecnologia.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Nossas Redes Sociais</h4>
+                <div class="social-icons">
+                    <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                    <a href="#" aria-label="Twitter/X"><i class="fa-brands fa-twitter"></i></a>
+                </div>
+            </div>
+            <div class="footer-emergency">
+                <h4>Contatos de Emergência</h4>
+                <p><i class="fa-solid fa-phone"></i> <strong>180</strong> Central de Atendimento à Mulher</p>
+                <p><i class="fa-solid fa-phone"></i> <strong>190</strong> Polícia Militar</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 SafeHer. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
