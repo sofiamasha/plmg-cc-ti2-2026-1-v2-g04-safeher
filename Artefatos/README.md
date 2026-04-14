@@ -1,16 +1,54 @@
-# Artefatos do projeto
+## 🌸📁 **Artefatos do Projeto**
 
-Este diretório mantém os artefatos do projeto. 
+Aqui estão os principais artefatos desenvolvidos pela equipe ao longo do projeto:
 
+---
 
-Liste os artefatos produzidos, com suas localizações e descrição do conteúdo.
+### 🌷 **DER (Diagrama Entidade-Relacionamento)**
+📌 Representação conceitual do banco de dados.
 
-Por exemplo, pode-se criar um diretório "atas", que seria descrito da seguinte forma:
-* `/atas`
-	* **Ata_xx_ago_2020.docx**: Ata de reunião do dia xx de agosto de 2020.
+🔗 [Acessar modelo conceitual](./Artefatos/DER/modelo_conceitual.jpeg)
 
-Pode-se também criar um diretório "canvas", que seria descrito da seguinte forma:
-* `/canvas`
-	* **BusinessModelCanvas.pdf**: Canvas do modelo de negócios.
+---
 
-Assim, sucessivamente para outros artefatos como `processos` e `DER`, etc.
+### 🌼 **DSC (Diagrama de Esquema)**
+📌 Estrutura e organização dos fluxos do sistema.
+
+🔗 [Acessar diagrama de esquema](./Artefatos/DSC/diagrama_esquema.jpeg)
+
+---
+
+### 🌺 **Modelo Lógico**
+📌 Modelo de implementação do banco de dados.
+
+🔗 [Acessar modelo lógico](./Artefatos/Modelo%20Lógico/modelo_implementacao.jpeg)
+
+---
+
+### 🌸 **Wireframes**
+📌 Protótipos das telas do sistema.
+
+- 🔗 [Cadastro de Empresa](./Artefatos/Wireframe/Cadastro%20de%20Empresa.png)
+- 🔗 [Cadastro de Usuária](./Artefatos/Wireframe/Cadastro%20de%20Usuária.png)
+- 🔗 [Home](./Artefatos/Wireframe/Home.png)
+- 🔗 [Login](./Artefatos/Wireframe/Login.png)
+- 🔗 [Modal](./Artefatos/Wireframe/Modal.png)
+
+---
+
+## 🌺🖼️ **Pré-visualização dos Wireframes** 🖼️🌺
+
+### 🏠 Home
+![Home](./Artefatos/Wireframe/Home.png)
+
+### 🔐 Login
+![Login](./Artefatos/Wireframe/Login.png)
+
+### 📝 Cadastro de Usuária
+![Cadastro de Usuária](./Artefatos/Wireframe/Cadastro%20de%20Usuária.png)
+
+### 🏢 Cadastro de Empresa
+![Cadastro de Empresa](./Artefatos/Wireframe/Cadastro%20de%20Empresa.png)
+
+### 💬 Modal
+![Modal](./Artefatos/Wireframe/Modal.png)
