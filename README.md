@@ -1,37 +1,43 @@
-# 🌸✨ **SafeHer** ✨🌸
+# 🌸 SafeHer
 
-O **SafeHer** é uma plataforma digital criada para oferecer um ambiente seguro, acolhedor e anônimo onde mulheres possam relatar situações de assédio vividas no contexto profissional. A proposta é **dar voz às vítimas**, permitindo o compartilhamento de experiências de forma protegida e contribuindo para a conscientização e prevenção de comportamentos abusivos dentro das empresas.
+## 💡 Sobre o projeto
 
-Além disso, a plataforma permite a **avaliação de empresas**, criando um índice de confiabilidade que auxilia outras mulheres na escolha de ambientes de trabalho mais seguros. O sistema também conta com o envio de evidências, como áudios e imagens, que passam por processos de validação, garantindo **maior credibilidade e responsabilidade** nas informações.
+O **SafeHer** é uma plataforma digital desenvolvida para permitir que mulheres relatem, de forma **anônima e segura**, situações de assédio vividas no ambiente de trabalho.
 
----
+O objetivo do projeto é dar visibilidade a experiências que muitas vezes são silenciadas, promovendo **conscientização sobre ambientes profissionais mais seguros** e ajudando outras mulheres a tomarem decisões mais informadas sobre onde trabalhar.
 
-## 🌷👩‍💻 **Alunos integrantes da equipe**
-
-* 🌸 **Kamilly Vitória**
-* 🌸 **Lanna Santos da Silva**
-* 🌸 **Maria Fernanda Oliveira**
-* 🌸 **Sofia de Abreu Botelho**
+Além dos relatos, a plataforma permite a **avaliação de empresas com base nas experiências compartilhadas**, criando um panorama coletivo sobre segurança no ambiente corporativo.
 
 ---
 
-## 🌼👨‍🏫 **Professores responsáveis**
+## 🚀 Funcionalidades
 
-* 🌷 **Humberto Torres**
-* 🌷 **Ilo Amy**
-
----
-
-## 🌸💡 **Instruções de utilização**
-
-🌼 **A primeira versão do sistema ainda está em desenvolvimento.**
-
-🌷 Em breve, serão incluídas instruções detalhadas sobre como acessar a plataforma, utilizar suas funcionalidades e executar a aplicação.
+- Registro anônimo de relatos de assédio no ambiente de trabalho  
+- Avaliação de empresas com base em experiências reais  
+- Envio de evidências (imagens e áudios) para complementar relatos  
+- Organização dos relatos de forma acessível para consulta  
 
 ---
 
-## 🌺✨ **Mensagem do Projeto** ✨🌺
+## 🌟 Diferenciais
 
-<p align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?font=Arial&size=22&duration=3000&color=FF69B4&center=true&vCenter=true&width=600&lines=Mulheres+merecem+seguran%C3%A7a;Sua+voz+importa;Denunciar+%C3%A9+um+ato+de+coragem" />
-</p>
+- Foco em **anonimato e segurança da usuária**  
+- Projeto com impacto social real  
+- Estrutura baseada em experiências reais compartilhadas  
+- Aplicação de conceitos de privacidade e responsabilidade no tratamento de dados  
+
+---
+
+## 🌺 Mensagem do projeto
+
+> “Segurança no ambiente de trabalho não deveria ser um privilégio.”
+
+---
+
+## 🔮 Possíveis melhorias futuras
+
+- Sistema de moderação e validação de relatos  
+- Melhor controle de qualidade das evidências enviadas  
+- Dashboard com estatísticas anonimizadas por empresa  
+- Versão mobile da plataforma  
+- Aprimoramento da segurança e autenticação de usuários  
