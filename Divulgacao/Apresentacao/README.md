@@ -1,4 +1,4 @@
-## 🌸🎤 **Apresentações do Projeto** 🎤
+## 🌸🎤 **Apresentações do Projeto**
 
 Nesta seção estão disponíveis as apresentações desenvolvidas ao longo das sprints do projeto **SafeHer**.
 
