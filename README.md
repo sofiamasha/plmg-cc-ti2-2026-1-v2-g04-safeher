@@ -1,6 +1,9 @@
-# 🌸 SafeHer
+# SafeHer 
+> Rede de Proteção e Avaliação de Empresas para Mulheres
 
-## 💡 Sobre o projeto
+---
+
+### Sobre o projeto
 
 O **SafeHer** é uma plataforma digital desenvolvida para permitir que mulheres relatem, de forma **anônima e segura**, situações de assédio vividas no ambiente de trabalho.
 
@@ -10,7 +13,7 @@ Além dos relatos, a plataforma permite a **avaliação de empresas com base nas
 
 ---
 
-## 🚀 Funcionalidades
+### Funcionalidades
 
 - Registro anônimo de relatos de assédio no ambiente de trabalho  
 - Avaliação de empresas com base em experiências reais  
@@ -19,7 +22,7 @@ Além dos relatos, a plataforma permite a **avaliação de empresas com base nas
 
 ---
 
-## 🌟 Diferenciais
+### Diferenciais!
 
 - Foco em **anonimato e segurança da usuária**  
 - Projeto com impacto social real  
@@ -28,16 +31,20 @@ Além dos relatos, a plataforma permite a **avaliação de empresas com base nas
 
 ---
 
-## 🌺 Mensagem do projeto
+### 🌺 Mensagem do projeto
 
 > “Segurança no ambiente de trabalho não deveria ser um privilégio.”
 
 ---
 
-## 🔮 Possíveis melhorias futuras
+### Integrantes do Grupo
+- Kamilly Santos
+- Lanna Silva
+- Maria Fernanda Oliveira Maro
+- Sofia de Abreu
 
-- Sistema de moderação e validação de relatos  
-- Melhor controle de qualidade das evidências enviadas  
-- Dashboard com estatísticas anonimizadas por empresa  
-- Versão mobile da plataforma  
-- Aprimoramento da segurança e autenticação de usuários  
+---
+
+### Professores 
+- Humberto Torres Marques Neto
+- Ilo Amy Saldanha Rivero
