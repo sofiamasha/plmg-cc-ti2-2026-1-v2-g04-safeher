@@ -46,8 +46,7 @@
                     <a href="index.html">Início</a>
                     <a href="denuncias.html">Denúncias</a>
                     <a href="avaliacoes.html" class="active">Avaliações</a>
-                    <a href="api.html">API</a>
-                    <a href="conteudos.html">Conteúdos</a>
+                <a href="conteudos.html">Conteúdos</a>
                     <a href="vagas.html">Vagas</a>
                     <a href="login.html" class="sh-btn" style="color: white;">Entrar</a>
                     <a href="escolha-cadastro.html" class="sh-btn-outline">Criar conta</a>
@@ -64,44 +63,10 @@
                     </div>
                 </div>
 
-                <div class="three-cols">
-                    <div class="company-card">
-                        <div class="badge"><i class="fa-solid fa-shield-heart"></i> Selo Empresa Segura</div>
-                        <div class="company-logo">
-                            <img src="resources/images/logo-escudo.png" alt="Escudo" style="width: 55px; height: auto;">
-                        </div>
-                        <h3 class="company-name">Empresa Alpha</h3>
-                        <p class="company-email">Tecnologia & Softwares</p>
-                        <div class="stars">
-                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
-                        </div>
-                        <p style="font-weight: 700; color: var(--pink-dark);">Nota: 4.8/5.0</p>
-                    </div>
-
-                    <div class="company-card">
-                        <div class="badge"><i class="fa-solid fa-shield-heart"></i> Selo Empresa Segura</div>
-                        <div class="company-logo">
-                            <img src="resources/images/logo-escudo.png" alt="Escudo" style="width: 55px; height: auto;">
-                        </div>
-                        <h3 class="company-name">Global Tech</h3>
-                        <p class="company-email">Consultoria TI</p>
-                        <div class="stars">
-                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star"></i>
-                        </div>
-                        <p style="font-weight: 700; color: var(--pink-dark);">Nota: 4.2/5.0</p>
-                    </div>
-
-                    <div class="company-card" style="opacity: 0.8;">
-                        <div class="badge" style="background: #FCE8E8; color: #D32F2F;"><i class="fa-solid fa-triangle-exclamation"></i> Empresa em Alerta</div>
-                        <div class="company-logo">
-                            <img src="resources/images/logo-escudo.png" alt="Escudo" style="width: 55px; height: auto;">
-                        </div>
-                        <h3 class="company-name">Corp Services</h3>
-                        <p class="company-email">Serviços Financeiros</p>
-                        <div class="stars">
-                            <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i><i class="fa-regular fa-star"></i>
-                        </div>
-                        <p style="font-weight: 700; color: #D32F2F;">Nota: 2.1/5.0</p>
+                <div class="three-cols" id="empresas-container">
+                    <div style="text-align: center; padding: 40px; width: 100%;">
+                        <i class="fa-solid fa-spinner fa-spin" style="font-size: 32px; color: var(--pink-primary);"></i>
+                        <p style="color: var(--text-gray); margin-top: 12px;">Carregando empresas...</p>
                     </div>
                 </div>
 
@@ -113,6 +78,56 @@
     <script src="api.js"></script>
     <script src="usuario-session.js"></script>
     <script>
+        function gerarEstrelas(nota) {
+            let html = '';
+            const inteiro = Math.floor(nota);
+            const temMeia = nota - inteiro >= 0.5;
+            for (let i = 0; i < inteiro; i++) html += '<i class="fa-solid fa-star"></i>';
+            if (temMeia) html += '<i class="fa-solid fa-star-half-stroke"></i>';
+            const vazias = 5 - inteiro - (temMeia ? 1 : 0);
+            for (let i = 0; i < vazias; i++) html += '<i class="fa-regular fa-star"></i>';
+            return html;
+        }
+
+        async function carregarEmpresas() {
+            const container = document.getElementById('empresas-container');
+            try {
+                const empresas = await listarEmpresas();
+                if (empresas.length === 0) {
+                    container.innerHTML = `
+                        <div style="text-align: center; padding: 60px 20px; width: 100%;">
+                            <i class="fa-solid fa-building-circle-xmark" style="font-size: 48px; color: var(--pink-light); margin-bottom: 16px;"></i>
+                            <h3 style="color: var(--text-dark); margin-bottom: 8px;">Nenhuma empresa cadastrada</h3>
+                            <p style="color: var(--text-gray);">Ainda não há empresas registradas no sistema.</p>
+                        </div>`;
+                    return;
+                }
+                container.innerHTML = '';
+                empresas.forEach(e => {
+                    const nota = e.indice ? parseFloat(e.indice) : 0;
+                    const corNota = nota >= 3.5 ? 'var(--pink-dark)' : '#D32F2F';
+                    const badge = nota >= 3.5
+                        ? '<div class="badge"><i class="fa-solid fa-shield-heart"></i> Selo Empresa Segura</div>'
+                        : '<div class="badge" style="background: #FCE8E8; color: #D32F2F;"><i class="fa-solid fa-triangle-exclamation"></i> Empresa em Alerta</div>';
+                    container.innerHTML += `
+                        <div class="company-card"${nota < 3.5 ? ' style="opacity: 0.8;"' : ''}>
+                            ${badge}
+                            <div class="company-logo">
+                                <img src="resources/images/logo-escudo.png" alt="Escudo" style="width: 55px; height: auto;">
+                            </div>
+                            <h3 class="company-name">${e.nome}</h3>
+                            <div class="stars">${gerarEstrelas(nota)}</div>
+                            <p style="font-weight: 700; color: ${corNota};">Nota: ${nota.toFixed(1)}/5.0</p>
+                        </div>`;
+                });
+            } catch (err) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 40px; width: 100%;">
+                        <p style="color: #D32F2F;">Erro ao carregar empresas: ${err.message}</p>
+                    </div>`;
+            }
+        }
+
         async function carregarAvaliacoes() {
             try {
                 const avaliacoes = await listarAvaliacoes();
@@ -132,6 +147,8 @@
                 console.log('API não disponível: ' + e.message);
             }
         }
+
+        carregarEmpresas();
         carregarAvaliacoes();
     </script>
 
