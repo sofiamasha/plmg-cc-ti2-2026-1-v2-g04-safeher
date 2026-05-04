@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeHer</title>
+    <link rel="stylesheet" href="global.css">
+</head>
+<body>
+    <main>
+        <div class="auth-container">
+            <div>
+                <img src="resources/images/login_illustration.jpeg" class="auth-illustration" alt="Mãos dadas">
+            </div>
+            <div class="auth-form-wrapper">
+                <a href="index.html" style="position: absolute; top: 30px; right: 40px; color: var(--text-gray); font-size: 24px;"><i class="fa-solid fa-xmark"></i></a>
+                
+                <div class="auth-card">
+                    <div class="auth-shield">
+                        <img src="resources/images/logo-escudo.png" alt="Escudo SafeHer">
+                    </div>
+                    <h2>Login</h2>
+                    <form id="formLogin" onsubmit="return false;">
+                        <label class="sh-label">Email</label>
+                        <input type="email" id="loginEmail" class="sh-input" placeholder="seuemail@mulheres.com">
+                        <label class="sh-label">Senha</label>
+                        <input type="password" id="loginSenha" class="sh-input" placeholder="********">
+                        <button type="submit" class="sh-btn" onclick="fazerLogin()">Entrar</button>
+                        <a href="escolha-cadastro.html" class="auth-link-bottom">Não tenho conta ainda</a>
+                    </form>
+                </div>
+
+                <div class="social-login-container">
+                    <h3 class="social-login-title">ou</h3>
+                    <div class="social-btns">
+                        <a href="#" class="social-btn"><i class="fa-brands fa-google" style="color: #DB4437;"></i> Google</a>
+                        <a href="#" class="social-btn"><i class="fa-brands fa-linkedin" style="color: #0A66C2;"></i> LinkedIn</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="api.js"></script>
+    <script>
+        async function fazerLogin() {
+            const email = document.getElementById('loginEmail').value;
+            const senha = document.getElementById('loginSenha').value;
+            try {
+                const usuarios = await listarUsuarios();
+                const usuario = usuarios.find(u => u.email === email && u.senha === senha);
+                if (usuario) {
+                    localStorage.setItem('safeher_usuario', JSON.stringify(usuario));
+                    window.location.href = 'index.html';
+                } else {
+                    alert('Email ou senha inválidos.');
+                }
+            } catch (e) {
+                alert('Erro ao fazer login: ' + e.message);
+            }
+        }
+    </script>
+</body>
+</html>

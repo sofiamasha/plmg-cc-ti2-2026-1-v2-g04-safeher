@@ -1,0 +1,14 @@
+dao\DenunciaDAO.class
+model\Usuario.class
+dao\AvaliacaoDAO.class
+service\UsuarioService.class
+dao\ConexaoDAO.class
+dao\UsuarioDAO.class
+dao\EmpresaDAO.class
+app\Aplicacao.class
+service\AvaliacaoService.class
+model\Denuncia.class
+model\Empresa.class
+model\Avaliacao.class
+service\EmpresaService.class
+service\DenunciaService.class
