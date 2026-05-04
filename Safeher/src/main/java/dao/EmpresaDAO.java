@@ -18,13 +18,19 @@ public class EmpresaDAO extends ConexaoDAO {
      * @throws SQLException em caso de erro no banco
      */
     public void insert(Empresa empresa) throws SQLException {
-        String sql = "INSERT INTO Empresa (id, nome, indice) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO Empresa (id, nome, indice, cnpj, cep, endereco, email, telefone, senha) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try {
             abrirConexao();
             PreparedStatement stmt = getConexao().prepareStatement(sql);
             stmt.setInt(1, empresa.getId());
             stmt.setString(2, empresa.getNome());
             stmt.setBigDecimal(3, empresa.getIndice());
+            stmt.setString(4, empresa.getCnpj());
+            stmt.setString(5, empresa.getCep());
+            stmt.setString(6, empresa.getEndereco());
+            stmt.setString(7, empresa.getEmail());
+            stmt.setString(8, empresa.getTelefone());
+            stmt.setString(9, empresa.getSenha());
             stmt.executeUpdate();
             stmt.close();
         } finally {
@@ -39,13 +45,18 @@ public class EmpresaDAO extends ConexaoDAO {
      * @throws SQLException em caso de erro no banco
      */
     public void update(Empresa empresa) throws SQLException {
-        String sql = "UPDATE Empresa SET nome=?, indice=? WHERE id=?";
+        String sql = "UPDATE Empresa SET nome=?, indice=?, cnpj=?, cep=?, endereco=?, email=?, telefone=? WHERE id=?";
         try {
             abrirConexao();
             PreparedStatement stmt = getConexao().prepareStatement(sql);
             stmt.setString(1, empresa.getNome());
             stmt.setBigDecimal(2, empresa.getIndice());
-            stmt.setInt(3, empresa.getId());
+            stmt.setString(3, empresa.getCnpj());
+            stmt.setString(4, empresa.getCep());
+            stmt.setString(5, empresa.getEndereco());
+            stmt.setString(6, empresa.getEmail());
+            stmt.setString(7, empresa.getTelefone());
+            stmt.setInt(8, empresa.getId());
             stmt.executeUpdate();
             stmt.close();
         } finally {
@@ -92,6 +103,12 @@ public class EmpresaDAO extends ConexaoDAO {
                 empresa.setId(rs.getInt("id"));
                 empresa.setNome(rs.getString("nome"));
                 empresa.setIndice(rs.getBigDecimal("indice"));
+                empresa.setCnpj(rs.getString("cnpj"));
+                empresa.setCep(rs.getString("cep"));
+                empresa.setEndereco(rs.getString("endereco"));
+                empresa.setEmail(rs.getString("email"));
+                empresa.setTelefone(rs.getString("telefone"));
+                empresa.setSenha(rs.getString("senha"));
             }
             rs.close();
             stmt.close();
@@ -119,6 +136,12 @@ public class EmpresaDAO extends ConexaoDAO {
                 empresa.setId(rs.getInt("id"));
                 empresa.setNome(rs.getString("nome"));
                 empresa.setIndice(rs.getBigDecimal("indice"));
+                empresa.setCnpj(rs.getString("cnpj"));
+                empresa.setCep(rs.getString("cep"));
+                empresa.setEndereco(rs.getString("endereco"));
+                empresa.setEmail(rs.getString("email"));
+                empresa.setTelefone(rs.getString("telefone"));
+                empresa.setSenha(rs.getString("senha"));
                 lista.add(empresa);
             }
             rs.close();

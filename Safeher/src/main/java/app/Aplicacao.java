@@ -257,6 +257,17 @@ public class Aplicacao {
             }
         });
 
+        /** Lista avaliações de uma empresa específica */
+        get("/avaliacoes/empresa/:empresaId", (req, res) -> {
+            res.type("application/json");
+            try {
+                return gson.toJson(avaliacaoService.listarPorEmpresa(Integer.parseInt(req.params(":empresaId"))));
+            } catch (Exception e) {
+                res.status(500);
+                return gson.toJson("{\"erro\":\"" + e.getMessage() + "\"}");
+            }
+        });
+
         // =====================
         // CRUD - DENUNCIA
         // =====================
@@ -328,6 +339,17 @@ public class Aplicacao {
             res.type("application/json");
             try {
                 return gson.toJson(denunciaService.listarPorUsuario(Integer.parseInt(req.params(":usuarioId"))));
+            } catch (Exception e) {
+                res.status(500);
+                return gson.toJson("{\"erro\":\"" + e.getMessage() + "\"}");
+            }
+        });
+
+        /** Lista denúncias de uma empresa específica */
+        get("/denuncias/empresa/:empresaId", (req, res) -> {
+            res.type("application/json");
+            try {
+                return gson.toJson(denunciaService.listarPorEmpresa(Integer.parseInt(req.params(":empresaId"))));
             } catch (Exception e) {
                 res.status(500);
                 return gson.toJson("{\"erro\":\"" + e.getMessage() + "\"}");

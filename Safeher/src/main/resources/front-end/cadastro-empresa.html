@@ -43,6 +43,9 @@
                         
                         <label for="telefone" class="sh-label">Telefone</label>
                         <input type="text" id="telefone" class="sh-input" placeholder="(11) 00000-0000">
+
+                        <label for="senha" class="sh-label">Senha</label>
+                        <input type="password" id="senha" class="sh-input" placeholder="Crie uma senha segura">
                         
                         <div style="margin: 15px 0 25px; font-size: 11px; display: flex; gap: 10px;">
                             <i class="fa-solid fa-paperclip" style="font-size: 16px;"></i>
@@ -57,12 +60,29 @@
         </div>
     </main>
     <script src="api.js"></script>
+    <script src="usuario-session.js"></script>
     <script>
         async function cadastrarEmpresaForm() {
+            const nome = document.getElementById('razaoSocial').value;
+            const cnpj = document.getElementById('cnpj').value;
+            const email = document.getElementById('email').value;
+            const senha = document.getElementById('senha').value;
+
+            if (!nome.trim() || !cnpj.trim() || !email.trim() || !senha.trim()) {
+                alert('Preencha os campos obrigatórios: CNPJ, Razão Social, E-mail e Senha.');
+                return;
+            }
+
             const empresa = {
                 id: Math.floor(Math.random() * 100000),
-                nome: document.getElementById('razaoSocial').value,
-                indice: 0.0
+                nome: nome,
+                indice: 0.0,
+                cnpj: cnpj,
+                cep: document.getElementById('cep').value,
+                endereco: document.getElementById('endereco').value,
+                email: email,
+                telefone: document.getElementById('telefone').value,
+                senha: senha
             };
             try {
                 await cadastrarEmpresa(empresa);

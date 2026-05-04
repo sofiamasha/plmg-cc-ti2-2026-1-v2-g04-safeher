@@ -178,4 +178,30 @@ public class DenunciaDAO extends ConexaoDAO {
         }
         return lista;
     }
+
+    public List<Denuncia> listarPorEmpresa(int empresaId) throws SQLException {
+        String sql = "SELECT * FROM Denuncia WHERE Empresa_id=?";
+        List<Denuncia> lista = new ArrayList<>();
+        try {
+            abrirConexao();
+            PreparedStatement stmt = getConexao().prepareStatement(sql);
+            stmt.setInt(1, empresaId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Denuncia denuncia = new Denuncia();
+                denuncia.setId(rs.getInt("id"));
+                denuncia.setDescricao(rs.getString("descricao"));
+                denuncia.setData(rs.getDate("data").toLocalDate());
+                denuncia.setAnonima(rs.getBoolean("anonima"));
+                denuncia.setUsuarioId(rs.getInt("Usuario_id"));
+                denuncia.setEmpresaId(rs.getInt("Empresa_id"));
+                lista.add(denuncia);
+            }
+            rs.close();
+            stmt.close();
+        } finally {
+            fecharConexao();
+        }
+        return lista;
+    }
 }

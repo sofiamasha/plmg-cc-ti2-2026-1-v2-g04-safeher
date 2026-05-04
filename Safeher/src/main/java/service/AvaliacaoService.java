@@ -71,4 +71,8 @@ public class AvaliacaoService {
     public List<Avaliacao> listar() throws SQLException {
         return avaliacaoDAO.listar();
     }
+
+    public List<Avaliacao> listarPorEmpresa(int empresaId) throws SQLException {
+        return avaliacaoDAO.listarPorEmpresa(empresaId);
+    }
 }

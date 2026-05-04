@@ -15,52 +15,40 @@ public class Empresa {
 
     /** Índice de avaliação da empresa */
     private BigDecimal indice;
+    private String cnpj;
+    private String cep;
+    private String endereco;
+    private String email;
+    private String telefone;
+    private String senha;
 
-    /**
-     * Construtor padrão.
-     */
     public Empresa() {
     }
 
-    /**
-     * @return o id da empresa
-     */
-    public int getId() {
-        return id;
-    }
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
-    /**
-     * @param id o id da empresa
-     */
-    public void setId(int id) {
-        this.id = id;
-    }
+    public String getNome() { return nome; }
+    public void setNome(String nome) { this.nome = nome; }
 
-    /**
-     * @return o nome da empresa
-     */
-    public String getNome() {
-        return nome;
-    }
+    public BigDecimal getIndice() { return indice; }
+    public void setIndice(BigDecimal indice) { this.indice = indice; }
 
-    /**
-     * @param nome o nome da empresa
-     */
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
+    public String getCnpj() { return cnpj; }
+    public void setCnpj(String cnpj) { this.cnpj = cnpj; }
 
-    /**
-     * @return o índice da empresa
-     */
-    public BigDecimal getIndice() {
-        return indice;
-    }
+    public String getCep() { return cep; }
+    public void setCep(String cep) { this.cep = cep; }
 
-    /**
-     * @param indice o índice da empresa
-     */
-    public void setIndice(BigDecimal indice) {
-        this.indice = indice;
-    }
+    public String getEndereco() { return endereco; }
+    public void setEndereco(String endereco) { this.endereco = endereco; }
+
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+
+    public String getTelefone() { return telefone; }
+    public void setTelefone(String telefone) { this.telefone = telefone; }
+
+    public String getSenha() { return senha; }
+    public void setSenha(String senha) { this.senha = senha; }
 }

@@ -82,4 +82,8 @@ public class DenunciaService {
     public List<Denuncia> listarPorUsuario(int usuarioId) throws SQLException {
         return denunciaDAO.listarPorUsuario(usuarioId);
     }
+
+    public List<Denuncia> listarPorEmpresa(int empresaId) throws SQLException {
+        return denunciaDAO.listarPorEmpresa(empresaId);
+    }
 }

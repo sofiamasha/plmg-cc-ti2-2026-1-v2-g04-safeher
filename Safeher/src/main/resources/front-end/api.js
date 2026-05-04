@@ -165,3 +165,15 @@ async function listarDenunciasPorUsuario(usuarioId) {
     const res = await fetch(`${API}/denuncias/usuario/${usuarioId}`);
     return res.json();
 }
+
+/** Lista avaliações de uma empresa específica */
+async function listarAvaliacoesPorEmpresa(empresaId) {
+    const res = await fetch(`${API}/avaliacoes/empresa/${empresaId}`);
+    return res.json();
+}
+
+/** Lista denúncias de uma empresa específica */
+async function listarDenunciasPorEmpresa(empresaId) {
+    const res = await fetch(`${API}/denuncias/empresa/${empresaId}`);
+    return res.json();
+}

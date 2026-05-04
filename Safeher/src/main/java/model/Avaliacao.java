@@ -17,6 +17,12 @@ public class Avaliacao {
     /** Identificador do usuário que fez a avaliação */
     private int usuarioId;
 
+    /** Identificador da empresa avaliada (nullable se empresa não cadastrada) */
+    private int empresaId;
+
+    /** Nome da empresa avaliada (texto livre) */
+    private String nomeEmpresa;
+
     /**
      * Construtor padrão.
      */
@@ -77,5 +83,21 @@ public class Avaliacao {
      */
     public void setUsuarioId(int usuarioId) {
         this.usuarioId = usuarioId;
+    }
+
+    public int getEmpresaId() {
+        return empresaId;
+    }
+
+    public void setEmpresaId(int empresaId) {
+        this.empresaId = empresaId;
+    }
+
+    public String getNomeEmpresa() {
+        return nomeEmpresa;
+    }
+
+    public void setNomeEmpresa(String nomeEmpresa) {
+        this.nomeEmpresa = nomeEmpresa;
     }
 }

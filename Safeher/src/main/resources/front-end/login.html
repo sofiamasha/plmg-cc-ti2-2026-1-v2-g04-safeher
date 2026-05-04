@@ -20,9 +20,15 @@
                         <img src="resources/images/logo-escudo.png" alt="Escudo SafeHer">
                     </div>
                     <h2>Login</h2>
+
+                    <div class="login-tabs">
+                        <button id="tabMulher" onclick="trocarTab('mulher')" class="login-tab active">Mulher</button>
+                        <button id="tabEmpresa" onclick="trocarTab('empresa')" class="login-tab">Empresa</button>
+                    </div>
+
                     <form id="formLogin" onsubmit="return false;">
-                        <label class="sh-label">Email</label>
-                        <input type="email" id="loginEmail" class="sh-input" placeholder="seuemail@mulheres.com">
+                        <label class="sh-label" id="labelIdentificacao">Email</label>
+                        <input type="email" id="loginEmail" class="sh-input" placeholder="seuemail@email.com">
                         <label class="sh-label">Senha</label>
                         <input type="password" id="loginSenha" class="sh-input" placeholder="********">
                         <button type="submit" class="sh-btn" onclick="fazerLogin()">Entrar</button>
@@ -34,7 +40,7 @@
                     <h3 class="social-login-title">ou</h3>
                     <div class="social-btns">
                         <a href="#" class="social-btn"><i class="fa-brands fa-google" style="color: #DB4437;"></i> Google</a>
-                        <a href="#" class="social-btn"><i class="fa-brands fa-linkedin" style="color: #0A66C2;"></i> LinkedIn</a>
+                        <a href="#" class="social-btn"><i class="fa-brands fa-linkedin" style="color: var(--pink-primary);"></i> LinkedIn</a>
                     </div>
                 </div>
             </div>
@@ -42,17 +48,57 @@
     </main>
     <script src="api.js"></script>
     <script>
+        let tipoLogin = 'mulher';
+
+        function trocarTab(tipo) {
+            tipoLogin = tipo;
+            const tabMulher = document.getElementById('tabMulher');
+            const tabEmpresa = document.getElementById('tabEmpresa');
+            const label = document.getElementById('labelIdentificacao');
+            const input = document.getElementById('loginEmail');
+            if (tipo === 'mulher') {
+                tabMulher.classList.add('active');
+                tabEmpresa.classList.remove('active');
+                label.textContent = 'Email';
+                input.type = 'email';
+                input.placeholder = 'seuemail@email.com';
+            } else {
+                tabEmpresa.classList.add('active');
+                tabMulher.classList.remove('active');
+                label.textContent = 'Nome da Empresa';
+                input.type = 'text';
+                input.placeholder = 'Nome da sua empresa';
+            }
+        }
+
         async function fazerLogin() {
             const email = document.getElementById('loginEmail').value;
             const senha = document.getElementById('loginSenha').value;
+            if (!email || !senha) {
+                alert('Preencha todos os campos.');
+                return;
+            }
             try {
-                const usuarios = await listarUsuarios();
-                const usuario = usuarios.find(u => u.email === email && u.senha === senha);
-                if (usuario) {
-                    localStorage.setItem('safeher_usuario', JSON.stringify(usuario));
-                    window.location.href = 'index.html';
+                if (tipoLogin === 'mulher') {
+                    const usuarios = await listarUsuarios();
+                    const usuario = usuarios.find(u => u.email === email && u.senha === senha);
+                    if (usuario) {
+                        localStorage.setItem('safeher_usuario', JSON.stringify(usuario));
+                        localStorage.setItem('safeher_tipo', 'mulher');
+                        window.location.href = 'inicio-mulher.html';
+                    } else {
+                        alert('Email ou senha inválidos.');
+                    }
                 } else {
-                    alert('Email ou senha inválidos.');
+                    const empresas = await listarEmpresas();
+                    const empresa = empresas.find(e => e.nome === email && e.senha === senha);
+                    if (empresa) {
+                        localStorage.setItem('safeher_usuario', JSON.stringify(empresa));
+                        localStorage.setItem('safeher_tipo', 'empresa');
+                        window.location.href = 'inicio-empresa.html';
+                    } else {
+                        alert('Nome ou senha inválidos.');
+                    }
                 }
             } catch (e) {
                 alert('Erro ao fazer login: ' + e.message);
