@@ -1,74 +1,78 @@
 package service;
 
+import com.google.gson.Gson;
 import dao.EmpresaDAO;
 import model.Empresa;
+import spark.Request;
+import spark.Response;
 
 import java.sql.SQLException;
 import java.util.List;
 
-/**
- * Classe de serviço responsável pelas regras de negócio da entidade Empresa.
- */
 public class EmpresaService {
 
-    /** DAO utilizado para acesso ao banco de dados */
     private EmpresaDAO empresaDAO;
+    private Gson gson;
 
-    /**
-     * Construtor padrão que inicializa o DAO.
-     */
     public EmpresaService() {
         this.empresaDAO = new EmpresaDAO();
+        this.gson = new Gson();
     }
 
-    /**
-     * Cadastra uma nova empresa.
-     *
-     * @param empresa objeto Empresa a ser cadastrado
-     * @throws SQLException em caso de erro no banco
-     */
-    public void insert(Empresa empresa) throws SQLException {
-        empresaDAO.insert(empresa);
+    public String insert(Request req, Response res) {
+        res.type("application/json");
+        try {
+            Empresa empresa = gson.fromJson(req.body(), Empresa.class);
+            empresaDAO.insert(empresa);
+            return gson.toJson("{\"msg\":\"Empresa inserida com sucesso\"}");
+        } catch (Exception e) {
+            res.status(500);
+            return gson.toJson("{\"erro\":\"" + e.getMessage() + "\"}");
+        }
     }
 
-    /**
-     * Atualiza os dados de uma empresa existente.
-     *
-     * @param empresa objeto Empresa com os dados atualizados
-     * @throws SQLException em caso de erro no banco
-     */
-    public void update(Empresa empresa) throws SQLException {
-        empresaDAO.update(empresa);
+    public String update(Request req, Response res) {
+        res.type("application/json");
+        try {
+            Empresa empresa = gson.fromJson(req.body(), Empresa.class);
+            empresa.setId(Integer.parseInt(req.params(":id")));
+            empresaDAO.update(empresa);
+            return gson.toJson("{\"msg\":\"Empresa atualizada com sucesso\"}");
+        } catch (Exception e) {
+            res.status(500);
+            return gson.toJson("{\"erro\":\"" + e.getMessage() + "\"}");
+        }
     }
 
-    /**
-     * Remove uma empresa pelo ID.
-     *
-     * @param id identificador da empresa
-     * @throws SQLException em caso de erro no banco
-     */
-    public void remove(int id) throws SQLException {
-        empresaDAO.remove(id);
+    public String remove(Request req, Response res) {
+        res.type("application/json");
+        try {
+            empresaDAO.remove(Integer.parseInt(req.params(":id")));
+            return gson.toJson("{\"msg\":\"Empresa removida com sucesso\"}");
+        } catch (Exception e) {
+            res.status(500);
+            return gson.toJson("{\"erro\":\"" + e.getMessage() + "\"}");
+        }
     }
 
-    /**
-     * Busca uma empresa pelo ID.
-     *
-     * @param id identificador da empresa
-     * @return Empresa encontrada ou null
-     * @throws SQLException em caso de erro no banco
-     */
-    public Empresa get(int id) throws SQLException {
-        return empresaDAO.get(id);
+    public String get(Request req, Response res) {
+        res.type("application/json");
+        try {
+            Empresa empresa = empresaDAO.get(Integer.parseInt(req.params(":id")));
+            return gson.toJson(empresa);
+        } catch (Exception e) {
+            res.status(500);
+            return gson.toJson("{\"erro\":\"" + e.getMessage() + "\"}");
+        }
     }
 
-    /**
-     * Lista todas as empresas cadastradas.
-     *
-     * @return List com todas as empresas
-     * @throws SQLException em caso de erro no banco
-     */
-    public List<Empresa> listar() throws SQLException {
-        return empresaDAO.listar();
+    public String listar(Request req, Response res) {
+        res.type("application/json");
+        try {
+            return gson.toJson(empresaDAO.listar());
+        } catch (Exception e) {
+            res.status(500);
+            return gson.toJson("{\"erro\":\"" + e.getMessage() + "\"}");
+        }
     }
 }

@@ -6,17 +6,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Classe DAO responsável pelas operações de banco de dados da entidade Avaliacao.
- */
 public class AvaliacaoDAO extends ConexaoDAO {
 
-    /**
-     * Insere uma nova avaliação no banco de dados.
-     *
-     * @param avaliacao objeto Avaliacao a ser inserido
-     * @throws SQLException em caso de erro no banco
-     */
     public void insert(Avaliacao avaliacao) throws SQLException {
         String sql = "INSERT INTO Avaliacao (id, comentario, nota, Usuario_id, Empresa_id, nome_empresa) VALUES (?, ?, ?, ?, ?, ?)";
         try {
@@ -39,12 +30,6 @@ public class AvaliacaoDAO extends ConexaoDAO {
         }
     }
 
-    /**
-     * Atualiza os dados de uma avaliação existente.
-     *
-     * @param avaliacao objeto Avaliacao com os dados atualizados
-     * @throws SQLException em caso de erro no banco
-     */
     public void update(Avaliacao avaliacao) throws SQLException {
         String sql = "UPDATE Avaliacao SET comentario=?, nota=?, Usuario_id=?, Empresa_id=?, nome_empresa=? WHERE id=?";
         try {
@@ -67,12 +52,6 @@ public class AvaliacaoDAO extends ConexaoDAO {
         }
     }
 
-    /**
-     * Remove uma avaliação pelo ID.
-     *
-     * @param id identificador da avaliação a ser removida
-     * @throws SQLException em caso de erro no banco
-     */
     public void remove(int id) throws SQLException {
         String sql = "DELETE FROM Avaliacao WHERE id=?";
         try {
@@ -86,13 +65,6 @@ public class AvaliacaoDAO extends ConexaoDAO {
         }
     }
 
-    /**
-     * Busca uma avaliação pelo ID.
-     *
-     * @param id identificador da avaliação
-     * @return Avaliacao encontrada ou null
-     * @throws SQLException em caso de erro no banco
-     */
     public Avaliacao get(int id) throws SQLException {
         String sql = "SELECT * FROM Avaliacao WHERE id=?";
         Avaliacao avaliacao = null;
@@ -118,12 +90,6 @@ public class AvaliacaoDAO extends ConexaoDAO {
         return avaliacao;
     }
 
-    /**
-     * Lista todas as avaliações cadastradas.
-     *
-     * @return List com todas as avaliações
-     * @throws SQLException em caso de erro no banco
-     */
     public List<Avaliacao> listar() throws SQLException {
         String sql = "SELECT * FROM Avaliacao";
         List<Avaliacao> lista = new ArrayList<>();

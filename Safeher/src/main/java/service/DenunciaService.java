@@ -1,89 +1,110 @@
 package service;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonSerializer;
+import com.google.gson.JsonPrimitive;
 import dao.DenunciaDAO;
 import model.Denuncia;
+import spark.Request;
+import spark.Response;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 
-/**
- * Classe de serviço responsável pelas regras de negócio da entidade Denuncia.
- */
 public class DenunciaService {
 
-    /** DAO utilizado para acesso ao banco de dados */
     private DenunciaDAO denunciaDAO;
+    private Gson gson;
 
-    /**
-     * Construtor padrão que inicializa o DAO.
-     */
     public DenunciaService() {
         this.denunciaDAO = new DenunciaDAO();
+        this.gson = new GsonBuilder()
+            .registerTypeAdapter(LocalDate.class,
+                (JsonSerializer<LocalDate>) (date, type, ctx) ->
+                    new JsonPrimitive(date.toString()))
+            .registerTypeAdapter(LocalDate.class,
+                (JsonDeserializer<LocalDate>) (json, type, ctx) ->
+                    LocalDate.parse(json.getAsString()))
+            .create();
     }
 
-    /**
-     * Cadastra uma nova denúncia.
-     *
-     * @param denuncia objeto Denuncia a ser cadastrado
-     * @throws SQLException em caso de erro no banco
-     */
-    public void insert(Denuncia denuncia) throws SQLException {
-        denunciaDAO.insert(denuncia);
+    public String insert(Request req, Response res) {
+        res.type("application/json");
+        try {
+            Denuncia denuncia = gson.fromJson(req.body(), Denuncia.class);
+            denunciaDAO.insert(denuncia);
+            return gson.toJson("{\"msg\":\"Denuncia inserida com sucesso\"}");
+        } catch (Exception e) {
+            res.status(500);
+            return gson.toJson("{\"erro\":\"" + e.getMessage() + "\"}");
+        }
     }
 
-    /**
-     * Atualiza os dados de uma denúncia existente.
-     *
-     * @param denuncia objeto Denuncia com os dados atualizados
-     * @throws SQLException em caso de erro no banco
-     */
-    public void update(Denuncia denuncia) throws SQLException {
-        denunciaDAO.update(denuncia);
+    public String update(Request req, Response res) {
+        res.type("application/json");
+        try {
+            Denuncia denuncia = gson.fromJson(req.body(), Denuncia.class);
+            denuncia.setId(Integer.parseInt(req.params(":id")));
+            denunciaDAO.update(denuncia);
+            return gson.toJson("{\"msg\":\"Denuncia atualizada com sucesso\"}");
+        } catch (Exception e) {
+            res.status(500);
+            return gson.toJson("{\"erro\":\"" + e.getMessage() + "\"}");
+        }
     }
 
-    /**
-     * Remove uma denúncia pelo ID.
-     *
-     * @param id identificador da denúncia
-     * @throws SQLException em caso de erro no banco
-     */
-    public void remove(int id) throws SQLException {
-        denunciaDAO.remove(id);
+    public String remove(Request req, Response res) {
+        res.type("application/json");
+        try {
+            denunciaDAO.remove(Integer.parseInt(req.params(":id")));
+            return gson.toJson("{\"msg\":\"Denuncia removida com sucesso\"}");
+        } catch (Exception e) {
+            res.status(500);
+            return gson.toJson("{\"erro\":\"" + e.getMessage() + "\"}");
+        }
     }
 
-    /**
-     * Busca uma denúncia pelo ID.
-     *
-     * @param id identificador da denúncia
-     * @return Denuncia encontrada ou null
-     * @throws SQLException em caso de erro no banco
-     */
-    public Denuncia get(int id) throws SQLException {
-        return denunciaDAO.get(id);
+    public String get(Request req, Response res) {
+        res.type("application/json");
+        try {
+            Denuncia denuncia = denunciaDAO.get(Integer.parseInt(req.params(":id")));
+            return gson.toJson(denuncia);
+        } catch (Exception e) {
+            res.status(500);
+            return gson.toJson("{\"erro\":\"" + e.getMessage() + "\"}");
+        }
     }
 
-    /**
-     * Lista todas as denúncias cadastradas.
-     *
-     * @return List com todas as denúncias
-     * @throws SQLException em caso de erro no banco
-     */
-    public List<Denuncia> listar() throws SQLException {
-        return denunciaDAO.listar();
+    public String listar(Request req, Response res) {
+        res.type("application/json");
+        try {
+            return gson.toJson(denunciaDAO.listar());
+        } catch (Exception e) {
+            res.status(500);
+            return gson.toJson("{\"erro\":\"" + e.getMessage() + "\"}");
+        }
     }
 
-    /**
-     * Lista denúncias de um usuário específico.
-     *
-     * @param usuarioId identificador do usuário
-     * @return List com as denúncias do usuário
-     * @throws SQLException em caso de erro no banco
-     */
-    public List<Denuncia> listarPorUsuario(int usuarioId) throws SQLException {
-        return denunciaDAO.listarPorUsuario(usuarioId);
+    public String listarPorUsuario(Request req, Response res) {
+        res.type("application/json");
+        try {
+            return gson.toJson(denunciaDAO.listarPorUsuario(Integer.parseInt(req.params(":usuarioId"))));
+        } catch (Exception e) {
+            res.status(500);
+            return gson.toJson("{\"erro\":\"" + e.getMessage() + "\"}");
+        }
     }
 
-    public List<Denuncia> listarPorEmpresa(int empresaId) throws SQLException {
-        return denunciaDAO.listarPorEmpresa(empresaId);
+    public String listarPorEmpresa(Request req, Response res) {
+        res.type("application/json");
+        try {
+            return gson.toJson(denunciaDAO.listarPorEmpresa(Integer.parseInt(req.params(":empresaId"))));
+        } catch (Exception e) {
+            res.status(500);
+            return gson.toJson("{\"erro\":\"" + e.getMessage() + "\"}");
+        }
     }
 }

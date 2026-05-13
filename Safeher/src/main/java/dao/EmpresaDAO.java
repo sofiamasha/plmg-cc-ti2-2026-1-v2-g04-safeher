@@ -6,17 +6,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Classe DAO responsável pelas operações de banco de dados da entidade Empresa.
- */
 public class EmpresaDAO extends ConexaoDAO {
 
-    /**
-     * Insere uma nova empresa no banco de dados.
-     *
-     * @param empresa objeto Empresa a ser inserido
-     * @throws SQLException em caso de erro no banco
-     */
     public void insert(Empresa empresa) throws SQLException {
         String sql = "INSERT INTO Empresa (id, nome, indice, cnpj, cep, endereco, email, telefone, senha) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try {
@@ -38,12 +29,6 @@ public class EmpresaDAO extends ConexaoDAO {
         }
     }
 
-    /**
-     * Atualiza os dados de uma empresa existente.
-     *
-     * @param empresa objeto Empresa com os dados atualizados
-     * @throws SQLException em caso de erro no banco
-     */
     public void update(Empresa empresa) throws SQLException {
         String sql = "UPDATE Empresa SET nome=?, indice=?, cnpj=?, cep=?, endereco=?, email=?, telefone=? WHERE id=?";
         try {
@@ -64,12 +49,6 @@ public class EmpresaDAO extends ConexaoDAO {
         }
     }
 
-    /**
-     * Remove uma empresa pelo ID.
-     *
-     * @param id identificador da empresa a ser removida
-     * @throws SQLException em caso de erro no banco
-     */
     public void remove(int id) throws SQLException {
         String sql = "DELETE FROM Empresa WHERE id=?";
         try {
@@ -83,13 +62,6 @@ public class EmpresaDAO extends ConexaoDAO {
         }
     }
 
-    /**
-     * Busca uma empresa pelo ID.
-     *
-     * @param id identificador da empresa
-     * @return Empresa encontrada ou null
-     * @throws SQLException em caso de erro no banco
-     */
     public Empresa get(int id) throws SQLException {
         String sql = "SELECT * FROM Empresa WHERE id=?";
         Empresa empresa = null;
@@ -118,12 +90,6 @@ public class EmpresaDAO extends ConexaoDAO {
         return empresa;
     }
 
-    /**
-     * Lista todas as empresas cadastradas.
-     *
-     * @return List com todas as empresas
-     * @throws SQLException em caso de erro no banco
-     */
     public List<Empresa> listar() throws SQLException {
         String sql = "SELECT * FROM Empresa";
         List<Empresa> lista = new ArrayList<>();

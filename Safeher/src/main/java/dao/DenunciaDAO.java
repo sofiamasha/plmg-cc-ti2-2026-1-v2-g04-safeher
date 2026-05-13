@@ -7,17 +7,8 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Classe DAO responsável pelas operações de banco de dados da entidade Denuncia.
- */
 public class DenunciaDAO extends ConexaoDAO {
 
-    /**
-     * Insere uma nova denúncia no banco de dados.
-     *
-     * @param denuncia objeto Denuncia a ser inserido
-     * @throws SQLException em caso de erro no banco
-     */
     public void insert(Denuncia denuncia) throws SQLException {
         String sql = "INSERT INTO Denuncia (id, descricao, data, anonima, Usuario_id, Empresa_id) VALUES (?, ?, ?, ?, ?, ?)";
         try {
@@ -40,12 +31,6 @@ public class DenunciaDAO extends ConexaoDAO {
         }
     }
 
-    /**
-     * Atualiza os dados de uma denúncia existente.
-     *
-     * @param denuncia objeto Denuncia com os dados atualizados
-     * @throws SQLException em caso de erro no banco
-     */
     public void update(Denuncia denuncia) throws SQLException {
         String sql = "UPDATE Denuncia SET descricao=?, data=?, anonima=?, Usuario_id=?, Empresa_id=? WHERE id=?";
         try {
@@ -64,12 +49,6 @@ public class DenunciaDAO extends ConexaoDAO {
         }
     }
 
-    /**
-     * Remove uma denúncia pelo ID.
-     *
-     * @param id identificador da denúncia a ser removida
-     * @throws SQLException em caso de erro no banco
-     */
     public void remove(int id) throws SQLException {
         String sql = "DELETE FROM Denuncia WHERE id=?";
         try {
@@ -83,13 +62,6 @@ public class DenunciaDAO extends ConexaoDAO {
         }
     }
 
-    /**
-     * Busca uma denúncia pelo ID.
-     *
-     * @param id identificador da denúncia
-     * @return Denuncia encontrada ou null
-     * @throws SQLException em caso de erro no banco
-     */
     public Denuncia get(int id) throws SQLException {
         String sql = "SELECT * FROM Denuncia WHERE id=?";
         Denuncia denuncia = null;
@@ -115,12 +87,6 @@ public class DenunciaDAO extends ConexaoDAO {
         return denuncia;
     }
 
-    /**
-     * Lista todas as denúncias cadastradas.
-     *
-     * @return List com todas as denúncias
-     * @throws SQLException em caso de erro no banco
-     */
     public List<Denuncia> listar() throws SQLException {
         String sql = "SELECT * FROM Denuncia";
         List<Denuncia> lista = new ArrayList<>();
@@ -146,13 +112,6 @@ public class DenunciaDAO extends ConexaoDAO {
         return lista;
     }
 
-    /**
-     * Lista denúncias de um usuário específico.
-     *
-     * @param usuarioId identificador do usuário
-     * @return List com as denúncias do usuário
-     * @throws SQLException em caso de erro no banco
-     */
     public List<Denuncia> listarPorUsuario(int usuarioId) throws SQLException {
         String sql = "SELECT * FROM Denuncia WHERE Usuario_id=?";
         List<Denuncia> lista = new ArrayList<>();

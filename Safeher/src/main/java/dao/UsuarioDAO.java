@@ -6,17 +6,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Classe DAO responsável pelas operações de banco de dados da entidade Usuario.
- */
 public class UsuarioDAO extends ConexaoDAO {
 
-    /**
-     * Insere um novo usuário no banco de dados.
-     *
-     * @param usuario objeto Usuario a ser inserido
-     * @throws SQLException em caso de erro no banco
-     */
     public void insert(Usuario usuario) throws SQLException {
         String sql = "INSERT INTO Usuario (id, nome, email, senha, data) VALUES (?, ?, ?, ?, ?)";
         try {
@@ -34,12 +25,6 @@ public class UsuarioDAO extends ConexaoDAO {
         }
     }
 
-    /**
-     * Atualiza os dados de um usuário existente.
-     *
-     * @param usuario objeto Usuario com os dados atualizados
-     * @throws SQLException em caso de erro no banco
-     */
     public void update(Usuario usuario) throws SQLException {
         String sql = "UPDATE Usuario SET nome=?, email=?, senha=?, data=? WHERE id=?";
         try {
@@ -57,12 +42,6 @@ public class UsuarioDAO extends ConexaoDAO {
         }
     }
 
-    /**
-     * Remove um usuário pelo ID.
-     *
-     * @param id identificador do usuário a ser removido
-     * @throws SQLException em caso de erro no banco
-     */
     public void remove(int id) throws SQLException {
         String sql = "DELETE FROM Usuario WHERE id=?";
         try {
@@ -76,13 +55,6 @@ public class UsuarioDAO extends ConexaoDAO {
         }
     }
 
-    /**
-     * Busca um usuário pelo ID.
-     *
-     * @param id identificador do usuário
-     * @return Usuario encontrado ou null
-     * @throws SQLException em caso de erro no banco
-     */
     public Usuario get(int id) throws SQLException {
         String sql = "SELECT * FROM Usuario WHERE id=?";
         Usuario usuario = null;
@@ -107,12 +79,6 @@ public class UsuarioDAO extends ConexaoDAO {
         return usuario;
     }
 
-    /**
-     * Lista todos os usuários cadastrados.
-     *
-     * @return List com todos os usuários
-     * @throws SQLException em caso de erro no banco
-     */
     public List<Usuario> listar() throws SQLException {
         String sql = "SELECT * FROM Usuario";
         List<Usuario> lista = new ArrayList<>();

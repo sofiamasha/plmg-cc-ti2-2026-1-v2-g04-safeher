@@ -2,18 +2,10 @@ package model;
 
 import java.math.BigDecimal;
 
-/**
- * Classe modelo que representa a entidade Empresa no sistema.
- */
 public class Empresa {
 
-    /** Identificador único da empresa */
     private int id;
-
-    /** Nome da empresa */
     private String nome;
-
-    /** Índice de avaliação da empresa */
     private BigDecimal indice;
     private String cnpj;
     private String cep;

@@ -1,78 +1,88 @@
 package service;
 
+import com.google.gson.Gson;
 import dao.AvaliacaoDAO;
 import model.Avaliacao;
+import spark.Request;
+import spark.Response;
 
 import java.sql.SQLException;
 import java.util.List;
 
-/**
- * Classe de serviço responsável pelas regras de negócio da entidade Avaliacao.
- */
 public class AvaliacaoService {
 
-    /** DAO utilizado para acesso ao banco de dados */
     private AvaliacaoDAO avaliacaoDAO;
+    private Gson gson;
 
-    /**
-     * Construtor padrão que inicializa o DAO.
-     */
     public AvaliacaoService() {
         this.avaliacaoDAO = new AvaliacaoDAO();
+        this.gson = new Gson();
     }
 
-    /**
-     * Cadastra uma nova avaliação.
-     *
-     * @param avaliacao objeto Avaliacao a ser cadastrado
-     * @throws SQLException em caso de erro no banco
-     */
-    public void insert(Avaliacao avaliacao) throws SQLException {
-        avaliacaoDAO.insert(avaliacao);
+    public String insert(Request req, Response res) {
+        res.type("application/json");
+        try {
+            Avaliacao avaliacao = gson.fromJson(req.body(), Avaliacao.class);
+            avaliacaoDAO.insert(avaliacao);
+            return gson.toJson("{\"msg\":\"Avaliacao inserida com sucesso\"}");
+        } catch (Exception e) {
+            res.status(500);
+            return gson.toJson("{\"erro\":\"" + e.getMessage() + "\"}");
+        }
     }
 
-    /**
-     * Atualiza os dados de uma avaliação existente.
-     *
-     * @param avaliacao objeto Avaliacao com os dados atualizados
-     * @throws SQLException em caso de erro no banco
-     */
-    public void update(Avaliacao avaliacao) throws SQLException {
-        avaliacaoDAO.update(avaliacao);
+    public String update(Request req, Response res) {
+        res.type("application/json");
+        try {
+            Avaliacao avaliacao = gson.fromJson(req.body(), Avaliacao.class);
+            avaliacao.setId(Integer.parseInt(req.params(":id")));
+            avaliacaoDAO.update(avaliacao);
+            return gson.toJson("{\"msg\":\"Avaliacao atualizada com sucesso\"}");
+        } catch (Exception e) {
+            res.status(500);
+            return gson.toJson("{\"erro\":\"" + e.getMessage() + "\"}");
+        }
     }
 
-    /**
-     * Remove uma avaliação pelo ID.
-     *
-     * @param id identificador da avaliação
-     * @throws SQLException em caso de erro no banco
-     */
-    public void remove(int id) throws SQLException {
-        avaliacaoDAO.remove(id);
+    public String remove(Request req, Response res) {
+        res.type("application/json");
+        try {
+            avaliacaoDAO.remove(Integer.parseInt(req.params(":id")));
+            return gson.toJson("{\"msg\":\"Avaliacao removida com sucesso\"}");
+        } catch (Exception e) {
+            res.status(500);
+            return gson.toJson("{\"erro\":\"" + e.getMessage() + "\"}");
+        }
     }
 
-    /**
-     * Busca uma avaliação pelo ID.
-     *
-     * @param id identificador da avaliação
-     * @return Avaliacao encontrada ou null
-     * @throws SQLException em caso de erro no banco
-     */
-    public Avaliacao get(int id) throws SQLException {
-        return avaliacaoDAO.get(id);
+    public String get(Request req, Response res) {
+        res.type("application/json");
+        try {
+            Avaliacao avaliacao = avaliacaoDAO.get(Integer.parseInt(req.params(":id")));
+            return gson.toJson(avaliacao);
+        } catch (Exception e) {
+            res.status(500);
+            return gson.toJson("{\"erro\":\"" + e.getMessage() + "\"}");
+        }
     }
 
-    /**
-     * Lista todas as avaliações cadastradas.
-     *
-     * @return List com todas as avaliações
-     * @throws SQLException em caso de erro no banco
-     */
-    public List<Avaliacao> listar() throws SQLException {
-        return avaliacaoDAO.listar();
+    public String listar(Request req, Response res) {
+        res.type("application/json");
+        try {
+            return gson.toJson(avaliacaoDAO.listar());
+        } catch (Exception e) {
+            res.status(500);
+            return gson.toJson("{\"erro\":\"" + e.getMessage() + "\"}");
+        }
     }
 
-    public List<Avaliacao> listarPorEmpresa(int empresaId) throws SQLException {
-        return avaliacaoDAO.listarPorEmpresa(empresaId);
+    public String listarPorEmpresa(Request req, Response res) {
+        res.type("application/json");
+        try {
+            return gson.toJson(avaliacaoDAO.listarPorEmpresa(Integer.parseInt(req.params(":empresaId"))));
+        } catch (Exception e) {
+            res.status(500);
+            return gson.toJson("{\"erro\":\"" + e.getMessage() + "\"}");
+        }
     }
 }

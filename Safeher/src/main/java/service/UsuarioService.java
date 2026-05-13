@@ -1,74 +1,90 @@
 package service;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonSerializer;
+import com.google.gson.JsonPrimitive;
 import dao.UsuarioDAO;
 import model.Usuario;
+import spark.Request;
+import spark.Response;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 
-/**
- * Classe de serviço responsável pelas regras de negócio da entidade Usuario.
- */
 public class UsuarioService {
 
-    /** DAO utilizado para acesso ao banco de dados */
     private UsuarioDAO usuarioDAO;
+    private Gson gson;
 
-    /**
-     * Construtor padrão que inicializa o DAO.
-     */
     public UsuarioService() {
         this.usuarioDAO = new UsuarioDAO();
+        this.gson = new GsonBuilder()
+            .registerTypeAdapter(LocalDate.class,
+                (JsonSerializer<LocalDate>) (date, type, ctx) ->
+                    new JsonPrimitive(date.toString()))
+            .registerTypeAdapter(LocalDate.class,
+                (JsonDeserializer<LocalDate>) (json, type, ctx) ->
+                    LocalDate.parse(json.getAsString()))
+            .create();
     }
 
-    /**
-     * Cadastra um novo usuário.
-     *
-     * @param usuario objeto Usuario a ser cadastrado
-     * @throws SQLException em caso de erro no banco
-     */
-    public void insert(Usuario usuario) throws SQLException {
-        usuarioDAO.insert(usuario);
+    public String insert(Request req, Response res) {
+        res.type("application/json");
+        try {
+            Usuario usuario = gson.fromJson(req.body(), Usuario.class);
+            usuarioDAO.insert(usuario);
+            return gson.toJson("{\"msg\":\"Usuario inserido com sucesso\"}");
+        } catch (Exception e) {
+            res.status(500);
+            return gson.toJson("{\"erro\":\"" + e.getMessage() + "\"}");
+        }
     }
 
-    /**
-     * Atualiza os dados de um usuário existente.
-     *
-     * @param usuario objeto Usuario com os dados atualizados
-     * @throws SQLException em caso de erro no banco
-     */
-    public void update(Usuario usuario) throws SQLException {
-        usuarioDAO.update(usuario);
+    public String update(Request req, Response res) {
+        res.type("application/json");
+        try {
+            Usuario usuario = gson.fromJson(req.body(), Usuario.class);
+            usuario.setId(Integer.parseInt(req.params(":id")));
+            usuarioDAO.update(usuario);
+            return gson.toJson("{\"msg\":\"Usuario atualizado com sucesso\"}");
+        } catch (Exception e) {
+            res.status(500);
+            return gson.toJson("{\"erro\":\"" + e.getMessage() + "\"}");
+        }
     }
 
-    /**
-     * Remove um usuário pelo ID.
-     *
-     * @param id identificador do usuário
-     * @throws SQLException em caso de erro no banco
-     */
-    public void remove(int id) throws SQLException {
-        usuarioDAO.remove(id);
+    public String remove(Request req, Response res) {
+        res.type("application/json");
+        try {
+            usuarioDAO.remove(Integer.parseInt(req.params(":id")));
+            return gson.toJson("{\"msg\":\"Usuario removido com sucesso\"}");
+        } catch (Exception e) {
+            res.status(500);
+            return gson.toJson("{\"erro\":\"" + e.getMessage() + "\"}");
+        }
     }
 
-    /**
-     * Busca um usuário pelo ID.
-     *
-     * @param id identificador do usuário
-     * @return Usuario encontrado ou null
-     * @throws SQLException em caso de erro no banco
-     */
-    public Usuario get(int id) throws SQLException {
-        return usuarioDAO.get(id);
+    public String get(Request req, Response res) {
+        res.type("application/json");
+        try {
+            Usuario usuario = usuarioDAO.get(Integer.parseInt(req.params(":id")));
+            return gson.toJson(usuario);
+        } catch (Exception e) {
+            res.status(500);
+            return gson.toJson("{\"erro\":\"" + e.getMessage() + "\"}");
+        }
     }
 
-    /**
-     * Lista todos os usuários cadastrados.
-     *
-     * @return List com todos os usuários
-     * @throws SQLException em caso de erro no banco
-     */
-    public List<Usuario> listar() throws SQLException {
-        return usuarioDAO.listar();
+    public String listar(Request req, Response res) {
+        res.type("application/json");
+        try {
+            return gson.toJson(usuarioDAO.listar());
+        } catch (Exception e) {
+            res.status(500);
+            return gson.toJson("{\"erro\":\"" + e.getMessage() + "\"}");
+        }
     }
 }
