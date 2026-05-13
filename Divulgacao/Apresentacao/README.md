@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-## 🌸🎤 **Apresentações do Projeto**
-=======
 ## 🎤 Apresentações do Projeto
->>>>>>> b3f712d (Atualizando os README para melhor experiência)
 
 Nesta seção estão disponíveis as apresentações desenvolvidas ao longo das sprints do projeto **SafeHer**, documentando a evolução da solução desde a concepção até o desenvolvimento.
 
@@ -24,11 +20,5 @@ Nesta seção estão disponíveis as apresentações desenvolvidas ao longo das 
 
 ## 🌺 Resumo das entregas
 
-- 🌸 **Sprint 1:** Definição do problema, proposta da solução e modelagem inicial  
-<<<<<<< HEAD
-- 🌸 **Sprint 2:** Desenvolvimento do front-end, estrutura do sistema e refinamento dos artefatos  
-
----
-=======
-- 🌸 **Sprint 2:** Desenvolvimento da interface, estrutura do sistema e refinamento dos artefatos  
->>>>>>> b3f712d (Atualizando os README para melhor experiência)
+- 🌸 Sprint 1: Definição do problema, proposta da solução e modelagem inicial  
+- 🌸 Sprint 2: Desenvolvimento da interface, estrutura do sistema e refinamento dos artefatos

@@ -28,27 +28,27 @@ Aqui estão os principais artefatos desenvolvidos ao longo do projeto **SafeHer*
 ### 🌸 Wireframes
 📌 Protótipos das principais telas da aplicação.
 
-- 🔗 Cadastro de Empresa: [Acessar](./Artefatos/Wireframe/Cadastro%20de%20Empresa.png)  
-- 🔗 Cadastro de Usuária: [Acessar](./Artefatos/Wireframe/Cadastro%20de%20Usu%C3%A1ria.png)  
-- 🔗 Home: [Acessar](./Artefatos/Wireframe/Home.png)  
-- 🔗 Login: [Acessar](./Artefatos/Wireframe/Login.png)  
-- 🔗 Modal: [Acessar](./Artefatos/Wireframe/Modal.png)  
+- 🔗 Cadastro de Empresa: [Acessar](./Artefatos/Wireframe/cadastro-empresa.png)  
+- 🔗 Cadastro de Usuária: [Acessar](./Artefatos/Wireframe/cadastro-usuario.png)  
+- 🔗 Home: [Acessar](./Artefatos/Wireframe/home.png)  
+- 🔗 Login: [Acessar](./Artefatos/Wireframe/login.png)  
+- 🔗 Modal: [Acessar](./Artefatos/Wireframe/modal.png)  
 
 ---
 
 ## 🖼️ Pré-visualização dos Wireframes
 
 ### 🏠 Home
-![Home](./Artefatos/Wireframe/Home.png)
+![Home](./Artefatos/Wireframe/home.png)
 
 ### 🔐 Login
-![Login](./Artefatos/Wireframe/Login.png)
+![Login](./Artefatos/Wireframe/login.png)
 
 ### 📝 Cadastro de Usuária
-![Cadastro de Usuária](./Artefatos/Wireframe/Cadastro%20de%20Usu%C3%A1ria.png)
+![Cadastro de Usuária](./Artefatos/Wireframe/cadastro-usuario.png)
 
 ### 🏢 Cadastro de Empresa
-![Cadastro de Empresa](./Artefatos/Wireframe/Cadastro%20de%20Empresa.png)
+![Cadastro de Empresa](./Artefatos/Wireframe/cadastro-empresa.png)
 
 ### 💬 Modal
-![Modal](./Artefatos/Wireframe/Modal.png)
+![Modal](./Artefatos/Wireframe/modal.png)
