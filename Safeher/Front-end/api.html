@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeHer</title>
+    <link rel="stylesheet" href="global.css">
+    <style>
+        .api-code {
+            background: #1E1E1E;
+            color: #D4D4D4;
+            padding: 30px;
+            border-radius: 20px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 15px;
+            line-height: 1.6;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            overflow-x: auto;
+        }
+        .api-code .keyword {
+            color: #569CD6;
+        }
+        .api-code .string {
+            color: #CE9178;
+        }
+        .badge-dev {
+            background: var(--pink-light);
+            color: var(--pink-dark);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 700;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        .alert-box {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            padding: 24px;
+            background: var(--pink-light);
+            border-radius: 16px;
+            color: var(--pink-dark);
+            font-weight: 500;
+            margin-top: 40px;
+            border-left: 6px solid var(--pink-primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="sh-header">
+            <a href="index.html" class="sh-logo">
+                <img src="logo.png" alt="SafeHer Logo" class="sh-logo-img">
+            </a>
+            <div class="sh-nav">
+                <a href="index.html">Início</a>
+                <a href="denuncias.html">Denúncias</a>
+                <a href="avaliacoes.html">Avaliações</a>
+                <a href="api.html" class="active">API</a>
+                <a href="conteudos.html">Conteúdos</a>
+                <a href="vagas.html">Vagas</a>
+                <a href="login.html" class="sh-btn" style="color: white;">Entrar</a>
+                <a href="escolha-cadastro.html" class="sh-btn-outline">Criar conta</a>
+            </div>
+        </header>
+
+        <main>
+            <div class="split-layout">
+                <div>
+                    <div class="badge-dev">Para Desenvolvedores</div>
+                    <h2 class="sh-title">Nossa API Pública</h2>
+                    <p class="sh-subtitle">Integre a base de dados do SafeHer ao seu sistema de RH, portal de vagas ou CRM. Consulte automaticamente o histórico de empresas e impulsione a transparência corporativa.</p>
+
+                    <div style="display: flex; gap: 16px; margin-bottom: 32px; flex-wrap: wrap;">
+                        <button class="sh-btn">Gerar Chave de API</button>
+                        <button class="sh-btn-outline">Ver Documentação Completa</button>
+                    </div>
+
+                    <div class="alert-box">
+                        <i class="fa-solid fa-shield-halved" style="font-size: 32px;"></i>
+                        <p><strong>Privacidade Garantida:</strong> Seus dados pessoais e os relatos textuais das usuárias são fortemente criptografados e <strong>nunca</strong> são expostos na API Pública. Apenas dados agregados e notas das empresas são acessíveis.</p>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="api-code">
+                        <div style="display: flex; gap: 8px; margin-bottom: 20px;">
+                            <div style="width: 14px; height: 14px; border-radius: 50%; background: #FF5F56;"></div>
+                            <div style="width: 14px; height: 14px; border-radius: 50%; background: #FFBD2E;"></div>
+                            <div style="width: 14px; height: 14px; border-radius: 50%; background: #27C93F;"></div>
+                        </div>
+<pre style="margin: 0;">
+<span style="color: #6A9955;">// Exemplo de Requisição (Consulta de Empresa)</span>
+<span class="keyword">curl</span> -X GET <span class="string">"https://api.safeher.com/v1/empresas/1234/reviews"</span> \
+  -H <span class="string">"Authorization: Bearer YOUR_API_KEY"</span>
+
+<span style="color: #6A9955;">// Resposta da API (JSON)</span>
+{
+  <span class="string">"status"</span>: <span class="string">"success"</span>,
+  <span class="string">"data"</span>: {
+    <span class="string">"empresa_id"</span>: <span class="keyword">1234</span>,
+    <span class="string">"nome"</span>: <span class="string">"Tech Solutions S.A."</span>,
+    <span class="string">"selo_seguro"</span>: <span class="keyword">true</span>,
+    <span class="string">"nota_media"</span>: <span class="keyword">4.8</span>,
+    <span class="string">"total_avaliacoes"</span>: <span class="keyword">342</span>,
+    <span class="string">"alertas_abuso_ativos"</span>: <span class="keyword">0</span>,
+    <span class="string">"cultura_diversidade"</span>: <span class="keyword">4.9</span>,
+    <span class="string">"url_perfil"</span>: <span class="string">"https://safeher.com/empresa/tech-solutions"</span>
+  }
+}
+</pre>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <footer class="sh-footer">
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <a href="index.html">
+                    <img src="logo.png" alt="SafeHer" class="sh-logo-img" style="filter: brightness(0) invert(1);">
+                </a>
+                <p>Protegendo mulheres, denunciando abusos e transformando o ambiente corporativo com transparência e justiça.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Nossas Redes Sociais</h4>
+                <div class="social-icons">
+                    <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                    <a href="#" aria-label="Twitter/X"><i class="fa-brands fa-twitter"></i></a>
+                </div>
+            </div>
+            <div class="footer-emergency">
+                <h4>Contatos de Emergência</h4>
+                <p><i class="fa-solid fa-phone"></i> <strong>180</strong> - Central de Atendimento à Mulher</p>
+                <p><i class="fa-solid fa-phone"></i> <strong>190</strong> - Polícia Militar</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 SafeHer. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+</body>
+</html>
