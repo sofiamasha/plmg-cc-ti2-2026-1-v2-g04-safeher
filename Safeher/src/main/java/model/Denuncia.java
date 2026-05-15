@@ -10,6 +10,7 @@ public class Denuncia {
     private boolean anonima;
     private int usuarioId;
     private int empresaId;
+    private int score;
 
     public Denuncia() {
     }
@@ -60,5 +61,13 @@ public class Denuncia {
 
     public void setEmpresaId(int empresaId) {
         this.empresaId = empresaId;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 }

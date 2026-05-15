@@ -26,6 +26,24 @@ public class Aplicacao {
         });
         options("/*", (req, res) -> "OK");
 
+        post("/upload-audio", (req, res) -> {
+            req.attribute("org.eclipse.jetty.multipartConfig", new javax.servlet.MultipartConfigElement("/temp"));
+            try (java.io.InputStream is = req.raw().getPart("audio").getInputStream()) {
+                java.nio.file.Path tempFile = java.nio.file.Files.createTempFile("audio", ".wav");
+                java.nio.file.Files.copy(is, tempFile, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                
+                String texto = service.AudioService.transcreverAudio(tempFile.toAbsolutePath().toString());
+                
+                service.ScoreService scoreService = new service.ScoreService();
+                int score = scoreService.calcularScore(texto);
+                
+                return "{\"texto\": " + new com.google.gson.Gson().toJson(texto) + ", \"score\": " + score + "}";
+            } catch (Exception e) {
+                res.status(500);
+                return "{\"erro\":\"" + e.getMessage() + "\"}";
+            }
+        });
+
         post("/usuarios", (req, res) -> usuarioService.insert(req, res));
         put("/usuarios/:id", (req, res) -> usuarioService.update(req, res));
         delete("/usuarios/:id", (req, res) -> usuarioService.remove(req, res));

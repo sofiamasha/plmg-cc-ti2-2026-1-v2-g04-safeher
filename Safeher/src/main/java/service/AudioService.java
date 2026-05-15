@@ -44,6 +44,8 @@ public class AudioService {
         Response response =
                 client.newCall(request).execute();
 
-        return response.body().string();
+        String jsonResponse = response.body().string();
+        com.google.gson.JsonObject jsonObject = com.google.gson.JsonParser.parseString(jsonResponse).getAsJsonObject();
+        return jsonObject.has("text") ? jsonObject.get("text").getAsString() : jsonResponse;
     }
 }

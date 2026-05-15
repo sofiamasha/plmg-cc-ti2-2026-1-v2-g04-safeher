@@ -10,7 +10,7 @@ import java.util.List;
 public class DenunciaDAO extends ConexaoDAO {
 
     public void insert(Denuncia denuncia) throws SQLException {
-        String sql = "INSERT INTO Denuncia (id, descricao, data, anonima, Usuario_id, Empresa_id) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Denuncia (id, descricao, data, anonima, Usuario_id, Empresa_id, score) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try {
             abrirConexao();
             PreparedStatement stmt = getConexao().prepareStatement(sql);
@@ -24,6 +24,7 @@ public class DenunciaDAO extends ConexaoDAO {
             } else {
                 stmt.setInt(6, denuncia.getEmpresaId());
             }
+            stmt.setInt(7, denuncia.getScore());
             stmt.executeUpdate();
             stmt.close();
         } finally {
@@ -32,7 +33,7 @@ public class DenunciaDAO extends ConexaoDAO {
     }
 
     public void update(Denuncia denuncia) throws SQLException {
-        String sql = "UPDATE Denuncia SET descricao=?, data=?, anonima=?, Usuario_id=?, Empresa_id=? WHERE id=?";
+        String sql = "UPDATE Denuncia SET descricao=?, data=?, anonima=?, Usuario_id=?, Empresa_id=?, score=? WHERE id=?";
         try {
             abrirConexao();
             PreparedStatement stmt = getConexao().prepareStatement(sql);
@@ -41,7 +42,8 @@ public class DenunciaDAO extends ConexaoDAO {
             stmt.setBoolean(3, denuncia.isAnonima());
             stmt.setInt(4, denuncia.getUsuarioId());
             stmt.setInt(5, denuncia.getEmpresaId());
-            stmt.setInt(6, denuncia.getId());
+            stmt.setInt(6, denuncia.getScore());
+            stmt.setInt(7, denuncia.getId());
             stmt.executeUpdate();
             stmt.close();
         } finally {
@@ -78,6 +80,7 @@ public class DenunciaDAO extends ConexaoDAO {
                 denuncia.setAnonima(rs.getBoolean("anonima"));
                 denuncia.setUsuarioId(rs.getInt("Usuario_id"));
                 denuncia.setEmpresaId(rs.getInt("Empresa_id"));
+                denuncia.setScore(rs.getInt("score"));
             }
             rs.close();
             stmt.close();
@@ -102,6 +105,7 @@ public class DenunciaDAO extends ConexaoDAO {
                 denuncia.setAnonima(rs.getBoolean("anonima"));
                 denuncia.setUsuarioId(rs.getInt("Usuario_id"));
                 denuncia.setEmpresaId(rs.getInt("Empresa_id"));
+                denuncia.setScore(rs.getInt("score"));
                 lista.add(denuncia);
             }
             rs.close();
@@ -128,6 +132,7 @@ public class DenunciaDAO extends ConexaoDAO {
                 denuncia.setAnonima(rs.getBoolean("anonima"));
                 denuncia.setUsuarioId(rs.getInt("Usuario_id"));
                 denuncia.setEmpresaId(rs.getInt("Empresa_id"));
+                denuncia.setScore(rs.getInt("score"));
                 lista.add(denuncia);
             }
             rs.close();
@@ -154,6 +159,7 @@ public class DenunciaDAO extends ConexaoDAO {
                 denuncia.setAnonima(rs.getBoolean("anonima"));
                 denuncia.setUsuarioId(rs.getInt("Usuario_id"));
                 denuncia.setEmpresaId(rs.getInt("Empresa_id"));
+                denuncia.setScore(rs.getInt("score"));
                 lista.add(denuncia);
             }
             rs.close();

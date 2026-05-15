@@ -31,7 +31,8 @@
      <p class="sh-subtitle">Seu relato é seguro, anônimo e fundamental para construirmos ambientes de trabalho melhores e protegermos outras mulheres.</p>
 
      <div class="sh-card">
-      <form action="processa-denuncia.html" method="POST">
+      <form id="denunciaForm">
+       <input type="hidden" id="score" value="1">
        <label for="empresa" class="sh-label">Empresa</label>
        <input type="text" id="empresa" class="sh-input" placeholder="Qual empresa você deseja denunciar?" value="Tech Solutions S.A.">
 
@@ -50,8 +51,10 @@
        <label class="sh-label" style="margin-top: 15px;">Gravar ou Anexar Áudio</label>
        <div class="audio-controls">
         <button type="button" class="sh-btn-outline" style="flex: 1;"><i class="fa-solid fa-microphone"></i> Gravar Relato</button>
-        <button type="button" class="sh-btn-outline" style="flex: 1;"><i class="fa-solid fa-upload"></i> Anexar Arquivo</button>
+        <button type="button" class="sh-btn-outline" id="btnAnexar" style="flex: 1;"><i class="fa-solid fa-upload"></i> Anexar Arquivo</button>
+        <input type="file" id="audioInput" accept="audio/*" style="display: none;">
        </div>
+       <p id="audioStatus" style="font-size: 12px; color: green; display: none; margin-top: 5px;">Áudio processado com sucesso!</p>
 
        <button type="submit" class="sh-btn" style="width: 100%; padding: 16px;">Enviar Denúncia Anônima</button>
       </form>
@@ -104,5 +107,76 @@
    <p>&copy; 2024 SafeHer. Todos os direitos reservados.</p>
   </div>
  </footer>
+
+ <script>
+  document.getElementById('btnAnexar').addEventListener('click', function() {
+      document.getElementById('audioInput').click();
+  });
+
+  document.getElementById('audioInput').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const formData = new FormData();
+      formData.append('audio', file);
+
+      document.getElementById('audioStatus').style.display = 'block';
+      document.getElementById('audioStatus').style.color = '#ff9800';
+      document.getElementById('audioStatus').textContent = 'Processando áudio pela IA Whisper...';
+
+      fetch('http://localhost:8080/upload-audio', {
+          method: 'POST',
+          body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+          if (data.erro) {
+              alert('Erro ao processar áudio: ' + data.erro);
+              document.getElementById('audioStatus').textContent = 'Erro ao processar áudio.';
+              document.getElementById('audioStatus').style.color = 'red';
+          } else {
+              document.getElementById('relato').value = data.texto;
+              document.getElementById('score').value = data.score;
+              document.getElementById('audioStatus').textContent = 'Áudio processado! Score de gravidade calculado: ' + data.score;
+              document.getElementById('audioStatus').style.color = 'green';
+          }
+      })
+      .catch(error => {
+          console.error('Error:', error);
+          document.getElementById('audioStatus').textContent = 'Falha ao comunicar com o servidor.';
+          document.getElementById('audioStatus').style.color = 'red';
+      });
+  });
+
+  document.getElementById('denunciaForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const denunciaData = {
+          descricao: document.getElementById('relato').value,
+          data: new Date().toISOString().split('T')[0],
+          anonima: true,
+          usuarioId: 1, // Exemplo
+          empresaId: 1, // Exemplo
+          score: parseInt(document.getElementById('score').value)
+      };
+
+      fetch('http://localhost:8080/denuncias', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(denunciaData)
+      })
+      .then(response => response.json())
+      .then(data => {
+          alert('Denúncia enviada com sucesso!');
+          document.getElementById('denunciaForm').reset();
+          document.getElementById('audioStatus').style.display = 'none';
+          document.getElementById('score').value = "1";
+      })
+      .catch(error => {
+          console.error('Error:', error);
+          alert('Erro ao enviar denúncia.');
+      });
+  });
+ </script>
 </body>
 </html>

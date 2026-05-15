@@ -33,6 +33,7 @@ CREATE TABLE Denuncia (
     anonima BOOLEAN,         -- se é anonima
     Usuario_id INT,          -- referencia ao usuario
     Empresa_id INT,          -- referencia a empresa
+    score INT,               -- score de gravidade
     FOREIGN KEY (Usuario_id) REFERENCES Usuario(id),
     FOREIGN KEY (Empresa_id) REFERENCES Empresa(id)
 );
