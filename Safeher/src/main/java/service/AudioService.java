@@ -1,50 +1,49 @@
 package service;
 
-import com.microsoft.cognitiveservices.speech.*;
-import com.microsoft.cognitiveservices.speech.audio.AudioConfig;
-
-import java.util.concurrent.Future;
+import okhttp3.*;
+import java.io.File;
+import java.io.IOException;
 
 public class AudioService {
 
-    private final String speechKey = "En74mVb2Krnz7Aat5vBABC8FZ4IEjOZqnZP1xngtwBeLTSx2ZhwoJQQJ99CEACZoyfiXJ3w3AAAEACOGGPoI";
-    private final String speechRegion = "brazilsouth";
+    private static final String API_KEY = "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";
 
-    public String converterAudioParaTexto(String caminhoAudio) {
+    public static String transcreverAudio(String caminhoAudio) throws IOException {
 
-        try {
+        OkHttpClient client = new OkHttpClient();
 
-            SpeechConfig speechConfig =
-                    SpeechConfig.fromSubscription(speechKey, speechRegion);
+        File audioFile = new File(caminhoAudio);
 
-            speechConfig.setSpeechRecognitionLanguage("pt-BR");
+        RequestBody fileBody =
+                RequestBody.create(
+                        audioFile,
+                        MediaType.parse("audio/wav")
+                );
 
-            AudioConfig audioConfig =
-                    AudioConfig.fromWavFileInput(caminhoAudio);
+        MultipartBody requestBody =
+                new MultipartBody.Builder()
+                        .setType(MultipartBody.FORM)
+                        .addFormDataPart(
+                                "file",
+                                audioFile.getName(),
+                                fileBody
+                        )
+                        .addFormDataPart("model", "whisper-1")
+                        .build();
 
-            SpeechRecognizer recognizer =
-                    new SpeechRecognizer(speechConfig, audioConfig);
+        Request request =
+                new Request.Builder()
+                        .url("https://api.openai.com/v1/audio/transcriptions")
+                        .addHeader(
+                                "Authorization",
+                                "Bearer " + API_KEY
+                        )
+                        .post(requestBody)
+                        .build();
 
-            Future<SpeechRecognitionResult> task =
-                    recognizer.recognizeOnceAsync();
+        Response response =
+                client.newCall(request).execute();
 
-            SpeechRecognitionResult result = task.get();
-
-            if (result.getReason() == ResultReason.RecognizedSpeech) {
-
-                return result.getText();
-
-            } else {
-
-                return "Não foi possível reconhecer o áudio.";
-
-            }
-
-        } catch (Exception e) {
-
-            e.printStackTrace();
-            return "Erro ao converter áudio.";
-
-        }
+        return response.body().string();
     }
 }
