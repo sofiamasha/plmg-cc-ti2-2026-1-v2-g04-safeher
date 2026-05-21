@@ -6,9 +6,18 @@ import java.io.IOException;
 
 public class AudioService {
 
-    private static final String API_KEY = "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";
+    // Chave lida da variavel de ambiente OPENAI_API_KEY.
+    // NUNCA commite a chave no codigo fonte.
+    // Defina antes de iniciar a aplicacao:
+    //   PowerShell:  $env:OPENAI_API_KEY = "sk-..."
+    //   Linux/Mac:   export OPENAI_API_KEY="sk-..."
+    private static final String API_KEY = System.getenv("OPENAI_API_KEY");
 
     public static String transcreverAudio(String caminhoAudio) throws IOException {
+
+        if (API_KEY == null || API_KEY.isBlank()) {
+            throw new IOException("OPENAI_API_KEY nao configurada. Defina a variavel de ambiente antes de iniciar a aplicacao.");
+        }
 
         OkHttpClient client = new OkHttpClient();
 

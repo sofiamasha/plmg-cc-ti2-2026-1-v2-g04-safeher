@@ -253,6 +253,7 @@
             </a>
             <div class="sh-nav">
                 <a href="index.html" class="active">Início</a>
+                <a href="parceiros.html">Para Parceiros</a>
                 <a href="login.html" class="sh-btn" style="color: white;">Entrar</a>
                 <a href="escolha-cadastro.html" class="sh-btn-outline">Criar conta</a>
             </div>
@@ -314,6 +315,27 @@
                         <li><i class="fa-solid fa-check-circle"></i> Melhore seu ambiente de trabalho</li>
                     </ul>
                     <a href="escolha-cadastro.html" class="card-btn">Criar Conta como Empresa</a>
+                </div>
+            </section>
+
+            <!-- API pública para parceiros -->
+            <section style="background: linear-gradient(135deg, var(--pink-light) 0%, #fff 100%); border-radius: 24px; padding: 50px 40px; margin: 40px 0; display: grid; grid-template-columns: 2fr 1fr; gap: 40px; align-items: center;">
+                <div>
+                    <div class="hero-badge" style="background: white;"><i class="fa-solid fa-code"></i> API pública</div>
+                    <h2 style="font-family: var(--font-heading); font-size: 30px; color: var(--text-dark); margin: 12px 0 14px;">É um site de vagas? <span style="color: var(--pink-primary);">Mostre o score SafeHer</span> nas suas vagas.</h2>
+                    <p style="color: var(--text-gray); font-size: 16px; line-height: 1.7; margin-bottom: 22px; max-width: 560px;">
+                        Sites como Gupy, Catho ou seu próprio portal de RH podem consultar gratuitamente a reputação que mulheres atribuíram a uma empresa e exibir esse score ao lado das vagas. Transparência que ajuda candidatas a decidir.
+                    </p>
+                    <a href="parceiros.html" class="sh-btn" style="padding: 14px 30px;"><i class="fa-solid fa-arrow-right" style="margin-right: 8px;"></i> Ver documentação e demo</a>
+                </div>
+                <div style="background: white; border-radius: 18px; padding: 22px; box-shadow: 0 12px 30px rgba(227,58,127,0.12); font-family: 'Courier New', monospace; font-size: 12px; color: #333;">
+                    <div style="color: var(--pink-primary); font-weight: 700; margin-bottom: 8px;">GET /api/public/empresas/:id/score</div>
+                    <div style="color: #888;">{</div>
+                    <div style="padding-left: 14px;">"empresa": "Tech Corp",</div>
+                    <div style="padding-left: 14px;">"score": <span style="color: var(--pink-primary); font-weight: 700;">4.7</span>,</div>
+                    <div style="padding-left: 14px;">"avaliacoes": 128,</div>
+                    <div style="padding-left: 14px;">"poweredBy": "SafeHer"</div>
+                    <div style="color: #888;">}</div>
                 </div>
             </section>
 
