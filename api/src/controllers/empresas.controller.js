@@ -1,5 +1,6 @@
 const { validationResult } = require('express-validator');
-const { query } = require('../config/database');
+const EmpresaModel = require('../models/empresa.model');
+const AvaliacaoModel = require('../models/avaliacao.model');
 
 /**
  * GET /api/empresas
@@ -7,10 +8,8 @@ const { query } = require('../config/database');
  */
 async function listar(req, res, next) {
   try {
-    const { rows } = await query(
-      'SELECT id, nome, indice, cnpj, cep, endereco, email, telefone FROM empresa ORDER BY nome'
-    );
-    res.json(rows);
+    const empresas = await EmpresaModel.listar();
+    res.json(empresas);
   } catch (err) {
     next(err);
   }
@@ -28,48 +27,21 @@ async function buscarPorNome(req, res, next) {
       return res.status(400).json({ erro: 'Parâmetro "nome" é obrigatório' });
     }
 
-    // Busca a empresa com busca parcial (ILIKE = case-insensitive)
-    const { rows: empresas } = await query(
-      `SELECT id, nome, indice, cnpj, cep, endereco, email, telefone
-       FROM empresa
-       WHERE nome ILIKE $1
-       LIMIT 5`,
-      [`%${nome.trim()}%`]
-    );
+    const empresas = await EmpresaModel.buscarPorNome(nome);
 
     if (empresas.length === 0) {
       return res.status(404).json({ erro: 'Empresa não encontrada' });
     }
 
-    // Para cada empresa encontrada, busca métricas de avaliações
     const resultados = await Promise.all(
       empresas.map(async (empresa) => {
-        // Média de notas e contagem
-        const { rows: metricas } = await query(
-          `SELECT
-             ROUND(AVG(nota)::numeric, 1) AS score,
-             COUNT(*) AS quantidade_avaliacoes
-           FROM avaliacao
-           WHERE empresa_id = $1`,
-          [empresa.id]
-        );
-
-        // Comentários recentes (para a extensão exibir)
-        const { rows: avaliacoes } = await query(
-          `SELECT comentario, nota, data_criacao
-           FROM avaliacao
-           WHERE empresa_id = $1
-           ORDER BY data_criacao DESC
-           LIMIT 3`,
-          [empresa.id]
-        );
-
-        const { score, quantidade_avaliacoes } = metricas[0];
+        const metricas = await AvaliacaoModel.buscarMetricasPorEmpresa(empresa.id);
+        const avaliacoes = await AvaliacaoModel.buscarRecentesPorEmpresa(empresa.id, 3);
 
         return {
           empresa: empresa.nome,
-          score: parseFloat(score) || 0,
-          quantidadeAvaliacoes: parseInt(quantidade_avaliacoes),
+          score: parseFloat(metricas?.score) || 0,
+          quantidadeAvaliacoes: parseInt(metricas?.quantidade_avaliacoes) || 0,
           avaliacoesRecentes: avaliacoes,
           detalhes: {
             id: empresa.id,
@@ -92,14 +64,11 @@ async function buscarPorNome(req, res, next) {
  */
 async function buscarPorId(req, res, next) {
   try {
-    const { rows } = await query(
-      'SELECT id, nome, indice, cnpj, cep, endereco, email, telefone FROM empresa WHERE id = $1',
-      [req.params.id]
-    );
-    if (rows.length === 0) {
+    const empresa = await EmpresaModel.buscarPorId(req.params.id);
+    if (!empresa) {
       return res.status(404).json({ erro: 'Empresa não encontrada' });
     }
-    res.json(rows[0]);
+    res.json(empresa);
   } catch (err) {
     next(err);
   }
@@ -116,18 +85,11 @@ async function criar(req, res, next) {
       return res.status(422).json({ erros: erros.array() });
     }
 
-    const { nome, cnpj, cep, endereco, email, telefone, senha } = req.body;
-
-    const { rows } = await query(
-      `INSERT INTO empresa (nome, indice, cnpj, cep, endereco, email, telefone, senha)
-       VALUES ($1, 0, $2, $3, $4, $5, $6, $7)
-       RETURNING id, nome, cnpj, email`,
-      [nome, cnpj, cep, endereco, email, telefone, senha]
-    );
+    const empresa = await EmpresaModel.criar(req.body);
 
     res.status(201).json({
       mensagem: 'Empresa cadastrada com sucesso',
-      empresa: rows[0],
+      empresa,
     });
   } catch (err) {
     next(err);
@@ -145,17 +107,9 @@ async function atualizar(req, res, next) {
       return res.status(422).json({ erros: erros.array() });
     }
 
-    const { nome, cnpj, cep, endereco, email, telefone } = req.body;
-    const { id } = req.params;
+    const sucesso = await EmpresaModel.atualizar(req.params.id, req.body);
 
-    const { rowCount } = await query(
-      `UPDATE empresa
-       SET nome=$1, cnpj=$2, cep=$3, endereco=$4, email=$5, telefone=$6
-       WHERE id=$7`,
-      [nome, cnpj, cep, endereco, email, telefone, id]
-    );
-
-    if (rowCount === 0) {
+    if (!sucesso) {
       return res.status(404).json({ erro: 'Empresa não encontrada' });
     }
 
@@ -171,8 +125,8 @@ async function atualizar(req, res, next) {
  */
 async function remover(req, res, next) {
   try {
-    const { rowCount } = await query('DELETE FROM empresa WHERE id = $1', [req.params.id]);
-    if (rowCount === 0) {
+    const sucesso = await EmpresaModel.remover(req.params.id);
+    if (!sucesso) {
       return res.status(404).json({ erro: 'Empresa não encontrada' });
     }
     res.json({ mensagem: 'Empresa removida com sucesso' });
@@ -189,41 +143,19 @@ async function score(req, res, next) {
   try {
     const { id } = req.params;
 
-    // Dados da empresa
-    const { rows: empresa } = await query(
-      'SELECT id, nome FROM empresa WHERE id = $1',
-      [id]
-    );
-    if (empresa.length === 0) {
+    const empresa = await EmpresaModel.buscarDadosBasicos(id);
+    if (!empresa) {
       return res.status(404).json({ erro: 'Empresa não encontrada' });
     }
 
-    // Métricas agregadas
-    const { rows: metricas } = await query(
-      `SELECT
-         ROUND(AVG(nota)::numeric, 1) AS score,
-         COUNT(*) AS quantidade_avaliacoes
-       FROM avaliacao
-       WHERE empresa_id = $1`,
-      [id]
-    );
-
-    // Tags/motivos mais citados nas avaliações
-    const { rows: motivos } = await query(
-      `SELECT tag, COUNT(*) AS total
-       FROM avaliacao_tag
-       WHERE empresa_id = $1
-       GROUP BY tag
-       ORDER BY total DESC
-       LIMIT 5`,
-      [id]
-    );
+    const metricas = await AvaliacaoModel.buscarMetricasPorEmpresa(id);
+    const motivos = await AvaliacaoModel.buscarMotivosPorEmpresa(id, 5);
 
     res.json({
-      empresa: empresa[0].nome,
-      score: parseFloat(metricas[0].score) || 0,
-      quantidadeAvaliacoes: parseInt(metricas[0].quantidade_avaliacoes),
-      motivos: motivos.map(m => m.tag),
+      empresa: empresa.nome,
+      score: parseFloat(metricas?.score) || 0,
+      quantidadeAvaliacoes: parseInt(metricas?.quantidade_avaliacoes) || 0,
+      motivos,
     });
   } catch (err) {
     next(err);
