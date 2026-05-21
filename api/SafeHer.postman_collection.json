@@ -1,0 +1,256 @@
+{
+  "info": {
+    "name": "SafeHer API",
+    "description": "Coleção de testes da SafeHer API (backend da extensão). Importe e ajuste a variável baseUrl se necessário. Após Cadastro/Login o token JWT é salvo automaticamente em {{token}}.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" },
+    { "key": "token", "value": "" },
+    { "key": "empresaId", "value": "" },
+    { "key": "avaliacaoId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "url": { "raw": "{{baseUrl}}/health", "host": ["{{baseUrl}}"], "path": ["health"] }
+      }
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Cadastro",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json.token) { pm.collectionVariables.set('token', json.token); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Teste Usuaria\",\n  \"email\": \"teste@safeher.com\",\n  \"senha\": \"senha123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/auth/cadastro", "host": ["{{baseUrl}}"], "path": ["api","auth","cadastro"] }
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json.token) { pm.collectionVariables.set('token', json.token); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"teste@safeher.com\",\n  \"senha\": \"senha123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/auth/login", "host": ["{{baseUrl}}"], "path": ["api","auth","login"] }
+          }
+        },
+        {
+          "name": "Perfil",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/api/auth/perfil", "host": ["{{baseUrl}}"], "path": ["api","auth","perfil"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Empresas",
+      "item": [
+        {
+          "name": "Listar",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/api/empresas", "host": ["{{baseUrl}}"], "path": ["api","empresas"] }
+          }
+        },
+        {
+          "name": "Buscar por nome (extensão)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/api/empresas/buscar?nome=Google",
+              "host": ["{{baseUrl}}"],
+              "path": ["api","empresas","buscar"],
+              "query": [{ "key": "nome", "value": "Google" }]
+            }
+          }
+        },
+        {
+          "name": "Buscar por ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/api/empresas/{{empresaId}}", "host": ["{{baseUrl}}"], "path": ["api","empresas","{{empresaId}}"] }
+          }
+        },
+        {
+          "name": "Score (extensão)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/api/empresas/{{empresaId}}/score", "host": ["{{baseUrl}}"], "path": ["api","empresas","{{empresaId}}","score"] }
+          }
+        },
+        {
+          "name": "Criar",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json.id) { pm.collectionVariables.set('empresaId', json.id); }",
+                  "else if (json.empresa && json.empresa.id) { pm.collectionVariables.set('empresaId', json.empresa.id); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Empresa Teste\",\n  \"cnpj\": \"00.000.000/0001-00\",\n  \"email\": \"contato@empresateste.com\",\n  \"telefone\": \"(31) 99999-9999\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/empresas", "host": ["{{baseUrl}}"], "path": ["api","empresas"] }
+          }
+        },
+        {
+          "name": "Atualizar",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"Empresa Teste Atualizada\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/empresas/{{empresaId}}", "host": ["{{baseUrl}}"], "path": ["api","empresas","{{empresaId}}"] }
+          }
+        },
+        {
+          "name": "Remover",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/api/empresas/{{empresaId}}", "host": ["{{baseUrl}}"], "path": ["api","empresas","{{empresaId}}"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Avaliacoes",
+      "item": [
+        {
+          "name": "Listar",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/api/avaliacoes", "host": ["{{baseUrl}}"], "path": ["api","avaliacoes"] }
+          }
+        },
+        {
+          "name": "Por empresa",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/api/avaliacoes/empresa/{{empresaId}}", "host": ["{{baseUrl}}"], "path": ["api","avaliacoes","empresa","{{empresaId}}"] }
+          }
+        },
+        {
+          "name": "Por ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/api/avaliacoes/{{avaliacaoId}}", "host": ["{{baseUrl}}"], "path": ["api","avaliacoes","{{avaliacaoId}}"] }
+          }
+        },
+        {
+          "name": "Criar",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json.id) { pm.collectionVariables.set('avaliacaoId', json.id); }",
+                  "else if (json.avaliacao && json.avaliacao.id) { pm.collectionVariables.set('avaliacaoId', json.avaliacao.id); }"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nota\": 5,\n  \"comentario\": \"Ambiente respeitoso e inclusivo.\",\n  \"nomeEmpresa\": \"Empresa Teste\",\n  \"empresaId\": {{empresaId}}\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/avaliacoes", "host": ["{{baseUrl}}"], "path": ["api","avaliacoes"] }
+          }
+        },
+        {
+          "name": "Atualizar",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nota\": 4,\n  \"comentario\": \"Editado: ambiente bom.\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/avaliacoes/{{avaliacaoId}}", "host": ["{{baseUrl}}"], "path": ["api","avaliacoes","{{avaliacaoId}}"] }
+          }
+        },
+        {
+          "name": "Remover",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+            "url": { "raw": "{{baseUrl}}/api/avaliacoes/{{avaliacaoId}}", "host": ["{{baseUrl}}"], "path": ["api","avaliacoes","{{avaliacaoId}}"] }
+          }
+        }
+      ]
+    }
+  ]
+}

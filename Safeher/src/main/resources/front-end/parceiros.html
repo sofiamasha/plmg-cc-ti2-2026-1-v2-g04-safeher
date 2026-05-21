@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SafeHer — API Pública para Parceiros</title>
+  <link rel="stylesheet" href="global.css" />
+  <style>
+    :root {
+      --rosa: #ff7aa2;
+      --rosa-escuro: #c84e7b;
+      --roxo: #6b3e8a;
+      --cinza-bg: #faf6f8;
+      --cinza-borda: #e6dde3;
+      --texto: #2c1a2e;
+    }
+
+    body {
+      background: var(--cinza-bg);
+      color: var(--texto);
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      margin: 0;
+    }
+
+    header.hero {
+      background: linear-gradient(135deg, var(--rosa) 0%, var(--roxo) 100%);
+      color: white;
+      padding: 60px 32px;
+      text-align: center;
+    }
+    header.hero h1 { margin: 0 0 12px; font-size: 2.4rem; }
+    header.hero p  { margin: 0; opacity: 0.95; font-size: 1.1rem; max-width: 720px; margin-inline: auto; }
+    .badge-novo {
+      display: inline-block; background: rgba(255,255,255,0.25);
+      padding: 4px 12px; border-radius: 999px; font-size: 0.8rem;
+      margin-bottom: 12px; letter-spacing: 0.5px;
+    }
+
+    main {
+      max-width: 1080px;
+      margin: -32px auto 60px;
+      padding: 0 24px;
+    }
+
+    section.card {
+      background: white;
+      border: 1px solid var(--cinza-borda);
+      border-radius: 12px;
+      padding: 28px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 16px rgba(107, 62, 138, 0.06);
+    }
+    section.card h2 {
+      margin-top: 0;
+      color: var(--roxo);
+      border-bottom: 2px solid var(--rosa);
+      padding-bottom: 8px;
+      display: inline-block;
+    }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 720px) { .grid-2 { grid-template-columns: 1fr; } }
+
+    code, pre {
+      background: #1e1e2e;
+      color: #f8f8f2;
+      border-radius: 6px;
+    }
+    code { padding: 2px 6px; font-size: 0.9rem; }
+    pre {
+      padding: 16px;
+      overflow-x: auto;
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+
+    table.endpoints {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+    }
+    table.endpoints th, table.endpoints td {
+      text-align: left;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--cinza-borda);
+      vertical-align: top;
+    }
+    table.endpoints th { background: #f3eaf0; color: var(--roxo); }
+    .method-get {
+      display: inline-block; background: #2d8f4e; color: white;
+      padding: 2px 8px; border-radius: 4px; font-size: 0.75rem;
+      font-weight: bold; min-width: 36px; text-align: center;
+    }
+
+    .demo-form {
+      display: flex; gap: 8px; flex-wrap: wrap; margin: 16px 0;
+    }
+    .demo-form input {
+      flex: 1; min-width: 200px;
+      padding: 10px 14px; font-size: 1rem;
+      border: 1px solid var(--cinza-borda); border-radius: 8px;
+    }
+    .demo-form button {
+      background: var(--rosa); color: white; border: 0;
+      padding: 10px 22px; border-radius: 8px; cursor: pointer;
+      font-weight: 600; font-size: 1rem;
+    }
+    .demo-form button:hover { background: var(--rosa-escuro); }
+
+    .resultado {
+      background: #f3eaf0; border-radius: 10px; padding: 18px;
+      margin-top: 12px; display: none;
+    }
+    .resultado.visivel { display: block; }
+    .score-grande {
+      font-size: 3rem; font-weight: 700; color: var(--roxo); line-height: 1;
+    }
+    .score-meta { color: #6a5a6e; font-size: 0.95rem; margin-top: 4px; }
+    .motivos { margin-top: 10px; }
+    .motivo-tag {
+      display: inline-block; background: white; color: var(--roxo);
+      border: 1px solid var(--rosa); padding: 4px 10px;
+      border-radius: 999px; font-size: 0.85rem; margin: 4px 4px 0 0;
+    }
+    .pre-resposta {
+      margin-top: 12px;
+      max-height: 280px; overflow-y: auto;
+    }
+
+    .badge-preview {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: white; border: 2px solid var(--rosa);
+      padding: 8px 14px; border-radius: 999px;
+      font-weight: 600; color: var(--roxo);
+    }
+    .badge-preview .estrela { color: var(--rosa); }
+
+    .chave-demo {
+      display: inline-block; background: #fff3e0; border: 1px dashed #c97a00;
+      padding: 8px 14px; border-radius: 6px; font-family: monospace;
+      font-size: 0.9rem; color: #6b3300;
+    }
+
+    .passos { padding-left: 20px; }
+    .passos li { margin-bottom: 10px; }
+
+    nav.top {
+      display: flex; gap: 16px; justify-content: center;
+      padding: 12px; background: white; border-bottom: 1px solid var(--cinza-borda);
+    }
+    nav.top a {
+      color: var(--roxo); text-decoration: none; font-weight: 500;
+    }
+    nav.top a:hover { color: var(--rosa-escuro); }
+  </style>
+</head>
+<body>
+
+<nav class="top">
+  <a href="index.html">← Voltar ao SafeHer</a>
+  <a href="#endpoints">Endpoints</a>
+  <a href="#demo">Demo</a>
+  <a href="#integrar">Como integrar</a>
+</nav>
+
+<header class="hero">
+  <span class="badge-novo">🚀 NOVO — API Pública</span>
+  <h1>SafeHer para sites de vagas</h1>
+  <p>
+    Integre o score de segurança do SafeHer no seu site de vagas em 5 minutos.
+    Mostre às candidatas a reputação da empresa antes de elas se candidatarem.
+  </p>
+</header>
+
+<main>
+
+  <section class="card">
+    <h2>O que é?</h2>
+    <p>
+      A <strong>API Pública SafeHer</strong> permite que qualquer site de vagas
+      (Gupy, Catho, sites internos de RH, etc.) consulte o score que mulheres
+      atribuíram a uma empresa e exiba um <em>badge de reputação</em> nas vagas.
+    </p>
+    <p style="margin-top:18px;">
+      Exemplo do badge que seu site pode mostrar:
+      <span class="badge-preview"><span class="estrela">⭐</span> SafeHer 4.3 · 27 avaliações</span>
+    </p>
+  </section>
+
+  <section class="card" id="demo">
+    <h2>🎯 Demonstração ao vivo</h2>
+    <p>
+      Use a chave de demonstração abaixo para testar agora mesmo. Digite o nome
+      de uma empresa cadastrada no SafeHer.
+    </p>
+    <p>Chave demo: <span class="chave-demo" id="chaveDemo">sh_demo_publica_123</span></p>
+
+    <div class="demo-form">
+      <input id="nomeEmpresa" placeholder="Digite o nome da empresa (ex: Empresa 1)" />
+      <button id="btnConsultar">Consultar score</button>
+    </div>
+
+    <div class="resultado" id="resultado">
+      <div style="display:flex; align-items:flex-end; gap:16px; flex-wrap:wrap;">
+        <div>
+          <div class="score-grande" id="resScore">—</div>
+          <div class="score-meta" id="resMeta"></div>
+        </div>
+        <div class="motivos" id="resMotivos" style="flex:1; min-width:200px;"></div>
+      </div>
+      <pre class="pre-resposta" id="resJson"></pre>
+    </div>
+  </section>
+
+  <section class="card" id="endpoints">
+    <h2>📡 Endpoints públicos</h2>
+    <p>Base URL: <code>http://localhost:3000/api/public</code></p>
+    <p>Envie a chave em <code>X-API-Key: &lt;sua_chave&gt;</code> <em>ou</em> <code>?api_key=&lt;sua_chave&gt;</code>.</p>
+
+    <table class="endpoints">
+      <thead>
+        <tr><th>Método</th><th>Rota</th><th>Descrição</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="method-get">GET</span></td>
+          <td><code>/empresas/score-por-nome?nome=X</code></td>
+          <td>Atalho perfeito para sites de vagas: passe o nome direto da página da vaga e receba o score. Devolve <code>encontrada: false</code> se a empresa ainda não tem dados.</td>
+        </tr>
+        <tr>
+          <td><span class="method-get">GET</span></td>
+          <td><code>/empresas/buscar?nome=X</code></td>
+          <td>Lista até 5 empresas que combinam com o nome, com score e qtd de avaliações.</td>
+        </tr>
+        <tr>
+          <td><span class="method-get">GET</span></td>
+          <td><code>/empresas/:id/score</code></td>
+          <td>Score detalhado de uma empresa específica (por ID), incluindo os motivos mais citados.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 style="margin-top:24px;">Exemplo de resposta</h3>
+<pre>{
+  "empresa": "Empresa Exemplo",
+  "score": 4.3,
+  "quantidadeAvaliacoes": 27,
+  "motivos": ["ambiente respeitoso", "boa liderança feminina"],
+  "encontrada": true,
+  "poweredBy": "SafeHer"
+}</pre>
+  </section>
+
+  <section class="card" id="integrar">
+    <h2>🔌 Como integrar (3 passos)</h2>
+    <ol class="passos">
+      <li>
+        <strong>Solicite sua chave:</strong> mande um e-mail para
+        <code>parceiros@safeher.local</code> com nome do site e contato.
+        Você receberá uma chave no formato <code>sh_live_xxxxxxxx</code>.
+      </li>
+      <li>
+        <strong>Adicione o snippet</strong> abaixo na página da vaga, substituindo
+        <code>SUA_CHAVE</code> e o nome da empresa:
+<pre>&lt;script&gt;
+fetch('http://localhost:3000/api/public/empresas/score-por-nome?nome='
+    + encodeURIComponent('Empresa X')
+    + '&api_key=SUA_CHAVE')
+  .then(r =&gt; r.json())
+  .then(d =&gt; {
+    if (d.encontrada &amp;&amp; d.score &gt; 0) {
+      document.getElementById('safeher-badge').innerHTML =
+        '⭐ SafeHer ' + d.score + ' · ' + d.quantidadeAvaliacoes + ' avaliações';
+    }
+  });
+&lt;/script&gt;
+&lt;span id="safeher-badge"&gt;&lt;/span&gt;</pre>
+      </li>
+      <li>
+        <strong>Pronto.</strong> O badge aparece automaticamente em toda página
+        de vaga que tiver dados no SafeHer.
+      </li>
+    </ol>
+  </section>
+
+  <section class="card">
+    <h2>🛡️ Limites e segurança</h2>
+    <ul>
+      <li><strong>Rate limit:</strong> 1000 chamadas/dia por chave (configurável).</li>
+      <li><strong>Apenas leitura:</strong> endpoints públicos não permitem criar, alterar ou excluir nada.</li>
+      <li><strong>Dados agregados:</strong> retornamos média e contagem — nunca expomos identidade das avaliadoras.</li>
+      <li><strong>Headers de quota:</strong> <code>X-RateLimit-Limit</code> e <code>X-RateLimit-Remaining</code> em toda resposta.</li>
+    </ul>
+  </section>
+
+</main>
+
+<script>
+  const BASE = 'http://localhost:3000/api/public';
+  const CHAVE_DEMO = 'sh_demo_publica_123';
+
+  document.getElementById('btnConsultar').addEventListener('click', consultar);
+  document.getElementById('nomeEmpresa').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') consultar();
+  });
+
+  async function consultar() {
+    const nome = document.getElementById('nomeEmpresa').value.trim();
+    if (!nome) return;
+
+    const box = document.getElementById('resultado');
+    box.classList.add('visivel');
+    document.getElementById('resScore').textContent = '…';
+    document.getElementById('resMeta').textContent = 'Consultando API…';
+    document.getElementById('resMotivos').innerHTML = '';
+    document.getElementById('resJson').textContent = '';
+
+    try {
+      const url = `${BASE}/empresas/score-por-nome?nome=${encodeURIComponent(nome)}&api_key=${CHAVE_DEMO}`;
+      const r = await fetch(url);
+      const data = await r.json();
+
+      if (!r.ok) {
+        document.getElementById('resScore').textContent = '!';
+        document.getElementById('resMeta').textContent = data.erro || 'Erro';
+      } else if (!data.encontrada) {
+        document.getElementById('resScore').textContent = '—';
+        document.getElementById('resMeta').textContent =
+          `Empresa "${nome}" ainda não está no SafeHer.`;
+      } else {
+        document.getElementById('resScore').textContent = data.score.toFixed(1);
+        document.getElementById('resMeta').textContent =
+          `${data.empresa} · ${data.quantidadeAvaliacoes} avaliação(ões)`;
+
+        const motivosEl = document.getElementById('resMotivos');
+        if (data.motivos && data.motivos.length) {
+          motivosEl.innerHTML = '<strong>Motivos mais citados:</strong><br/>' +
+            data.motivos.map(m => `<span class="motivo-tag">${m}</span>`).join('');
+        } else {
+          motivosEl.innerHTML = '<em style="color:#6a5a6e">Sem motivos catalogados ainda.</em>';
+        }
+      }
+
+      document.getElementById('resJson').textContent = JSON.stringify(data, null, 2);
+    } catch (e) {
+      document.getElementById('resScore').textContent = '!';
+      document.getElementById('resMeta').textContent =
+        'Não foi possível conectar à API. Ela está rodando em http://localhost:3000?';
+    }
+  }
+</script>
+
+</body>
+</html>
