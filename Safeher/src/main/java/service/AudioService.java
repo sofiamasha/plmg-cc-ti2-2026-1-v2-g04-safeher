@@ -1,60 +1,74 @@
 package service;
 
-import okhttp3.*;
-import java.io.File;
-import java.io.IOException;
+import com.microsoft.cognitiveservices.speech.*;
+import com.microsoft.cognitiveservices.speech.audio.AudioConfig;
+
+import java.util.concurrent.ExecutionException;
 
 public class AudioService {
 
-    // Chave lida da variavel de ambiente OPENAI_API_KEY.
-    // NUNCA commite a chave no codigo fonte.
-    // Defina antes de iniciar a aplicacao:
-    //   PowerShell:  $env:OPENAI_API_KEY = "sk-..."
-    //   Linux/Mac:   export OPENAI_API_KEY="sk-..."
-    private static final String API_KEY = System.getenv("OPENAI_API_KEY");
+    // SUA NOVA KEY DA AZURE
+    private static final String SPEECH_KEY =
+            "COLE_SUA_NOVA_KEY_AQUI";
 
-    public static String transcreverAudio(String caminhoAudio) throws IOException {
+    // SUA REGIAO
+    private static final String SPEECH_REGION =
+            "eastus";
 
-        if (API_KEY == null || API_KEY.isBlank()) {
-            throw new IOException("OPENAI_API_KEY nao configurada. Defina a variavel de ambiente antes de iniciar a aplicacao.");
+    public static String transcreverAudio(String caminhoAudio)
+            throws ExecutionException, InterruptedException {
+
+        try {
+
+            // converte para wav
+            String caminhoWav =
+                    AudioConverter.converterParaWav(caminhoAudio);
+
+            // configuracao azure
+            SpeechConfig speechConfig =
+                    SpeechConfig.fromSubscription(
+                            SPEECH_KEY,
+                            SPEECH_REGION
+                    );
+
+            // idioma
+            speechConfig.setSpeechRecognitionLanguage("pt-BR");
+
+            // audio wav
+            AudioConfig audioConfig =
+                    AudioConfig.fromWavFileInput(caminhoWav);
+
+            // reconhecedor
+            SpeechRecognizer recognizer =
+                    new SpeechRecognizer(
+                            speechConfig,
+                            audioConfig
+                    );
+
+            // processa audio
+            SpeechRecognitionResult result =
+                    recognizer.recognizeOnceAsync().get();
+
+            // resposta
+            if (result.getReason() ==
+                    ResultReason.RecognizedSpeech) {
+
+                return result.getText();
+
+            } else if (result.getReason() ==
+                    ResultReason.NoMatch) {
+
+                return "Nenhuma fala reconhecida.";
+
+            } else {
+
+                return "Erro na transcricao.";
+            }
+
+        } catch (Exception e) {
+
+            return "Erro ao processar audio: "
+                    + e.getMessage();
         }
-
-        OkHttpClient client = new OkHttpClient();
-
-        File audioFile = new File(caminhoAudio);
-
-        RequestBody fileBody =
-                RequestBody.create(
-                        audioFile,
-                        MediaType.parse("audio/wav")
-                );
-
-        MultipartBody requestBody =
-                new MultipartBody.Builder()
-                        .setType(MultipartBody.FORM)
-                        .addFormDataPart(
-                                "file",
-                                audioFile.getName(),
-                                fileBody
-                        )
-                        .addFormDataPart("model", "whisper-1")
-                        .build();
-
-        Request request =
-                new Request.Builder()
-                        .url("https://api.openai.com/v1/audio/transcriptions")
-                        .addHeader(
-                                "Authorization",
-                                "Bearer " + API_KEY
-                        )
-                        .post(requestBody)
-                        .build();
-
-        Response response =
-                client.newCall(request).execute();
-
-        String jsonResponse = response.body().string();
-        com.google.gson.JsonObject jsonObject = com.google.gson.JsonParser.parseString(jsonResponse).getAsJsonObject();
-        return jsonObject.has("text") ? jsonObject.get("text").getAsString() : jsonResponse;
     }
 }

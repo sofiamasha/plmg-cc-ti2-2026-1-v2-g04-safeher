@@ -1,1 +1,0 @@
-# SCRIPT DEPRECADO: A conversão agora é processada diretamente no Java via OkHttp e a API do Whisper (OpenAI) no AudioService.java.
