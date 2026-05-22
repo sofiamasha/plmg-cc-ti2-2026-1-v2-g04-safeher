@@ -66,6 +66,7 @@ public class Aplicacao {
         post("/denuncias", (req, res) -> denunciaService.insert(req, res));
         put("/denuncias/:id", (req, res) -> denunciaService.update(req, res));
         delete("/denuncias/:id", (req, res) -> denunciaService.remove(req, res));
+        get("/denuncias/painel-risco", (req, res) -> denunciaService.listarPainelRisco(req, res));
         get("/denuncias/:id", (req, res) -> denunciaService.get(req, res));
         get("/denuncias", (req, res) -> denunciaService.listar(req, res));
         get("/denuncias/usuario/:usuarioId", (req, res) -> denunciaService.listarPorUsuario(req, res));

@@ -107,4 +107,14 @@ public class DenunciaService {
             return gson.toJson("{\"erro\":\"" + e.getMessage() + "\"}");
         }
     }
+
+    public String listarPainelRisco(Request req, Response res) {
+        res.type("application/json");
+        try {
+            return gson.toJson(denunciaDAO.listarOrdenadoPorRisco());
+        } catch (Exception e) {
+            res.status(500);
+            return gson.toJson("{\"erro\":\"" + e.getMessage() + "\"}");
+        }
+    }
 }

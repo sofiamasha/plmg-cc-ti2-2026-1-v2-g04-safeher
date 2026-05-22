@@ -169,4 +169,30 @@ public class DenunciaDAO extends ConexaoDAO {
         }
         return lista;
     }
+
+    public List<Denuncia> listarOrdenadoPorRisco() throws SQLException {
+        String sql = "SELECT * FROM Denuncia ORDER BY score DESC NULLS LAST, data DESC";
+        List<Denuncia> lista = new ArrayList<>();
+        try {
+            abrirConexao();
+            PreparedStatement stmt = getConexao().prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Denuncia denuncia = new Denuncia();
+                denuncia.setId(rs.getInt("id"));
+                denuncia.setDescricao(rs.getString("descricao"));
+                denuncia.setData(rs.getDate("data") != null ? rs.getDate("data").toLocalDate() : null);
+                denuncia.setAnonima(rs.getBoolean("anonima"));
+                denuncia.setUsuarioId(rs.getInt("Usuario_id"));
+                denuncia.setEmpresaId(rs.getInt("Empresa_id"));
+                denuncia.setScore(rs.getInt("score"));
+                lista.add(denuncia);
+            }
+            rs.close();
+            stmt.close();
+        } finally {
+            fecharConexao();
+        }
+        return lista;
+    }
 }

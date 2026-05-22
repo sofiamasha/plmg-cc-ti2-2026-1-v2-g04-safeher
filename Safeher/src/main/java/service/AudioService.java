@@ -7,13 +7,12 @@ import java.util.concurrent.ExecutionException;
 
 public class AudioService {
 
-    // SUA NOVA KEY DA AZURE
+    // Chave e regiao lidas de variaveis de ambiente (AZURE_SPEECH_KEY, AZURE_SPEECH_REGION)
     private static final String SPEECH_KEY =
-            "COLE_SUA_NOVA_KEY_AQUI";
+            System.getenv().getOrDefault("AZURE_SPEECH_KEY", "");
 
-    // SUA REGIAO
     private static final String SPEECH_REGION =
-            "eastus";
+            System.getenv().getOrDefault("AZURE_SPEECH_REGION", "eastus");
 
     public static String transcreverAudio(String caminhoAudio)
             throws ExecutionException, InterruptedException {

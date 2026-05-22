@@ -182,16 +182,25 @@
                 }
 
                 container.innerHTML = `<p style="color: var(--text-gray); margin-bottom: 20px;">${denuncias.length} denúncia(s) encontrada(s)</p>`;
+                const RISCO_CORES  = ['#28a745','#7fb800','#f5a623','#e8743b','#dc3545'];
+                const RISCO_LABELS = ['Baixo','Atenção','Moderado','Alto','Crítico'];
                 denuncias.forEach(d => {
+                    const sc = Math.min(Math.max(parseInt(d.score, 10) || 1, 1), 5);
+                    const idx = sc - 1;
+                    const estrelas = '★'.repeat(sc) + '☆'.repeat(5 - sc);
+                    const badgeRisco = `<span class="denuncia-badge" style="background:${RISCO_CORES[idx]}20; color:${RISCO_CORES[idx]}; border:1px solid ${RISCO_CORES[idx]};"><span style="letter-spacing:2px;">${estrelas}</span> ${sc}/5 — ${RISCO_LABELS[idx]}</span>`;
                     container.innerHTML += `
-                        <div class="denuncia-card">
+                        <div class="denuncia-card" style="border-left-color:${RISCO_CORES[idx]};">
                             <div class="denuncia-header">
                                 <span class="denuncia-id"><i class="fa-solid fa-hashtag"></i> ${d.id}</span>
                                 <span class="denuncia-data"><i class="fa-regular fa-calendar"></i> ${d.data || 'Sem data'}</span>
                             </div>
                             <p class="denuncia-texto">${d.descricao || 'Sem descrição'}</p>
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <span class="denuncia-badge badge-anonima"><i class="fa-solid fa-user-secret"></i> Anônima</span>
+                            <div style="display: flex; justify-content: space-between; align-items: center; gap:8px; flex-wrap:wrap;">
+                                <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                                    <span class="denuncia-badge badge-anonima"><i class="fa-solid fa-user-secret"></i> Anônima</span>
+                                    ${badgeRisco}
+                                </div>
                                 <button class="btn-delete" onclick="excluirDenuncia(${d.id})"><i class="fa-solid fa-trash"></i> Excluir</button>
                             </div>
                         </div>`;
