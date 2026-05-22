@@ -87,6 +87,3 @@ Para visualizar os integrantes, detalhes académicos e atribuições oficiais, c
 
 ---
 
-## 📄 Licença
-
-Este projeto é protegido e distribuído sob os termos da **Licença MIT**. Para mais informações, consulte o arquivo `LICENSE` no repositório.
