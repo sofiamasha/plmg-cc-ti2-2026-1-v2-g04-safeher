@@ -1,50 +1,52 @@
-# SafeHer 
-> Rede de Proteção e Avaliação de Empresas para Mulheres
+cff-version: 1.2.0
 
----
+title: "SafeHer"
 
-### Sobre o projeto
+message: "If you use this project, please cite it using this metadata."
 
-O **SafeHer** é uma plataforma digital desenvolvida para permitir que mulheres relatem, de forma **anônima e segura**, situações de assédio vividas no ambiente de trabalho.
+type: "software"
 
-O objetivo do projeto é dar visibilidade a experiências que muitas vezes são silenciadas, promovendo **conscientização sobre ambientes profissionais mais seguros** e ajudando outras mulheres a tomarem decisões mais informadas sobre onde trabalhar.
+authors:
+  - given-names: "Kamilly"
+    family-names: "Santos"
 
-Além dos relatos, a plataforma permite a **avaliação de empresas com base nas experiências compartilhadas**, criando um panorama coletivo sobre segurança no ambiente corporativo.
+  - given-names: "Lanna"
+    family-names: "Silva"
 
----
+  - given-names: "Maria Fernanda"
+    family-names: "Oliveira Maro"
 
-### Funcionalidades
+  - given-names: "Sofia"
+    family-names: "de Abreu"
 
-- Registro anônimo de relatos de assédio no ambiente de trabalho  
-- Avaliação de empresas com base em experiências reais  
-- Envio de evidências (imagens e áudios) para complementar relatos  
-- Organização dos relatos de forma acessível para consulta  
+  - given-names: "Humberto"
+    family-names: "Torres Marques Neto"
+    name-suffix: "Professor"
 
----
+  - given-names: "Ilo Amy"
+    family-names: "Saldanha Rivero"
+    name-suffix: "Professor"
 
-### Diferenciais!
+abstract: >
+  Rede de Proteção e Avaliação de Empresas para Mulheres.
+  O SafeHer é uma plataforma digital desenvolvida para permitir que mulheres
+  relatem, de forma anônima e segura, situações de assédio vividas no ambiente
+  de trabalho. O projeto busca promover conscientização sobre ambientes
+  profissionais mais seguros e auxiliar mulheres na tomada de decisões mais
+  informadas sobre onde trabalhar.
 
-- Foco em **anonimato e segurança da usuária**  
-- Projeto com impacto social real  
-- Estrutura baseada em experiências reais compartilhadas  
-- Aplicação de conceitos de privacidade e responsabilidade no tratamento de dados  
+keywords:
+  - assédio
+  - segurança
+  - mulheres
+  - ambiente de trabalho
+  - denúncias anônimas
+  - impacto social
 
----
+license: "MIT"
 
-### 🌺 Mensagem do projeto
+repository-code: "<PRIVATE_URL>"
 
-> “Segurança no ambiente de trabalho não deveria ser um privilégio.”
+version: "1.0.0"
 
----
-
-### Integrantes do Grupo
-- Kamilly Santos
-- Lanna Silva
-- Maria Fernanda Oliveira Maro
-- Sofia de Abreu
-
----
-
-### Professores 
-- Humberto Torres Marques Neto
-- Ilo Amy Saldanha Rivero
+date-released: "2026-05-22"
