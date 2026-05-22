@@ -46,7 +46,7 @@
                             <label for="relato" class="sh-label">Seu Relato (Totalmente Anônimo)</label>
                             <textarea id="relato" class="sh-input" rows="5" placeholder="Descreva o que aconteceu em detalhes. Não se preocupe, seus dados não serão compartilhados..."></textarea>
 
-                            <!-- NOVA ÁREA DE ÁUDIO -->
+                            <!-- ÁREA DE ÁUDIO -->
                             <label class="sh-label">Áudio do Relato (Opcional)</label>
                             <div style="display: flex; gap: 10px; margin-bottom: 15px;">
                                 <button type="button" id="btnGravar" class="sh-btn-outline">🎤 Gravar Áudio</button>
@@ -91,6 +91,7 @@
             <p>&copy; 2024 SafeHer. Todos os direitos reservados.</p>
         </div>
     </footer>
+
     <script src="api.js"></script>
     <script src="usuario-session.js"></script>
     <script>
@@ -148,8 +149,19 @@
         });
 
         // ==========================================
-        // LÓGICA DE ENVIO DO FORMULÁRIO
+        // CONVERSÃO E ENVIO PARA O BACK-END
         // ==========================================
+        
+        // Transforma o arquivo de áudio em texto (Base64)
+        function audioParaBase64(blob) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(blob);
+                reader.onloadend = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
+
         async function enviarDenuncia() {
             const usuario = getSessao();
             if (!usuario) {
@@ -160,26 +172,32 @@
             
             const descricao = document.getElementById('relato').value;
             
-            // Verifica se a usuária digitou um relato OU gravou um áudio
             if (!descricao.trim() && !audioBlobFinal) {
                 alert('Por favor, descreva o que aconteceu no texto ou grave um áudio.');
                 return;
             }
 
+            // Converte o áudio para Base64 se houver gravação
+            let audioConvertido = null;
+            if (audioBlobFinal) {
+                audioConvertido = await audioParaBase64(audioBlobFinal);
+            }
+
+            // Prepara a denúncia com a string de áudio (Base64)
             const denuncia = {
-                id: Math.floor(Math.random() * 100000),
                 descricao: descricao,
                 data: new Date().toISOString().split('T')[0],
                 anonima: true,
                 usuarioId: usuario.id,
-                empresaId: 0
+                empresaId: 1, // Ajuste para capturar o ID real da empresa futuramente
+                audio: audioConvertido 
             };
 
             try {
                 await cadastrarDenuncia(denuncia);
                 alert('Denúncia enviada com sucesso!');
                 
-                // Limpa o formulário e reseta o player de áudio
+                // Limpa o formulário e reseta o player
                 document.getElementById('formDenuncia').reset();
                 audioPlayback.style.display = 'none';
                 audioPlayback.src = '';
