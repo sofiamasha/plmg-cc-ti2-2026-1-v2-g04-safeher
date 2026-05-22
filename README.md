@@ -22,10 +22,9 @@ Além disso, através de dados estruturados e de uma API pública, a plataforma 
 * [🎯 Visão Geral do Projeto](#-visão-geral-do-projeto)
 * [✨ Principais Funcionalidades](#-principais-funcionalidades)
 * [🛠️ Arquitetura e Tecnologias](#-arquitetura-e-tecnologias)
-* [🗄️ Estrutura do Banco de Dados](#%EF%B8%8F-estrutura-do-banco-de-dados)
+* [🗄️ Fluxo de Rotas](#%EF%B8%8F-fluxo-de-rotas-exemplo-avalia%C3%A7%C3%B5es)
 * [⏱️ Histórico de Versões](#%EF%B8%8F-histórico-de-versões)
-* [👩‍💻 Contribuidores (Alunos)](#-contribuidores-alunos)
-* [🧑‍🏫 Orientação (Professores)](#-orientação-professores)
+* [👥 Autores e Orientação](#-autores-e-orientação)
 * [📄 Licença](#-licença)
 
 ---
@@ -49,7 +48,7 @@ Além disso, através de dados estruturados e de uma API pública, a plataforma 
 * 📑 **Canais de Denúncia Anónima:** Registo blindado de relatos com garantia de proteção e desvinculação de identidade.
 * 🔍 **Índice de Confiabilidade:** Consulta rápida ao nível de segurança de organizações antes de processos seletivos.
 * 📊 **API Pública Compartilhada:** Fornecimento de dados analíticos sobre scores organizacionais e métricas de igualdade de género.
-* 🧠 **Processamento Inteligente:** Integração com o ecossistema de IA para transcrição avançada de áudio e análise de recorrências.
+* 🧠 **Processamento Inteligente:** Integração com o ecossistema de IA para transcrição avançada de áudio e análise de ocorrências.
 
 ---
 
@@ -84,26 +83,16 @@ A porta de entrada das requisições é orquestrada no controller por meio dos s
 
 ---
 
-## 👩‍💻 Contribuidores (Alunos)
+## 👥 Autores e Orientação
 
-```yaml
-authors:
-  - given-names: "Kamilly"
-    family-names: "Santos"
-  - given-names: "Lanna"
-    family-names: "Silva"
-  - given-names: "Maria Fernanda"
-    family-names: "Oliveira Maro"
-  - given-names: "Sofia"
-    family-names: "de Abreu"
-🧑‍🏫 Orientação (Professores)
-YAML
-  - given-names: "Humberto"
-    family-names: "Torres Marques Neto"
-    name-suffix: "Professor"
-  - given-names: "Ilo Amy"
-    family-names: "Saldanha Rivero"
-    name-suffix: "Professor"
-📄 Licença
-Este projeto é protegido e distribuído sob os termos da Licença MIT. Para mais informações, consulte o arquivo LICENSE no repositório.
-Este projeto é protegido e distribuído sob os termos da Licença MIT. Para mais informações, consulte o arquivo LICENSE no repositório.
+✨ **Informações de Citação e Integrantes:**
+
+A lista completa das alunas contribuidoras que idealizaram este ecossistema e dos professores orientadores responsáveis pela tutela académica encontra-se integrada dinamicamente no arquivo de metadados do projeto.
+
+Para visualizar os integrantes, detalhes académicos e atribuições oficiais, consulte a secção lateral direita da página deste repositório em **"Cite this repository"** ou aceda diretamente ao arquivo de configuração [CITATION.cff](CITATION.cff).
+
+---
+
+## 📄 Licença
+
+Este projeto é protegido e distribuído sob os termos da **Licença MIT**. Para mais informações, consulte o arquivo `LICENSE` no repositório.
