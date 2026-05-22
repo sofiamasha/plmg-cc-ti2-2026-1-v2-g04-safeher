@@ -1,6 +1,9 @@
 cff-version: 1.2.0
+
 title: "SafeHer"
+
 message: "If you use this project, please cite it using this metadata."
+
 type: software
 
 authors:
