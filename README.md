@@ -23,7 +23,6 @@ Além disso, através de dados estruturados e de uma API pública, a plataforma 
 * [✨ Principais Funcionalidades](#-principais-funcionalidades)
 * [🛠️ Arquitetura e Tecnologias](#-arquitetura-e-tecnologias)
 * [🗄️ Estrutura do Banco de Dados](#%EF%B8%8F-estrutura-do-banco-de-dados)
-* [💻 Como Executar o Projeto](#-como-executar-o-projeto)
 * [⏱️ Histórico de Versões](#%EF%B8%8F-histórico-de-versões)
 * [👩‍💻 Contribuidores (Alunos)](#-contribuidores-alunos)
 * [🧑‍🏫 Orientação (Professores)](#-orientação-professores)
@@ -76,81 +75,35 @@ A porta de entrada das requisições é orquestrada no controller por meio dos s
 
 ---
 
-## 💻 Como Executar o Projeto
+## ⏱️ Histórico de Versões
 
-### 🎀 Pré-requisitos
-Antes de começar, certifique-se de que tem instalado na sua máquina:
-* Git
-* Java JDK (compatível com Spark Framework)
-* SGBD PostgreSQL (local ou acesso à Azure)
+* **🌷 1.0.0 (2026-05-22):**
+  * Definição da especificação lógica e arquitetura do ecossistema.
+  * Implementação do banco de dados relacional PostgreSQL na Azure.
+  * Integração das rotas do Spark Framework e motor de Inteligência Artificial OpenAI Whisper.
 
-### 🌸 Passo a Passo
-```bash
-# 1. Clone o repositório oficial do grupo
-$ git clone [https://github.com/ICEI-PUC-Minas-CC-TI/plmg-cc-ti2-2026-1-v2-g04-safeher.git](https://github.com/ICEI-PUC-Minas-CC-TI/plmg-cc-ti2-2026-1-v2-g04-safeher.git)
+---
 
-# 2. Acesse o diretório raiz do projeto
-$ cd plmg-cc-ti2-2026-1-v2-g04-safeher
+## 👩‍💻 Contribuidores (Alunos)
 
-# 3. Configure a string de conexão do PostgreSQL em suas variáveis locais
-
-# 4. Execute os scripts SQL de migração para estruturar as tabelas
-
-# 5. Inicie a aplicação Java através do seu terminal ou IDE de preferência
-⏱️ Histórico de Versões
-🌷 1.0.0 (2026-05-22):
-
-Definição da especificação lógica e arquitetura do ecossistema.
-
-Implementação do banco de dados relacional PostgreSQL na Azure.
-
-Integração das rotas do Spark Framework e motor de Inteligência Artificial OpenAI Whisper.
-
-👩‍💻 Contribuidores (Alunos)
-Agradecemos imensamente às desenvolvedoras que planejaram, modelaram e construíram este ecossistema de proteção:
-
-🌸 Integrante 1:
-
-given-names: "Kamilly"
-
-family-names: "Santos"
-
-🌸 Integrante 2:
-
-given-names: "Lanna"
-
-family-names: "Silva"
-
-🌸 Integrante 3:
-
-given-names: "Maria Fernanda"
-
-family-names: "Oliveira Maro"
-
-🌸 Integrante 4:
-
-given-names: "Sofia"
-
-family-names: "de Abreu"
-
+```yaml
+authors:
+  - given-names: "Kamilly"
+    family-names: "Santos"
+  - given-names: "Lanna"
+    family-names: "Silva"
+  - given-names: "Maria Fernanda"
+    family-names: "Oliveira Maro"
+  - given-names: "Sofia"
+    family-names: "de Abreu"
 🧑‍🏫 Orientação (Professores)
-O projeto foi rigorosamente estruturado e desenvolvido sob a tutela académica dos professores:
-
-👔 Orientador 1:
-
-given-names: "Humberto"
-
-family-names: "Torres Marques Neto"
-
-name-suffix: "Professor"
-
-👔 Orientador 2:
-
-given-names: "Ilo Amy"
-
-family-names: "Saldanha Rivero"
-
-name-suffix: "Professor"
-
+YAML
+  - given-names: "Humberto"
+    family-names: "Torres Marques Neto"
+    name-suffix: "Professor"
+  - given-names: "Ilo Amy"
+    family-names: "Saldanha Rivero"
+    name-suffix: "Professor"
 📄 Licença
+Este projeto é protegido e distribuído sob os termos da Licença MIT. Para mais informações, consulte o arquivo LICENSE no repositório.
 Este projeto é protegido e distribuído sob os termos da Licença MIT. Para mais informações, consulte o arquivo LICENSE no repositório.
