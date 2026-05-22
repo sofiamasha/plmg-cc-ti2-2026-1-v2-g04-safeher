@@ -1,11 +1,5 @@
 # 🌸 SafeHer: Rede de Proteção e Avaliação de Empresas para Mulheres 🎀
 
-<p align="center">
-  <img src="https://img.shields.io/github/license/ICEI-PUC-Minas-CC-TI/plmg-cc-ti2-2026-1-v2-g04-safeher?color=ff69b4&style=for-the-badge" alt="License">
-  <img src="https://img.shields.io/github/v/release/ICEI-PUC-Minas-CC-TI/plmg-cc-ti2-2026-1-v2-g04-safeher?color=ffb6c1&style=for-the-badge" alt="Release">
-  <img src="https://img.shields.io/badge/maintained-yes-ff1493.svg?style=for-the-badge" alt="Maintained">
-</p>
-
 ---
 
 ## 💗 Visão Geral do Projeto
