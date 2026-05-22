@@ -1,182 +1,195 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
- <meta charset="UTF-8">
- <meta name="viewport" content="width=device-width, initial-scale=1.0">
- <title>SafeHer</title>
- <link rel="stylesheet" href="global.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeHer</title>
+    <link rel="stylesheet" href="global.css">
 </head>
 <body>
- <div class="container">
-  <header class="sh-header">
-   <a href="index.html" class="sh-logo">
-    <img src="logo.png" alt="SafeHer Logo" class="sh-logo-img">
-   </a>
-   <div class="sh-nav">
-    <a href="index.html">Início</a>
-    <a href="denuncias.html" class="active">Denúncias</a>
-    <a href="avaliacoes.html">Avaliações</a>
-    <a href="api.html">API</a>
-    <a href="conteudos.html">Conteúdos</a>
-    <a href="vagas.html">Vagas</a>
-    <a href="login.html" class="sh-btn" style="color: white;">Entrar</a>
-    <a href="escolha-cadastro.html" class="sh-btn-outline">Criar conta</a>
-   </div>
-  </header>
+    <div class="container">
+        <header class="sh-header">
+            <a href="index.html" class="sh-logo">
+                <img src="resources/images/logo-escudo.png" alt="SafeHer Logo" class="sh-logo-img">
+            </a>
+            <div class="sh-nav">
+                <a href="index.html">Início</a>
+                <a href="denuncias.html" class="active">Denúncias</a>
+                <a href="avaliacoes.html">Avaliações</a>
+                <a href="conteudos.html">Conteúdos</a>
+                <a href="vagas.html">Vagas</a>
+                <a href="login.html" class="sh-btn" style="color: white;">Entrar</a>
+                <a href="escolha-cadastro.html" class="sh-btn-outline">Criar conta</a>
+            </div>
+        </header>
 
-  <main>
-   <div class="split-layout">
-    <div>
-     <h2 class="sh-title">Fazer uma Denúncia</h2>
-     <p class="sh-subtitle">Seu relato é seguro, anônimo e fundamental para construirmos ambientes de trabalho melhores e protegermos outras mulheres.</p>
+        <main>
+            <div class="split-layout">
+                <div>
+                    <h2 class="sh-title">Fazer uma Denúncia</h2>
+                    <p class="sh-subtitle">Seu relato é seguro, anônimo e fundamental para construirmos ambientes de trabalho melhores e protegermos outras mulheres.</p>
 
-     <div class="sh-card">
-      <form id="denunciaForm">
-       <input type="hidden" id="score" value="1">
-       <label for="empresa" class="sh-label">Empresa</label>
-       <input type="text" id="empresa" class="sh-input" placeholder="Qual empresa você deseja denunciar?" value="Tech Solutions S.A.">
+                    <div class="sh-card">
+                        <form id="formDenuncia" onsubmit="return false;">
+                            <label for="empresa" class="sh-label">Empresa</label>
+                            <input type="text" id="empresa" class="sh-input" placeholder="Qual empresa você deseja denunciar?" value="Tech Solutions S.A.">
 
-       <label for="tipoAbuso" class="sh-label">Tipo de Abuso / Problema</label>
-       <select id="tipoAbuso" class="sh-input">
-        <option>Assédio Moral</option>
-        <option>Assédio Sexual</option>
-        <option>Desigualdade Salarial</option>
-        <option>Machismo / Misoginia</option>
-        <option>Maternidade Desrespeitada</option>
-       </select>
+                            <label for="tipoAbuso" class="sh-label">Tipo de Abuso / Problema</label>
+                            <select id="tipoAbuso" class="sh-input">
+                                <option>Assédio Moral</option>
+                                <option>Assédio Sexual</option>
+                                <option>Desigualdade Salarial</option>
+                                <option>Machismo / Misoginia</option>
+                                <option>Maternidade Desrespeitada</option>
+                            </select>
 
-       <label for="relato" class="sh-label">Seu Relato (Totalmente Anônimo)</label>
-       <textarea id="relato" class="sh-input" rows="5" placeholder="Descreva o que aconteceu em detalhes. Não se preocupe, seus dados não serão compartilhados..."></textarea>
+                            <label for="relato" class="sh-label">Seu Relato (Totalmente Anônimo)</label>
+                            <textarea id="relato" class="sh-input" rows="5" placeholder="Descreva o que aconteceu em detalhes. Não se preocupe, seus dados não serão compartilhados..."></textarea>
 
-       <label class="sh-label" style="margin-top: 15px;">Gravar ou Anexar Áudio</label>
-       <div class="audio-controls">
-        <button type="button" class="sh-btn-outline" style="flex: 1;"><i class="fa-solid fa-microphone"></i> Gravar Relato</button>
-        <button type="button" class="sh-btn-outline" id="btnAnexar" style="flex: 1;"><i class="fa-solid fa-upload"></i> Anexar Arquivo</button>
-        <input type="file" id="audioInput" accept="audio/*" style="display: none;">
-       </div>
-       <p id="audioStatus" style="font-size: 12px; color: green; display: none; margin-top: 5px;">Áudio processado com sucesso!</p>
+                            <!-- NOVA ÁREA DE ÁUDIO -->
+                            <label class="sh-label">Áudio do Relato (Opcional)</label>
+                            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                                <button type="button" id="btnGravar" class="sh-btn-outline">🎤 Gravar Áudio</button>
+                                <button type="button" id="btnParar" class="sh-btn" style="display: none; background-color: #dc3545; border-color: #dc3545;">⏹ Parar Gravação</button>
+                            </div>
+                            <audio id="audioPlayback" controls style="display: none; width: 100%; margin-bottom: 15px;"></audio>
+                            <!-- FIM DA ÁREA DE ÁUDIO -->
 
-       <button type="submit" class="sh-btn" style="width: 100%; padding: 16px;">Enviar Denúncia Anônima</button>
-      </form>
-     </div>
-     
-     <div class="whatsapp-card">
-      <h3 style="color: #128C7E; display: flex; align-items: center; gap: 10px; font-size: 22px; margin-bottom: 10px;">
-       <i class="fa-brands fa-whatsapp" style="font-size: 28px;"></i> Apoio com Psicóloga
-      </h3>
-      <p style="color: var(--text-dark); margin-bottom: 8px;">Precisa conversar? Oferecemos um espaço de acolhimento totalmente gratuito e com conversa privada.</p>
-      <p style="color: var(--text-gray); font-size: 14px; margin-bottom: 20px;">
-       <i class="fa-regular fa-clock"></i> <strong>Horário de atendimento:</strong> 18h às 22h
-      </p>
-      
-      <a href="https://wa.me/5511000000000?text=Olá,%20acessei%20o%20SafeHer%20e%20gostaria%20de%20conversar%20com%20a%20psicóloga." target="_blank" class="sh-btn btn-whatsapp" style="width: 100%;">
-       Iniciar conversa no WhatsApp
-      </a>
-     </div>
-     
+                            <button type="submit" class="sh-btn" style="width: 100%; padding: 16px;" onclick="enviarDenuncia()">Enviar Denúncia Anônima</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="image-container" style="text-align: center;">
+                    <img src="resources/images/reporting_illustration.jpeg" alt="Ilustração de mulher usando notebook e ícone de segurança" onerror="this.onerror=null; this.src='resources/images/fallback.svg';" style="max-width: 100%; height: auto; border-radius: 20px;">
+                </div>
+            </div>
+        </main>
     </div>
-    <div class="image-container" style="text-align: center;">
-     <img src="resources/images/reporting_illustration.jpeg" alt="Ilustração de mulher usando notebook e ícone de segurança" onerror="this.onerror=null; this.src='resources/images/fallback.svg';" style="max-width: 100%; height: auto; border-radius: 20px;">
-    </div>
-   </div>
-  </main>
- </div>
- <footer class="sh-footer">
-  <div class="container footer-content">
-   <div class="footer-brand">
-    <a href="index.html">
-     <img src="logo.png" alt="SafeHer" class="sh-logo-img" style="filter: brightness(0) invert(1);">
-    </a>
-    <p>Protegendo mulheres, denunciando abusos e transformando o ambiente corporativo com transparência e justiça.</p>
-   </div>
-   <div class="footer-links">
-    <h4>Nossas Redes Sociais</h4>
-    <div class="social-icons">
-     <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-     <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
-     <a href="#" aria-label="Twitter/X"><i class="fa-brands fa-twitter"></i></a>
-    </div>
-   </div>
-   <div class="footer-emergency">
-    <h4>Contatos de Emergência</h4>
-    <p><i class="fa-solid fa-phone"></i> <strong>180</strong> - Central de Atendimento à Mulher</p>
-    <p><i class="fa-solid fa-phone"></i> <strong>190</strong> - Polícia Militar</p>
-   </div>
-  </div>
-  <div class="footer-bottom">
-   <p>&copy; 2024 SafeHer. Todos os direitos reservados.</p>
-  </div>
- </footer>
+    <footer class="sh-footer">
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <a href="index.html">
+                    <img src="resources/images/logo-escudo.png" alt="SafeHer" class="sh-logo-img" style="filter: brightness(0) invert(1);">
+                </a>
+                <p>Protegendo mulheres, denunciando abusos e transformando o ambiente corporativo com transparência e justiça.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Nossas Redes Sociais</h4>
+                <div class="social-icons">
+                    <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                    <a href="#" aria-label="Twitter/X"><i class="fa-brands fa-twitter"></i></a>
+                </div>
+            </div>
+            <div class="footer-emergency">
+                <h4>Contatos de Emergência</h4>
+                <p><i class="fa-solid fa-phone"></i> <strong>180</strong> - Central de Atendimento à Mulher</p>
+                <p><i class="fa-solid fa-phone"></i> <strong>190</strong> - Polícia Militar</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 SafeHer. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+    <script src="api.js"></script>
+    <script src="usuario-session.js"></script>
+    <script>
+        // ==========================================
+        // LÓGICA DE GRAVAÇÃO DE ÁUDIO (MediaRecorder)
+        // ==========================================
+        let mediaRecorder;
+        let audioChunks = [];
+        let audioBlobFinal = null; 
 
- <script>
-  document.getElementById('btnAnexar').addEventListener('click', function() {
-      document.getElementById('audioInput').click();
-  });
+        const btnGravar = document.getElementById('btnGravar');
+        const btnParar = document.getElementById('btnParar');
+        const audioPlayback = document.getElementById('audioPlayback');
 
-  document.getElementById('audioInput').addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      if (!file) return;
+        btnGravar.addEventListener('click', async () => {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
 
-      const formData = new FormData();
-      formData.append('audio', file);
+                mediaRecorder.ondataavailable = event => {
+                    if (event.data.size > 0) {
+                        audioChunks.push(event.data);
+                    }
+                };
 
-      document.getElementById('audioStatus').style.display = 'block';
-      document.getElementById('audioStatus').style.color = '#ff9800';
-      document.getElementById('audioStatus').textContent = 'Processando áudio pela IA Whisper...';
+                mediaRecorder.onstop = () => {
+                    audioBlobFinal = new Blob(audioChunks, { type: 'audio/webm' });
+                    const audioUrl = URL.createObjectURL(audioBlobFinal);
+                    
+                    audioPlayback.src = audioUrl;
+                    audioPlayback.style.display = 'block';
+                };
 
-      fetch('http://localhost:8080/upload-audio', {
-          method: 'POST',
-          body: formData
-      })
-      .then(response => response.json())
-      .then(data => {
-          if (data.erro) {
-              alert('Erro ao processar áudio: ' + data.erro);
-              document.getElementById('audioStatus').textContent = 'Erro ao processar áudio.';
-              document.getElementById('audioStatus').style.color = 'red';
-          } else {
-              document.getElementById('relato').value = data.texto;
-              document.getElementById('score').value = data.score;
-              document.getElementById('audioStatus').textContent = 'Áudio processado! Score de gravidade calculado: ' + data.score;
-              document.getElementById('audioStatus').style.color = 'green';
-          }
-      })
-      .catch(error => {
-          console.error('Error:', error);
-          document.getElementById('audioStatus').textContent = 'Falha ao comunicar com o servidor.';
-          document.getElementById('audioStatus').style.color = 'red';
-      });
-  });
+                mediaRecorder.start();
+                btnGravar.style.display = 'none';
+                btnParar.style.display = 'block';
 
-  document.getElementById('denunciaForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      const denunciaData = {
-          descricao: document.getElementById('relato').value,
-          data: new Date().toISOString().split('T')[0],
-          anonima: true,
-          usuarioId: 1, // Exemplo
-          empresaId: 1, // Exemplo
-          score: parseInt(document.getElementById('score').value)
-      };
+            } catch (err) {
+                alert("Não foi possível acessar o microfone. Verifique as permissões do navegador.");
+                console.error("Erro do MediaRecorder:", err);
+            }
+        });
 
-      fetch('http://localhost:8080/denuncias', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(denunciaData)
-      })
-      .then(response => response.json())
-      .then(data => {
-          alert('Denúncia enviada com sucesso!');
-          document.getElementById('denunciaForm').reset();
-          document.getElementById('audioStatus').style.display = 'none';
-          document.getElementById('score').value = "1";
-      })
-      .catch(error => {
-          console.error('Error:', error);
-          alert('Erro ao enviar denúncia.');
-      });
-  });
- </script>
+        btnParar.addEventListener('click', () => {
+            if (mediaRecorder && mediaRecorder.state === 'recording') {
+                mediaRecorder.stop();
+                
+                mediaRecorder.stream.getTracks().forEach(track => track.stop()); 
+                
+                btnGravar.style.display = 'block';
+                btnGravar.innerText = '🎤 Gravar Novamente';
+                btnParar.style.display = 'none';
+            }
+        });
+
+        // ==========================================
+        // LÓGICA DE ENVIO DO FORMULÁRIO
+        // ==========================================
+        async function enviarDenuncia() {
+            const usuario = getSessao();
+            if (!usuario) {
+                alert('Você precisa estar logada para enviar uma denúncia.');
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            const descricao = document.getElementById('relato').value;
+            
+            // Verifica se a usuária digitou um relato OU gravou um áudio
+            if (!descricao.trim() && !audioBlobFinal) {
+                alert('Por favor, descreva o que aconteceu no texto ou grave um áudio.');
+                return;
+            }
+
+            const denuncia = {
+                id: Math.floor(Math.random() * 100000),
+                descricao: descricao,
+                data: new Date().toISOString().split('T')[0],
+                anonima: true,
+                usuarioId: usuario.id,
+                empresaId: 0
+            };
+
+            try {
+                await cadastrarDenuncia(denuncia);
+                alert('Denúncia enviada com sucesso!');
+                
+                // Limpa o formulário e reseta o player de áudio
+                document.getElementById('formDenuncia').reset();
+                audioPlayback.style.display = 'none';
+                audioPlayback.src = '';
+                audioBlobFinal = null;
+                btnGravar.innerText = '🎤 Gravar Áudio';
+
+            } catch (e) {
+                alert('Erro ao enviar denúncia: ' + e.message);
+            }
+        }
+    </script>
 </body>
 </html>
