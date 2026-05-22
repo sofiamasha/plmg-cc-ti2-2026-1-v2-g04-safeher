@@ -1,10 +1,7 @@
 cff-version: 1.2.0
-
 title: "SafeHer"
-
 message: "If you use this project, please cite it using this metadata."
-
-type: "software"
+type: software
 
 authors:
   - given-names: "Kamilly"
@@ -31,9 +28,7 @@ abstract: >
   Rede de Proteção e Avaliação de Empresas para Mulheres.
   O SafeHer é uma plataforma digital desenvolvida para permitir que mulheres
   relatem, de forma anônima e segura, situações de assédio vividas no ambiente
-  de trabalho. O projeto busca promover conscientização sobre ambientes
-  profissionais mais seguros e auxiliar mulheres na tomada de decisões mais
-  informadas sobre onde trabalhar.
+  de trabalho.
 
 keywords:
   - assédio
@@ -43,9 +38,9 @@ keywords:
   - denúncias anônimas
   - impacto social
 
-license: "MIT"
+license: MIT
 
-repository-code: "<PRIVATE_URL>"
+repository-code: "https://github.com/SEU-USUARIO/plmg-cc-ti2-2026-1-v2-g04-safeher"
 
 version: "1.0.0"
 
