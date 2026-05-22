@@ -46,6 +46,15 @@
                             <label for="relato" class="sh-label">Seu Relato (Totalmente Anônimo)</label>
                             <textarea id="relato" class="sh-input" rows="5" placeholder="Descreva o que aconteceu em detalhes. Não se preocupe, seus dados não serão compartilhados..."></textarea>
 
+                            <!-- NOVA ÁREA DE ÁUDIO -->
+                            <label class="sh-label">Áudio do Relato (Opcional)</label>
+                            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                                <button type="button" id="btnGravar" class="sh-btn-outline">🎤 Gravar Áudio</button>
+                                <button type="button" id="btnParar" class="sh-btn" style="display: none; background-color: #dc3545; border-color: #dc3545;">⏹ Parar Gravação</button>
+                            </div>
+                            <audio id="audioPlayback" controls style="display: none; width: 100%; margin-bottom: 15px;"></audio>
+                            <!-- FIM DA ÁREA DE ÁUDIO -->
+
                             <button type="submit" class="sh-btn" style="width: 100%; padding: 16px;" onclick="enviarDenuncia()">Enviar Denúncia Anônima</button>
                         </form>
                     </div>
@@ -85,6 +94,62 @@
     <script src="api.js"></script>
     <script src="usuario-session.js"></script>
     <script>
+        // ==========================================
+        // LÓGICA DE GRAVAÇÃO DE ÁUDIO (MediaRecorder)
+        // ==========================================
+        let mediaRecorder;
+        let audioChunks = [];
+        let audioBlobFinal = null; 
+
+        const btnGravar = document.getElementById('btnGravar');
+        const btnParar = document.getElementById('btnParar');
+        const audioPlayback = document.getElementById('audioPlayback');
+
+        btnGravar.addEventListener('click', async () => {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+
+                mediaRecorder.ondataavailable = event => {
+                    if (event.data.size > 0) {
+                        audioChunks.push(event.data);
+                    }
+                };
+
+                mediaRecorder.onstop = () => {
+                    audioBlobFinal = new Blob(audioChunks, { type: 'audio/webm' });
+                    const audioUrl = URL.createObjectURL(audioBlobFinal);
+                    
+                    audioPlayback.src = audioUrl;
+                    audioPlayback.style.display = 'block';
+                };
+
+                mediaRecorder.start();
+                btnGravar.style.display = 'none';
+                btnParar.style.display = 'block';
+
+            } catch (err) {
+                alert("Não foi possível acessar o microfone. Verifique as permissões do navegador.");
+                console.error("Erro do MediaRecorder:", err);
+            }
+        });
+
+        btnParar.addEventListener('click', () => {
+            if (mediaRecorder && mediaRecorder.state === 'recording') {
+                mediaRecorder.stop();
+                
+                mediaRecorder.stream.getTracks().forEach(track => track.stop()); 
+                
+                btnGravar.style.display = 'block';
+                btnGravar.innerText = '🎤 Gravar Novamente';
+                btnParar.style.display = 'none';
+            }
+        });
+
+        // ==========================================
+        // LÓGICA DE ENVIO DO FORMULÁRIO
+        // ==========================================
         async function enviarDenuncia() {
             const usuario = getSessao();
             if (!usuario) {
@@ -92,11 +157,15 @@
                 window.location.href = 'login.html';
                 return;
             }
+            
             const descricao = document.getElementById('relato').value;
-            if (!descricao.trim()) {
-                alert('Por favor, descreva o que aconteceu.');
+            
+            // Verifica se a usuária digitou um relato OU gravou um áudio
+            if (!descricao.trim() && !audioBlobFinal) {
+                alert('Por favor, descreva o que aconteceu no texto ou grave um áudio.');
                 return;
             }
+
             const denuncia = {
                 id: Math.floor(Math.random() * 100000),
                 descricao: descricao,
@@ -105,10 +174,18 @@
                 usuarioId: usuario.id,
                 empresaId: 0
             };
+
             try {
                 await cadastrarDenuncia(denuncia);
                 alert('Denúncia enviada com sucesso!');
+                
+                // Limpa o formulário e reseta o player de áudio
                 document.getElementById('formDenuncia').reset();
+                audioPlayback.style.display = 'none';
+                audioPlayback.src = '';
+                audioBlobFinal = null;
+                btnGravar.innerText = '🎤 Gravar Áudio';
+
             } catch (e) {
                 alert('Erro ao enviar denúncia: ' + e.message);
             }
