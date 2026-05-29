@@ -1,354 +1,722 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SafeHer — API Pública para Parceiros</title>
-  <link rel="stylesheet" href="global.css" />
-  <style>
-    :root {
-      --rosa: #ff7aa2;
-      --rosa-escuro: #c84e7b;
-      --roxo: #6b3e8a;
-      --cinza-bg: #faf6f8;
-      --cinza-borda: #e6dde3;
-      --texto: #2c1a2e;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeHer</title>
+    <link rel="stylesheet" href="global.css">
+    <style>
+        /*hero */
+        .parceiros-hero {
+            background: linear-gradient(135deg, var(--pink-primary) 0%, var(--pink-dark) 100%);
+            border-radius: 24px;
+            padding: 60px 48px;
+            color: white;
+            margin-bottom: 48px;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 40px;
+            align-items: center;
+        }
+        .parceiros-hero .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 7px 16px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.25);
+        }
+        .parceiros-hero h1 {
+            font-size: 36px;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 16px;
+            letter-spacing: -0.5px;
+        }
+        .parceiros-hero p {
+            font-size: 16px;
+            opacity: 0.9;
+            line-height: 1.7;
+            max-width: 540px;
+            margin-bottom: 28px;
+        }
+        .hero-code-preview {
+            background: rgba(0,0,0,0.3);
+            border-radius: 16px;
+            padding: 24px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            color: #f0f0f0;
+            min-width: 260px;
+            line-height: 1.7;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .hero-code-preview .method { color: #7ee787; font-weight: 700; }
+        .hero-code-preview .key    { color: #79c0ff; }
+        .hero-code-preview .val    { color: #ffa657; }
+        .hero-code-preview .url    { color: rgba(255,255,255,0.5); font-size: 11px; margin-bottom: 10px; }
 
-    body {
-      background: var(--cinza-bg);
-      color: var(--texto);
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      margin: 0;
-    }
+        /* ── Quick nav ── */
+        .quick-nav {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+        .quick-nav a {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 9px 18px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            background: white;
+            color: var(--text-dark);
+            border: 2px solid var(--border-light);
+            transition: all 0.2s ease;
+        }
+        .quick-nav a:hover {
+            border-color: var(--pink-primary);
+            color: var(--pink-primary);
+            background: var(--pink-lighter);
+        }
+        .quick-nav a i { color: var(--pink-primary); }
 
-    header.hero {
-      background: linear-gradient(135deg, var(--rosa) 0%, var(--roxo) 100%);
-      color: white;
-      padding: 60px 32px;
-      text-align: center;
-    }
-    header.hero h1 { margin: 0 0 12px; font-size: 2.4rem; }
-    header.hero p  { margin: 0; opacity: 0.95; font-size: 1.1rem; max-width: 720px; margin-inline: auto; }
-    .badge-novo {
-      display: inline-block; background: rgba(255,255,255,0.25);
-      padding: 4px 12px; border-radius: 999px; font-size: 0.8rem;
-      margin-bottom: 12px; letter-spacing: 0.5px;
-    }
+        /* ── Cards de seção ── */
+        .doc-section {
+            background: white;
+            border-radius: 20px;
+            padding: 36px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-light);
+        }
+        .doc-section:hover { box-shadow: 0 8px 30px rgba(227,58,127,0.08); }
+        .section-heading {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--pink-light);
+        }
+        .section-heading .icon-box {
+            width: 42px;
+            height: 42px;
+            background: var(--pink-light);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: var(--pink-primary);
+            flex-shrink: 0;
+        }
+        .section-heading h2 {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin: 0;
+        }
 
-    main {
-      max-width: 1080px;
-      margin: -32px auto 60px;
-      padding: 0 24px;
-    }
+        /* ── Badge preview ── */
+        .badge-preview-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: var(--pink-lighter);
+            border-radius: 14px;
+            padding: 20px 24px;
+            margin-top: 18px;
+            flex-wrap: wrap;
+        }
+        .badge-safeher {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            border: 2px solid var(--pink-primary);
+            padding: 10px 18px;
+            border-radius: 999px;
+            font-weight: 700;
+            color: var(--pink-dark);
+            font-size: 15px;
+            box-shadow: 0 4px 12px rgba(227,58,127,0.15);
+        }
+        .badge-safeher .star-icon { color: #FFB800; }
 
-    section.card {
-      background: white;
-      border: 1px solid var(--cinza-borda);
-      border-radius: 12px;
-      padding: 28px;
-      margin-bottom: 24px;
-      box-shadow: 0 2px 16px rgba(107, 62, 138, 0.06);
-    }
-    section.card h2 {
-      margin-top: 0;
-      color: var(--roxo);
-      border-bottom: 2px solid var(--rosa);
-      padding-bottom: 8px;
-      display: inline-block;
-    }
+        /* ── Demo ── */
+        .demo-key-box {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #fff8e1;
+            border: 1.5px dashed #f59e0b;
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            color: #92400e;
+            margin: 16px 0;
+            cursor: pointer;
+        }
+        .demo-key-box:hover { background: #fef3c7; }
+        .demo-form {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 20px 0 0;
+        }
+        .demo-form input {
+            flex: 1;
+            min-width: 200px;
+            padding: 13px 18px;
+            font-size: 15px;
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            outline: none;
+            font-family: var(--font-body);
+            transition: all 0.2s;
+        }
+        .demo-form input:focus { border-color: var(--pink-primary); box-shadow: 0 0 0 3px rgba(227,58,127,0.1); }
+        .demo-form button {
+            background: linear-gradient(135deg, var(--pink-primary), var(--pink-dark));
+            color: white;
+            border: 0;
+            padding: 13px 28px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 15px;
+            font-family: var(--font-body);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 14px rgba(227,58,127,0.3);
+        }
+        .demo-form button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(227,58,127,0.4); }
 
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-    @media (max-width: 720px) { .grid-2 { grid-template-columns: 1fr; } }
+        .resultado {
+            background: var(--pink-lighter);
+            border-radius: 16px;
+            padding: 28px;
+            margin-top: 20px;
+            display: none;
+            border: 1px solid var(--pink-light);
+        }
+        .resultado.visivel { display: block; }
+        .score-grande {
+            font-size: 56px;
+            font-weight: 800;
+            color: var(--pink-dark);
+            line-height: 1;
+            letter-spacing: -2px;
+        }
+        .score-meta { color: var(--text-gray); font-size: 15px; margin-top: 6px; font-weight: 500; }
+        .motivos { margin-top: 14px; }
+        .motivo-tag {
+            display: inline-block;
+            background: white;
+            color: var(--pink-dark);
+            border: 1.5px solid var(--pink-light);
+            padding: 5px 12px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 600;
+            margin: 4px 4px 0 0;
+        }
+        .pre-resposta {
+            margin-top: 18px;
+            max-height: 260px;
+            overflow-y: auto;
+            border-radius: 10px;
+        }
 
-    code, pre {
-      background: #1e1e2e;
-      color: #f8f8f2;
-      border-radius: 6px;
-    }
-    code { padding: 2px 6px; font-size: 0.9rem; }
-    pre {
-      padding: 16px;
-      overflow-x: auto;
-      font-size: 0.85rem;
-      line-height: 1.5;
-    }
+        /*code blocks*/
+        code {
+            background: #f4f4f8;
+            color: var(--pink-dark);
+            padding: 2px 7px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        pre {
+            background: #1a1a2e;
+            color: #e2e8f0;
+            border-radius: 14px;
+            padding: 22px;
+            overflow-x: auto;
+            font-size: 13px;
+            line-height: 1.7;
+            font-family: 'Courier New', monospace;
+        }
+        pre .c-method { color: #7ee787; }
+        pre .c-key    { color: #79c0ff; }
+        pre .c-val    { color: #ffa657; }
+        pre .c-str    { color: #a5d6ff; }
+        pre .c-comment{ color: #6e7681; }
 
-    table.endpoints {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 12px;
-    }
-    table.endpoints th, table.endpoints td {
-      text-align: left;
-      padding: 10px 12px;
-      border-bottom: 1px solid var(--cinza-borda);
-      vertical-align: top;
-    }
-    table.endpoints th { background: #f3eaf0; color: var(--roxo); }
-    .method-get {
-      display: inline-block; background: #2d8f4e; color: white;
-      padding: 2px 8px; border-radius: 4px; font-size: 0.75rem;
-      font-weight: bold; min-width: 36px; text-align: center;
-    }
+        /* ── Endpoint table ── */
+        .endpoints-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+            font-size: 14px;
+        }
+        .endpoints-table th {
+            background: var(--pink-lighter);
+            color: var(--pink-dark);
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 700;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .endpoints-table th:first-child { border-radius: 10px 0 0 10px; }
+        .endpoints-table th:last-child  { border-radius: 0 10px 10px 0; }
+        .endpoints-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border-light);
+            vertical-align: top;
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+        .endpoints-table tr:last-child td { border-bottom: none; }
+        .endpoints-table tr:hover td { background: var(--pink-lighter); }
+        .method-get {
+            display: inline-block;
+            background: #22c55e;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
 
-    .demo-form {
-      display: flex; gap: 8px; flex-wrap: wrap; margin: 16px 0;
-    }
-    .demo-form input {
-      flex: 1; min-width: 200px;
-      padding: 10px 14px; font-size: 1rem;
-      border: 1px solid var(--cinza-borda); border-radius: 8px;
-    }
-    .demo-form button {
-      background: var(--rosa); color: white; border: 0;
-      padding: 10px 22px; border-radius: 8px; cursor: pointer;
-      font-weight: 600; font-size: 1rem;
-    }
-    .demo-form button:hover { background: var(--rosa-escuro); }
+        /* ── Steps ── */
+        .steps-list { list-style: none; padding: 0; counter-reset: step; }
+        .steps-list li {
+            counter-increment: step;
+            position: relative;
+            padding: 0 0 28px 56px;
+        }
+        .steps-list li:last-child { padding-bottom: 0; }
+        .steps-list li::before {
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, var(--pink-primary), var(--pink-dark));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 16px;
+        }
+        .steps-list li::after {
+            content: '';
+            position: absolute;
+            left: 18px;
+            top: 38px;
+            bottom: 0;
+            width: 2px;
+            background: var(--pink-light);
+        }
+        .steps-list li:last-child::after { display: none; }
+        .steps-list li strong { display: block; font-size: 16px; margin-bottom: 8px; color: var(--text-dark); margin-top: 6px; }
+        .steps-list li p { color: var(--text-gray); font-size: 14px; line-height: 1.6; margin-bottom: 12px; }
 
-    .resultado {
-      background: #f3eaf0; border-radius: 10px; padding: 18px;
-      margin-top: 12px; display: none;
-    }
-    .resultado.visivel { display: block; }
-    .score-grande {
-      font-size: 3rem; font-weight: 700; color: var(--roxo); line-height: 1;
-    }
-    .score-meta { color: #6a5a6e; font-size: 0.95rem; margin-top: 4px; }
-    .motivos { margin-top: 10px; }
-    .motivo-tag {
-      display: inline-block; background: white; color: var(--roxo);
-      border: 1px solid var(--rosa); padding: 4px 10px;
-      border-radius: 999px; font-size: 0.85rem; margin: 4px 4px 0 0;
-    }
-    .pre-resposta {
-      margin-top: 12px;
-      max-height: 280px; overflow-y: auto;
-    }
+        /* ── Security badges ── */
+        .security-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-top: 4px;
+        }
+        .security-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            background: var(--pink-lighter);
+            border-radius: 14px;
+            padding: 18px;
+            border: 1px solid var(--pink-light);
+        }
+        .security-item .si-icon {
+            width: 38px;
+            height: 38px;
+            background: var(--pink-light);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: var(--pink-primary);
+            flex-shrink: 0;
+        }
+        .security-item h4 { font-size: 14px; font-weight: 700; color: var(--text-dark); margin-bottom: 4px; }
+        .security-item p  { font-size: 13px; color: var(--text-gray); line-height: 1.5; }
 
-    .badge-preview {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: white; border: 2px solid var(--rosa);
-      padding: 8px 14px; border-radius: 999px;
-      font-weight: 600; color: var(--roxo);
-    }
-    .badge-preview .estrela { color: var(--rosa); }
-
-    .chave-demo {
-      display: inline-block; background: #fff3e0; border: 1px dashed #c97a00;
-      padding: 8px 14px; border-radius: 6px; font-family: monospace;
-      font-size: 0.9rem; color: #6b3300;
-    }
-
-    .passos { padding-left: 20px; }
-    .passos li { margin-bottom: 10px; }
-
-    nav.top {
-      display: flex; gap: 16px; justify-content: center;
-      padding: 12px; background: white; border-bottom: 1px solid var(--cinza-borda);
-    }
-    nav.top a {
-      color: var(--roxo); text-decoration: none; font-weight: 500;
-    }
-    nav.top a:hover { color: var(--rosa-escuro); }
-  </style>
+        @media (max-width: 900px) {
+            .parceiros-hero { grid-template-columns: 1fr; }
+            .hero-code-preview { display: none; }
+            .security-grid { grid-template-columns: 1fr; }
+            .parceiros-hero h1 { font-size: 28px; }
+        }
+        @media (max-width: 600px) {
+            .doc-section { padding: 24px 20px; }
+            .parceiros-hero { padding: 36px 24px; }
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <header class="sh-header">
+            <a href="index.html" class="sh-logo">
+                <img src="resources/images/logo-escudo.png" alt="SafeHer Logo" class="sh-logo-img">
+            </a>
+            <div class="sh-nav">
+                <a href="index.html">Início</a>
+                <a href="avaliacoes.html">Avaliações</a>
+                <a href="parceiros.html" class="active">Parceiros</a>
+                <a href="login.html" class="sh-btn">Entrar</a>
+                <a href="escolha-cadastro.html" class="sh-btn-outline">Criar conta</a>
+            </div>
+        </header>
 
-<nav class="top">
-  <a href="index.html">← Voltar ao SafeHer</a>
-  <a href="#endpoints">Endpoints</a>
-  <a href="#demo">Demo</a>
-  <a href="#integrar">Como integrar</a>
-</nav>
+        <main>
+            <!-- hero -->
+            <section class="parceiros-hero">
+                <div>
+                    <div class="badge"><i class="fa-solid fa-code"></i> API Pública SafeHer</div>
+                    <h1>Mostre o score SafeHer<br>no seu site de vagas</h1>
+                    <p>Integre o índice de segurança da SafeHer em 5 minutos. Mostre às candidatas a reputação da empresa antes de elas se candidatarem — grátis.</p>
+                    <div style="display:flex; gap:12px; flex-wrap:wrap;">
+                        <a href="#demo" class="sh-btn" style="background:white;color:var(--pink-primary)!important;box-shadow:0 4px 14px rgba(0,0,0,0.15);">
+                            <i class="fa-solid fa-play"></i> Ver demo ao vivo
+                        </a>
+                        <a href="#integrar" class="sh-btn-outline" style="border-color:rgba(255,255,255,0.5);color:white;">
+                            <i class="fa-solid fa-book"></i> Como integrar
+                        </a>
+                    </div>
+                </div>
+                <div class="hero-code-preview">
+                    <div class="url">GET /empresas/:id/score</div>
+                    <div><span class="key">"empresa"</span>: <span class="val">"Tech Corp"</span>,</div>
+                    <div><span class="key">"score"</span>: <span class="val">4.7</span>,</div>
+                    <div><span class="key">"avaliacoes"</span>: <span class="val">128</span>,</div>
+                    <div><span class="key">"poweredBy"</span>: <span class="val">"SafeHer"</span></div>
+                </div>
+            </section>
 
-<header class="hero">
-  <span class="badge-novo">🚀 NOVO — API Pública</span>
-  <h1>SafeHer para sites de vagas</h1>
-  <p>
-    Integre o score de segurança do SafeHer no seu site de vagas em 5 minutos.
-    Mostre às candidatas a reputação da empresa antes de elas se candidatarem.
-  </p>
-</header>
+            <!-- quick Nav -->
+            <nav class="quick-nav" aria-label="Seções">
+                <a href="#oquee"><i class="fa-solid fa-circle-info"></i> O que é</a>
+                <a href="#demo"><i class="fa-solid fa-flask"></i> Demonstração</a>
+                <a href="#endpoints"><i class="fa-solid fa-plug"></i> Endpoints</a>
+                <a href="#integrar"><i class="fa-solid fa-code"></i> Como integrar</a>
+                <a href="#seguranca"><i class="fa-solid fa-shield-halved"></i> Segurança</a>
+            </nav>
 
-<main>
+            <!--o que é -->
+            <section class="doc-section" id="oquee">
+                <div class="section-heading">
+                    <div class="icon-box"><i class="fa-solid fa-circle-info"></i></div>
+                    <h2>O que é a API SafeHer?</h2>
+                </div>
+                <p style="color:var(--text-gray);font-size:15px;line-height:1.8;margin-bottom:16px;">
+                    A <strong>API Pública SafeHer</strong> permite que qualquer site de vagas — Gupy, Catho, portais internos de RH — consulte o score que mulheres atribuíram a uma empresa e exiba um <em>badge de reputação</em> nas vagas, ajudando candidatas a tomar decisões mais informadas.
+                </p>
+                <div class="badge-preview-wrapper">
+                    <span style="font-size:14px;color:var(--text-gray);font-weight:600;">Badge que seu site pode exibir:</span>
+                    <div class="badge-safeher">
+                        <span class="star-icon"><i class="fa-solid fa-star"></i></span>
+                        SafeHer <strong>4.3</strong> · 27 avaliações
+                    </div>
+                </div>
+            </section>
 
-  <section class="card">
-    <h2>O que é?</h2>
-    <p>
-      A <strong>API Pública SafeHer</strong> permite que qualquer site de vagas
-      (Gupy, Catho, sites internos de RH, etc.) consulte o score que mulheres
-      atribuíram a uma empresa e exiba um <em>badge de reputação</em> nas vagas.
-    </p>
-    <p style="margin-top:18px;">
-      Exemplo do badge que seu site pode mostrar:
-      <span class="badge-preview"><span class="estrela">⭐</span> SafeHer 4.3 · 27 avaliações</span>
-    </p>
-  </section>
+            <!-- demo -->
+            <section class="doc-section" id="demo">
+                <div class="section-heading">
+                    <div class="icon-box"><i class="fa-solid fa-flask"></i></div>
+                    <h2>Demonstração ao vivo</h2>
+                </div>
+                <p style="color:var(--text-gray);font-size:15px;line-height:1.7;margin-bottom:8px;">
+                    Use a chave de demonstração abaixo e consulte qualquer empresa cadastrada na SafeHer em tempo real.
+                </p>
+                <div class="demo-key-box" title="Clique para copiar" onclick="copiarChave()">
+                    <i class="fa-solid fa-key" style="color:#f59e0b;"></i>
+                    <code id="chaveDemo" style="background:none;color:#92400e;font-size:14px;">sh_demo_publica_123</code>
+                    <i class="fa-regular fa-copy" style="color:#b45309;font-size:13px;margin-left:4px;"></i>
+                </div>
 
-  <section class="card" id="demo">
-    <h2>🎯 Demonstração ao vivo</h2>
-    <p>
-      Use a chave de demonstração abaixo para testar agora mesmo. Digite o nome
-      de uma empresa cadastrada no SafeHer.
-    </p>
-    <p>Chave demo: <span class="chave-demo" id="chaveDemo">sh_demo_publica_123</span></p>
+                <div class="demo-form">
+                    <input id="nomeEmpresa" placeholder="Nome da empresa (ex: Empresa 1)" autocomplete="off">
+                    <button id="btnConsultar">
+                        <i class="fa-solid fa-magnifying-glass"></i> Consultar
+                    </button>
+                </div>
 
-    <div class="demo-form">
-      <input id="nomeEmpresa" placeholder="Digite o nome da empresa (ex: Empresa 1)" />
-      <button id="btnConsultar">Consultar score</button>
-    </div>
+                <div class="resultado" id="resultado">
+                    <div style="display:flex;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:16px;">
+                        <div>
+                            <div class="score-grande" id="resScore">—</div>
+                            <div class="score-meta" id="resMeta"></div>
+                        </div>
+                        <div class="motivos" id="resMotivos" style="flex:1;min-width:180px;"></div>
+                    </div>
+                    <details style="margin-top:4px;">
+                        <summary style="cursor:pointer;font-size:13px;color:var(--text-gray);font-weight:600;user-select:none;">
+                            <i class="fa-solid fa-code" style="color:var(--pink-primary);"></i> Ver resposta JSON completa
+                        </summary>
+                        <pre class="pre-resposta" id="resJson" style="margin-top:12px;"></pre>
+                    </details>
+                </div>
+            </section>
 
-    <div class="resultado" id="resultado">
-      <div style="display:flex; align-items:flex-end; gap:16px; flex-wrap:wrap;">
-        <div>
-          <div class="score-grande" id="resScore">—</div>
-          <div class="score-meta" id="resMeta"></div>
-        </div>
-        <div class="motivos" id="resMotivos" style="flex:1; min-width:200px;"></div>
-      </div>
-      <pre class="pre-resposta" id="resJson"></pre>
-    </div>
-  </section>
+            <!-- Endpoints -->
+            <section class="doc-section" id="endpoints">
+                <div class="section-heading">
+                    <div class="icon-box"><i class="fa-solid fa-plug"></i></div>
+                    <h2>Endpoints públicos</h2>
+                </div>
+                <p style="color:var(--text-gray);font-size:14px;margin-bottom:4px;">
+                    Envie a chave em <code>X-API-Key: &lt;sua_chave&gt;</code> ou <code>?api_key=&lt;sua_chave&gt;</code>.
+                </p>
+                <table class="endpoints-table">
+                    <thead>
+                        <tr>
+                            <th>Método</th>
+                            <th>Rota</th>
+                            <th>Descrição</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="method-get">GET</span></td>
+                            <td><code>/empresas/score-por-nome?nome=X</code></td>
+                            <td>Atalho ideal para sites de vagas. Passe o nome da empresa e receba o score. Retorna <code>encontrada: false</code> se ainda não há dados.</td>
+                        </tr>
+                        <tr>
+                            <td><span class="method-get">GET</span></td>
+                            <td><code>/empresas/buscar?nome=X</code></td>
+                            <td>Lista até 5 empresas que combinam com o nome, com score e quantidade de avaliações.</td>
+                        </tr>
+                        <tr>
+                            <td><span class="method-get">GET</span></td>
+                            <td><code>/empresas/:id/score</code></td>
+                            <td>Score detalhado por ID, incluindo os motivos mais citados pelas avaliadoras.</td>
+                        </tr>
+                    </tbody>
+                </table>
 
-  <section class="card" id="endpoints">
-    <h2>📡 Endpoints públicos</h2>
-    <p>Base URL: <code>http://localhost:3000/api/public</code></p>
-    <p>Envie a chave em <code>X-API-Key: &lt;sua_chave&gt;</code> <em>ou</em> <code>?api_key=&lt;sua_chave&gt;</code>.</p>
-
-    <table class="endpoints">
-      <thead>
-        <tr><th>Método</th><th>Rota</th><th>Descrição</th></tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><span class="method-get">GET</span></td>
-          <td><code>/empresas/score-por-nome?nome=X</code></td>
-          <td>Atalho perfeito para sites de vagas: passe o nome direto da página da vaga e receba o score. Devolve <code>encontrada: false</code> se a empresa ainda não tem dados.</td>
-        </tr>
-        <tr>
-          <td><span class="method-get">GET</span></td>
-          <td><code>/empresas/buscar?nome=X</code></td>
-          <td>Lista até 5 empresas que combinam com o nome, com score e qtd de avaliações.</td>
-        </tr>
-        <tr>
-          <td><span class="method-get">GET</span></td>
-          <td><code>/empresas/:id/score</code></td>
-          <td>Score detalhado de uma empresa específica (por ID), incluindo os motivos mais citados.</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <h3 style="margin-top:24px;">Exemplo de resposta</h3>
-<pre>{
-  "empresa": "Empresa Exemplo",
-  "score": 4.3,
-  "quantidadeAvaliacoes": 27,
-  "motivos": ["ambiente respeitoso", "boa liderança feminina"],
-  "encontrada": true,
-  "poweredBy": "SafeHer"
+                <div style="margin-top:28px;">
+                    <p style="font-weight:700;font-size:14px;color:var(--text-dark);margin-bottom:10px;">Exemplo de resposta</p>
+                    <pre>{
+  <span class="c-key">"empresa"</span>: <span class="c-str">"Empresa Exemplo"</span>,
+  <span class="c-key">"score"</span>: <span class="c-val">4.3</span>,
+  <span class="c-key">"quantidadeAvaliacoes"</span>: <span class="c-val">27</span>,
+  <span class="c-key">"motivos"</span>: [<span class="c-str">"ambiente respeitoso"</span>, <span class="c-str">"boa liderança feminina"</span>],
+  <span class="c-key">"encontrada"</span>: <span class="c-val">true</span>,
+  <span class="c-key">"poweredBy"</span>: <span class="c-str">"SafeHer"</span>
 }</pre>
-  </section>
+                </div>
+            </section>
 
-  <section class="card" id="integrar">
-    <h2>🔌 Como integrar (3 passos)</h2>
-    <ol class="passos">
-      <li>
-        <strong>Solicite sua chave:</strong> mande um e-mail para
-        <code>parceiros@safeher.local</code> com nome do site e contato.
-        Você receberá uma chave no formato <code>sh_live_xxxxxxxx</code>.
-      </li>
-      <li>
-        <strong>Adicione o snippet</strong> abaixo na página da vaga, substituindo
-        <code>SUA_CHAVE</code> e o nome da empresa:
-<pre>&lt;script&gt;
-fetch('http://localhost:3000/api/public/empresas/score-por-nome?nome='
-    + encodeURIComponent('Empresa X')
-    + '&api_key=SUA_CHAVE')
-  .then(r =&gt; r.json())
-  .then(d =&gt; {
-    if (d.encontrada &amp;&amp; d.score &gt; 0) {
+            <!-- Como integrar -->
+            <section class="doc-section" id="integrar">
+                <div class="section-heading">
+                    <div class="icon-box"><i class="fa-solid fa-code"></i></div>
+                    <h2>Como integrar (3 passos)</h2>
+                </div>
+                <ol class="steps-list">
+                    <li>
+                        <strong>Solicite sua chave de acesso</strong>
+                        <p>Envie um e-mail para <code>parceiros@safeher.local</code> com o nome do site e contato. Você receberá uma chave no formato <code>sh_live_xxxxxxxx</code>.</p>
+                    </li>
+                    <li>
+                        <strong>Adicione o snippet na página da vaga</strong>
+                        <p>Substitua <code>SUA_CHAVE</code> e o nome da empresa. O badge aparece automaticamente quando há dados:</p>
+<pre><span class="c-comment">// Adicione na página da vaga</span>
+fetch('/api/public/empresas/score-por-nome?nome='
+    + encodeURIComponent('<span class="c-str">Nome da Empresa</span>')
+    + '&api_key=<span class="c-str">SUA_CHAVE</span>')
+  .then(r => r.json())
+  .then(d => {
+    if (d.encontrada && d.score > 0) {
       document.getElementById('safeher-badge').innerHTML =
         '⭐ SafeHer ' + d.score + ' · ' + d.quantidadeAvaliacoes + ' avaliações';
     }
   });
-&lt;/script&gt;
-&lt;span id="safeher-badge"&gt;&lt;/span&gt;</pre>
-      </li>
-      <li>
-        <strong>Pronto.</strong> O badge aparece automaticamente em toda página
-        de vaga que tiver dados no SafeHer.
-      </li>
-    </ol>
-  </section>
 
-  <section class="card">
-    <h2>🛡️ Limites e segurança</h2>
-    <ul>
-      <li><strong>Rate limit:</strong> 1000 chamadas/dia por chave (configurável).</li>
-      <li><strong>Apenas leitura:</strong> endpoints públicos não permitem criar, alterar ou excluir nada.</li>
-      <li><strong>Dados agregados:</strong> retornamos média e contagem — nunca expomos identidade das avaliadoras.</li>
-      <li><strong>Headers de quota:</strong> <code>X-RateLimit-Limit</code> e <code>X-RateLimit-Remaining</code> em toda resposta.</li>
-    </ul>
-  </section>
+&lt;span id="<span class="c-str">safeher-badge</span>"&gt;&lt;/span&gt;</pre>
+                    </li>
+                    <li>
+                        <strong>Pronto!</strong>
+                        <p>O badge exibe o score real das avaliações de mulheres sempre que a empresa tiver dados na SafeHer.</p>
+                        <div class="badge-preview-wrapper" style="margin-top:0;">
+                            <span style="font-size:13px;color:var(--text-gray);">Resultado:</span>
+                            <div class="badge-safeher">
+                                <span class="star-icon"><i class="fa-solid fa-star"></i></span>
+                                SafeHer <strong>4.3</strong> · 27 avaliações
+                            </div>
+                        </div>
+                    </li>
+                </ol>
+            </section>
 
-</main>
+            <!-- Segurança -->
+            <section class="doc-section" id="seguranca">
+                <div class="section-heading">
+                    <div class="icon-box"><i class="fa-solid fa-shield-halved"></i></div>
+                    <h2>Limites e segurança</h2>
+                </div>
+                <div class="security-grid">
+                    <div class="security-item">
+                        <div class="si-icon"><i class="fa-solid fa-gauge-high"></i></div>
+                        <div>
+                            <h4>Rate limit</h4>
+                            <p>1.000 chamadas/dia por chave, configurável para planos de parceiros.</p>
+                        </div>
+                    </div>
+                    <div class="security-item">
+                        <div class="si-icon"><i class="fa-solid fa-eye-slash"></i></div>
+                        <div>
+                            <h4>Apenas leitura</h4>
+                            <p>Os endpoints públicos não permitem criar, alterar ou excluir nenhum dado.</p>
+                        </div>
+                    </div>
+                    <div class="security-item">
+                        <div class="si-icon"><i class="fa-solid fa-user-shield"></i></div>
+                        <div>
+                            <h4>Dados agregados</h4>
+                            <p>Retornamos apenas médias e contagens — nunca a identidade das avaliadoras.</p>
+                        </div>
+                    </div>
+                    <div class="security-item">
+                        <div class="si-icon"><i class="fa-solid fa-chart-bar"></i></div>
+                        <div>
+                            <h4>Headers de quota</h4>
+                            <p><code>X-RateLimit-Limit</code> e <code>X-RateLimit-Remaining</code> em toda resposta.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
 
-<script>
-  const BASE = 'http://localhost:3000/api/public';
-  const CHAVE_DEMO = 'sh_demo_publica_123';
+    <footer class="sh-footer">
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <a href="index.html">
+                    <img src="resources/images/logo-escudo.png" alt="SafeHer" class="sh-logo-img" style="filter: brightness(0) invert(1);">
+                </a>
+                <p>Conectando mulheres e empresas por um mercado de trabalho mais justo, transparente e seguro.</p>
+                <div class="social-icons" style="margin-top:16px;">
+                    <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+                    <a href="#" aria-label="Twitter/X"><i class="fa-brands fa-twitter"></i></a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <h4>Navegação</h4>
+                <a href="index.html">Início</a>
+                <a href="avaliacoes.html">Avaliações</a>
+                <a href="parceiros.html">Parceiros API</a>
+            </div>
+            <div class="footer-emergency">
+                <h4>Contatos de Emergência</h4>
+                <p><i class="fa-solid fa-phone"></i> <strong>180</strong> — Central da Mulher</p>
+                <p><i class="fa-solid fa-phone"></i> <strong>190</strong> — Polícia Militar</p>
+                <p><i class="fa-solid fa-phone"></i> <strong>100</strong> — Direitos Humanos</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 SafeHer. Todos os direitos reservados.</p>
+        </div>
+    </footer>
 
-  document.getElementById('btnConsultar').addEventListener('click', consultar);
-  document.getElementById('nomeEmpresa').addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') consultar();
-  });
+    <div id="toast-container"></div>
 
-  async function consultar() {
-    const nome = document.getElementById('nomeEmpresa').value.trim();
-    if (!nome) return;
+    <script src="api.js"></script>
+    <script src="usuario-session.js"></script>
+    <script>
+        const BASE_DEMO = '/api/public';
+        const CHAVE_DEMO = 'sh_demo_publica_123';
 
-    const box = document.getElementById('resultado');
-    box.classList.add('visivel');
-    document.getElementById('resScore').textContent = '…';
-    document.getElementById('resMeta').textContent = 'Consultando API…';
-    document.getElementById('resMotivos').innerHTML = '';
-    document.getElementById('resJson').textContent = '';
-
-    try {
-      const url = `${BASE}/empresas/score-por-nome?nome=${encodeURIComponent(nome)}&api_key=${CHAVE_DEMO}`;
-      const r = await fetch(url);
-      const data = await r.json();
-
-      if (!r.ok) {
-        document.getElementById('resScore').textContent = '!';
-        document.getElementById('resMeta').textContent = data.erro || 'Erro';
-      } else if (!data.encontrada) {
-        document.getElementById('resScore').textContent = '—';
-        document.getElementById('resMeta').textContent =
-          `Empresa "${nome}" ainda não está no SafeHer.`;
-      } else {
-        document.getElementById('resScore').textContent = data.score.toFixed(1);
-        document.getElementById('resMeta').textContent =
-          `${data.empresa} · ${data.quantidadeAvaliacoes} avaliação(ões)`;
-
-        const motivosEl = document.getElementById('resMotivos');
-        if (data.motivos && data.motivos.length) {
-          motivosEl.innerHTML = '<strong>Motivos mais citados:</strong><br/>' +
-            data.motivos.map(m => `<span class="motivo-tag">${m}</span>`).join('');
-        } else {
-          motivosEl.innerHTML = '<em style="color:#6a5a6e">Sem motivos catalogados ainda.</em>';
+        function copiarChave() {
+            navigator.clipboard.writeText(CHAVE_DEMO).then(() => {
+                showToast('Chave copiada para a área de transferência!', 'info');
+            }).catch(() => {
+                showToast('Chave: ' + CHAVE_DEMO, 'info');
+            });
         }
-      }
 
-      document.getElementById('resJson').textContent = JSON.stringify(data, null, 2);
-    } catch (e) {
-      document.getElementById('resScore').textContent = '!';
-      document.getElementById('resMeta').textContent =
-        'Não foi possível conectar à API. Ela está rodando em http://localhost:3000?';
-    }
-  }
-</script>
+        document.getElementById('btnConsultar').addEventListener('click', consultar);
+        document.getElementById('nomeEmpresa').addEventListener('keydown', e => {
+            if (e.key === 'Enter') consultar();
+        });
 
+        async function consultar() {
+            const nome = document.getElementById('nomeEmpresa').value.trim();
+            if (!nome) {
+                showToast('Digite o nome de uma empresa.', 'error');
+                return;
+            }
+
+            const box = document.getElementById('resultado');
+            box.classList.add('visivel');
+            document.getElementById('resScore').textContent = '…';
+            document.getElementById('resMeta').textContent  = 'Consultando API…';
+            document.getElementById('resMotivos').innerHTML = '';
+            document.getElementById('resJson').textContent  = '';
+
+            try {
+                const url = `${BASE_DEMO}/empresas/score-por-nome?nome=${encodeURIComponent(nome)}&api_key=${CHAVE_DEMO}`;
+                const r    = await fetch(url);
+                const data = await r.json();
+
+                if (!r.ok) {
+                    document.getElementById('resScore').textContent = '!';
+                    document.getElementById('resMeta').textContent  = data.erro || 'Erro na requisição';
+                } else if (!data.encontrada) {
+                    document.getElementById('resScore').textContent = '—';
+                    document.getElementById('resMeta').textContent  = `"${nome}" ainda não está na SafeHer.`;
+                } else {
+                    document.getElementById('resScore').textContent = data.score.toFixed(1);
+                    document.getElementById('resMeta').textContent  = `${data.empresa} · ${data.quantidadeAvaliacoes} avaliação(ões)`;
+
+                    const motivosEl = document.getElementById('resMotivos');
+                    if (data.motivos && data.motivos.length) {
+                        motivosEl.innerHTML = '<strong style="font-size:13px;color:var(--text-dark);">Motivos mais citados:</strong><br>' +
+                            data.motivos.map(m => `<span class="motivo-tag">${m}</span>`).join('');
+                    } else {
+                        motivosEl.innerHTML = '<em style="font-size:13px;color:var(--text-gray);">Sem motivos catalogados ainda.</em>';
+                    }
+                }
+                document.getElementById('resJson').textContent = JSON.stringify(data, null, 2);
+            } catch (e) {
+                document.getElementById('resScore').textContent = '!';
+                document.getElementById('resMeta').textContent  = 'Não foi possível conectar à API.';
+            }
+        }
+    </script>
 </body>
 </html>
