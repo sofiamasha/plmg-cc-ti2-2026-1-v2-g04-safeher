@@ -111,6 +111,20 @@
     <script src="usuario-session.js"></script>
     <script>
         // ==========================================
+        // AUTO-PREENCHIMENTO DE EMPRESA VIA URL (Extensão)
+        // ==========================================
+        window.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const empresaUrl = params.get('empresa');
+            if (empresaUrl) {
+                const inputEmpresa = document.getElementById('empresa');
+                if (inputEmpresa) {
+                    inputEmpresa.value = decodeURIComponent(empresaUrl);
+                }
+            }
+        });
+
+        // ==========================================
         // LÓGICA DE GRAVAÇÃO DE ÁUDIO (MediaRecorder)
         // ==========================================
         let mediaRecorder;

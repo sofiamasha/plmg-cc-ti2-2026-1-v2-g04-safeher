@@ -117,4 +117,25 @@ public class EmpresaDAO extends ConexaoDAO {
         }
         return lista;
     }
+
+    public Empresa buscarPorNome(String nome) throws SQLException {
+        String sql = "SELECT id, nome FROM Empresa WHERE nome ILIKE ? LIMIT 1";
+        Empresa empresa = null;
+        try {
+            abrirConexao();
+            PreparedStatement stmt = getConexao().prepareStatement(sql);
+            stmt.setString(1, "%" + nome.trim() + "%");
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                empresa = new Empresa();
+                empresa.setId(rs.getInt("id"));
+                empresa.setNome(rs.getString("nome"));
+            }
+            rs.close();
+            stmt.close();
+        } finally {
+            fecharConexao();
+        }
+        return empresa;
+    }
 }

@@ -135,5 +135,17 @@
         </div>
     </footer>
 
+    <script>
+        // Pre-preenche a pesquisa de empresa vinda da extensão (?empresa=...)
+        const urlParams = new URLSearchParams(window.location.search);
+        const empresaParam = urlParams.get('empresa');
+        if (empresaParam) {
+            const searchInput = document.querySelector('.search-input');
+            if (searchInput) {
+                searchInput.value = decodeURIComponent(empresaParam);
+                searchInput.focus();
+            }
+        }
+    </script>
 </body>
 </html>

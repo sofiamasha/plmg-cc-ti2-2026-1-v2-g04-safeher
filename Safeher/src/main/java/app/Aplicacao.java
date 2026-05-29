@@ -55,6 +55,7 @@ public class Aplicacao {
         delete("/empresas/:id", (req, res) -> empresaService.remove(req, res));
         get("/empresas/:id", (req, res) -> empresaService.get(req, res));
         get("/empresas", (req, res) -> empresaService.listar(req, res));
+        get("/empresa/score", (req, res) -> empresaService.obterScorePublico(req, res));
 
         post("/avaliacoes", (req, res) -> avaliacaoService.insert(req, res));
         put("/avaliacoes/:id", (req, res) -> avaliacaoService.update(req, res));

@@ -11,9 +11,11 @@ CREATE TABLE Usuario (
 
 -- tabela das empresas
 CREATE TABLE Empresa (
-    id INT PRIMARY KEY,      -- chave primaria (id unico da empresa)
-    nome VARCHAR(100),       -- nome da empresa
-    indice DECIMAL(5,2)      -- indice da empresa
+    id INT PRIMARY KEY,
+    nome VARCHAR(100),
+    email VARCHAR(100),
+    senha VARCHAR(100),
+    indice DECIMAL(5,2)
 );
 
 -- tabela de avaliações

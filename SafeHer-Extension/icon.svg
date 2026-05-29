@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <!-- Gradiente premium de rosa para roxo suave -->
+    <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF75B5" />
+      <stop offset="100%" stop-color="#B31B6E" />
+    </linearGradient>
+    <!-- Sombra suave para dar profundidade premium -->
+    <filter id="dropShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#B31B6E" flood-opacity="0.25" />
+    </filter>
+  </defs>
+
+  <!-- Fundo Circular Rosa -->
+  <circle cx="64" cy="64" r="58" fill="url(#shieldGrad)" filter="url(#dropShadow)" />
+
+  <!-- Escudo de Proteção Branco -->
+  <path d="M64 26 C75 26 88 32 94 36 C94 56 88 78 64 96 C40 78 34 56 34 36 C40 32 53 26 64 26 Z" 
+        fill="#FFFFFF" 
+        stroke="rgba(255, 255, 255, 0.4)" 
+        stroke-width="3" />
+
+  <!-- Coração Feminino Centralizado em Rosa -->
+  <path d="M64 45 C64 45 59.5 39 53 39 C46.5 39 42 43.5 42 50 C42 59 64 74 64 74 C64 74 86 59 86 50 C86 43.5 81.5 39 75 39 C68.5 39 64 45 64 45 Z" 
+        fill="url(#shieldGrad)" />
+</svg>

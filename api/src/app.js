@@ -27,6 +27,9 @@ app.get('/health', (req, res) => {
 });
 
 // ── Rotas ─────────────────────────────────────────────────────────────────────
+const { obterScorePublico } = require('./controllers/empresas.controller');
+app.get('/empresa/score', obterScorePublico);
+
 app.use('/api', routes);
 
 // ── 404 ───────────────────────────────────────────────────────────────────────

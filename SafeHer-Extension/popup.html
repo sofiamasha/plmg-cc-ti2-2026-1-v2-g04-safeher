@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SafeHer Extension</title>
+  <!-- Google Fonts & FontAwesome -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header Decorativo e Premium -->
+  <header class="header">
+    <div class="logo-container">
+      <div class="logo-icon-bg">
+        <i class="fa-solid fa-shield-halved logo-icon"></i>
+      </div>
+      <div class="logo-text">
+        <h1>Safe<span class="highlight">Her</span></h1>
+        <p class="tagline">Segurança Corporativa Feminina</p>
+      </div>
+    </div>
+    <div class="decorative-dots">
+      <span></span><span></span><span></span>
+    </div>
+  </header>
+
+  <main class="content">
+    <!-- Barra de Pesquisa Elegante -->
+    <div class="search-container">
+      <div class="search-box">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input type="text" id="company-search-input" placeholder="Buscar outra empresa..." autocomplete="off">
+        <button id="search-btn" class="search-action-btn">
+          <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+      <div id="detected-indicator" class="detected-badge hidden">
+        <i class="fa-solid fa-location-crosshairs pulse-icon"></i>
+        <span>Nome selecionado/detectado na página</span>
+      </div>
+    </div>
+
+    <!-- Container de Loader -->
+    <div id="loader" class="loader-container hidden">
+      <div class="spinner"></div>
+      <p>Consultando banco SafeHer...</p>
+    </div>
+
+    <!-- CARD PRINCIPAL: EMPRESA ENCONTRADA -->
+    <div id="result-card" class="company-card fade-in hidden">
+      <div class="company-header">
+        <div class="company-logo-avatar" id="company-avatar">
+          <i class="fa-solid fa-building"></i>
+        </div>
+        <div class="company-title-info">
+          <h2 id="company-name">Empresa Exemplo S.A.</h2>
+          <span id="status-badge" class="badge badge-success">Segura</span>
+        </div>
+      </div>
+
+      <!-- Seção do Score de Segurança (Destaque) -->
+      <div class="score-section">
+        <div class="score-circle-container">
+          <div class="score-circle">
+            <svg class="progress-ring" width="100" height="100">
+              <circle class="progress-ring__circle-bg" stroke="#f3e5f5" stroke-width="8" fill="transparent" r="40" cx="50" cy="50"/>
+              <circle id="score-ring-progress" class="progress-ring__circle" stroke="#E33A7F" stroke-width="8" fill="transparent" r="40" cx="50" cy="50"/>
+            </svg>
+            <div class="score-number-display">
+              <span id="score-value">85</span>
+              <span class="score-max">/100</span>
+            </div>
+          </div>
+          <div class="score-label-details">
+            <h3>Índice SafeHer</h3>
+            <p id="reputation-summary">Excelente reputação. Ambiente de trabalho seguro e recomendado.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Métricas: Avaliações e Denúncias -->
+      <div class="metrics-grid">
+        <div class="metric-item card-light">
+          <div class="metric-icon pink-text">
+            <i class="fa-solid fa-star"></i>
+          </div>
+          <div class="metric-info">
+            <div class="metric-stars" id="star-rating">
+              <i class="fa-solid fa-star fill"></i>
+              <i class="fa-solid fa-star fill"></i>
+              <i class="fa-solid fa-star fill"></i>
+              <i class="fa-solid fa-star fill"></i>
+              <i class="fa-regular fa-star"></i>
+            </div>
+            <p class="metric-text"><strong id="rating-avg">4.3</strong> (<span id="total-reviews">12</span> avaliações)</p>
+          </div>
+        </div>
+
+        <div class="metric-item card-light" id="complaints-container">
+          <div class="metric-icon purple-text">
+            <i class="fa-solid fa-bullhorn"></i>
+          </div>
+          <div class="metric-info">
+            <h4 class="metric-val" id="total-complaints">0</h4>
+            <p class="metric-label">Denúncias anônimas</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD ALTERNATIVO: EMPRESA NÃO ENCONTRADA -->
+    <div id="no-data-card" class="company-card no-data fade-in hidden">
+      <div class="no-data-icon-bg">
+        <i class="fa-solid fa-circle-info"></i>
+      </div>
+      <h2>Sem dados no SafeHer</h2>
+      <p id="no-data-company-name-display" class="no-data-company-name">"Empresa Desconhecida"</p>
+      <p class="no-data-desc">Ainda não temos registros de avaliações ou denúncias para esta empresa. Seja a primeira a deixar o seu relato seguro!</p>
+      <div class="incentive-badge">
+        <i class="fa-solid fa-lock-open"></i> Seu relato é 100% anônimo e seguro.
+      </div>
+    </div>
+
+    <!-- BOTÕES DE AÇÃO PRINCIPAIS (SEMPRE VISÍVEIS) -->
+    <div class="action-buttons">
+      <a href="#" id="btn-evaluate" class="action-btn btn-primary" target="_blank">
+        <i class="fa-solid fa-pen-fancy"></i>
+        <span>Avaliar Empresa</span>
+      </a>
+      <a href="#" id="btn-complain" class="action-btn btn-danger" target="_blank">
+        <i class="fa-solid fa-bullhorn"></i>
+        <span>Fazer Denúncia</span>
+      </a>
+      <a href="#" id="btn-view-site" class="action-btn btn-outline" target="_blank">
+        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        <span>Ver no SafeHer</span>
+      </a>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>SafeHer &copy; 2026. Juntas, somos mais fortes.</p>
+  </footer>
+
+  <script src="popup.js"></script>
+</body>
+</html>

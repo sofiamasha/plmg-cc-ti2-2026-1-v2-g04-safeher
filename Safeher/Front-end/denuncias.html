@@ -208,6 +208,16 @@
                 alert('Erro ao enviar denúncia: ' + e.message);
             }
         }
+
+        // Pre-preenche a empresa vinda da extensão de navegador (?empresa=...)
+        const urlParams = new URLSearchParams(window.location.search);
+        const empresaParam = urlParams.get('empresa');
+        if (empresaParam) {
+            const empresaInput = document.getElementById('empresa');
+            if (empresaInput) {
+                empresaInput.value = decodeURIComponent(empresaParam);
+            }
+        }
     </script>
 </body>
 </html>
