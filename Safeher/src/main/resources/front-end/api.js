@@ -1,17 +1,8 @@
-/**
- * SafeHer - Funções de integração com o back-end
- * Inclua este script nas páginas HTML que precisam de dados do banco.
- *
- * Uso: <script src="api.js"></script>
- */
-
 const API = "http://localhost:8080";
 
-// =====================
-// USUARIO
-// =====================
+//usuario 
 
-/** Cadastra um novo usuário */
+/*cadastra novo */
 async function cadastrarUsuario(usuario) {
     const res = await fetch(`${API}/usuarios`, {
         method: "POST",
@@ -21,7 +12,7 @@ async function cadastrarUsuario(usuario) {
     return res.json();
 }
 
-/** Atualiza um usuário pelo ID */
+/*atualiza usuario */
 async function atualizarUsuario(id, usuario) {
     const res = await fetch(`${API}/usuarios/${id}`, {
         method: "PUT",
@@ -31,27 +22,25 @@ async function atualizarUsuario(id, usuario) {
     return res.json();
 }
 
-/** Remove um usuário pelo ID */
+/*remove usuario */
 async function removerUsuario(id) {
     const res = await fetch(`${API}/usuarios/${id}`, { method: "DELETE" });
     return res.json();
 }
 
-/** Busca um usuário pelo ID */
+/*busca usuario */
 async function getUsuario(id) {
     const res = await fetch(`${API}/usuarios/${id}`);
     return res.json();
 }
 
-/** Lista todos os usuários */
+/*lista usuarios*/
 async function listarUsuarios() {
     const res = await fetch(`${API}/usuarios`);
     return res.json();
 }
 
-// =====================
-// EMPRESA
-// =====================
+// empresa
 
 async function cadastrarEmpresa(empresa) {
     const res = await fetch(`${API}/empresas`, {
@@ -86,9 +75,7 @@ async function listarEmpresas() {
     return res.json();
 }
 
-// =====================
-// AVALIACAO
-// =====================
+// avaliacao
 
 async function cadastrarAvaliacao(avaliacao) {
     const res = await fetch(`${API}/avaliacoes`, {
@@ -123,9 +110,7 @@ async function listarAvaliacoes() {
     return res.json();
 }
 
-// =====================
-// DENUNCIA
-// =====================
+// denuncia
 
 async function cadastrarDenuncia(denuncia) {
     const res = await fetch(`${API}/denuncias`, {
@@ -160,19 +145,19 @@ async function listarDenuncias() {
     return res.json();
 }
 
-/** Lista denúncias de um usuário específico */
+/* lista avaliações feitas por um usuário específico */
 async function listarDenunciasPorUsuario(usuarioId) {
     const res = await fetch(`${API}/denuncias/usuario/${usuarioId}`);
     return res.json();
 }
 
-/** Lista avaliações de uma empresa específica */
+/* lista avaliações de uma empresa específica */
 async function listarAvaliacoesPorEmpresa(empresaId) {
     const res = await fetch(`${API}/avaliacoes/empresa/${empresaId}`);
     return res.json();
 }
 
-/** Lista denúncias de uma empresa específica */
+/* lista denúncias de uma empresa específica */
 async function listarDenunciasPorEmpresa(empresaId) {
     const res = await fetch(`${API}/denuncias/empresa/${empresaId}`);
     return res.json();
