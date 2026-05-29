@@ -102,6 +102,17 @@
     <script src="api.js"></script>
     <script src="usuario-session.js"></script>
     <script>
+        // pre-preenche a pesquisa de empresa vinda da extensão (?empresa=...)
+        const urlParams = new URLSearchParams(window.location.search);
+        const empresaParam = urlParams.get('empresa');
+        if (empresaParam) {
+            const searchInput = document.querySelector('.search-input');
+            if (searchInput) {
+                searchInput.value = decodeURIComponent(empresaParam);
+                searchInput.focus();
+            }
+        }
+        
         function gerarEstrelas(nota) {
             let html = '';
             const inteiro = Math.floor(nota);
