@@ -3,27 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SafeHer - Minhas Denúncias</title>
+    <title>SafeHer</title>
     <link rel="stylesheet" href="global.css">
     <style>
         .denuncia-card {
             background: var(--white);
             border-radius: 16px;
             padding: 24px;
-            margin-bottom: 16px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
-            border-left: 6px solid var(--pink-primary);
-            transition: 0.3s;
+            margin-bottom: 14px;
+            box-shadow: var(--shadow-sm);
+            border-left: 5px solid var(--pink-primary);
+            transition: var(--transition);
         }
         .denuncia-card:hover {
-            box-shadow: 0 10px 25px rgba(227, 58, 127, 0.1);
-            transform: translateX(4px);
+            box-shadow: var(--shadow-pink);
+            transform: translateX(3px);
         }
         .denuncia-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 8px;
         }
         .denuncia-id {
             background: var(--pink-light);
@@ -36,12 +38,22 @@
         .denuncia-data {
             color: var(--text-gray);
             font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
         .denuncia-texto {
             color: var(--text-dark);
-            font-size: 15px;
-            line-height: 1.6;
-            margin-bottom: 12px;
+            font-size: 14px;
+            line-height: 1.7;
+            margin-bottom: 14px;
+        }
+        .denuncia-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
         }
         .denuncia-badge {
             display: inline-flex;
@@ -49,45 +61,50 @@
             gap: 6px;
             font-size: 12px;
             font-weight: 600;
-            padding: 4px 10px;
+            padding: 4px 12px;
             border-radius: 20px;
-        }
-        .badge-anonima {
-            background: #E8F5E9;
-            color: #2E7D32;
+            background: #f0fdf4;
+            color: #166534;
+            border: 1px solid #bbf7d0;
         }
         .empty-state {
             text-align: center;
-            padding: 60px 20px;
+            padding: 80px 20px;
         }
-        .empty-state i {
-            font-size: 64px;
-            color: var(--pink-light);
-            margin-bottom: 20px;
-        }
-        .denuncia-actions {
-            display: flex;
-            gap: 8px;
-            margin-top: 12px;
-        }
+        .empty-state i { font-size: 56px; color: var(--pink-light); margin-bottom: 20px; display: block; }
+        .empty-state h3 { font-size: 20px; font-weight: 700; color: var(--text-dark); margin-bottom: 10px; }
+        .empty-state p { color: var(--text-gray); margin-bottom: 24px; font-size: 15px; }
         .btn-delete {
             background: none;
-            border: 1px solid #D32F2F;
-            color: #D32F2F;
+            border: 1.5px solid #fca5a5;
+            color: #dc2626;
             padding: 6px 14px;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 13px;
+            font-size: 12px;
+            font-weight: 600;
             font-family: var(--font-body);
-            transition: 0.2s;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
-        .btn-delete:hover {
-            background: #D32F2F;
-            color: white;
+        .btn-delete:hover { background: #dc2626; color: white; border-color: #dc2626; }
+        .count-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--pink-light);
+            color: var(--pink-dark);
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
         }
     </style>
 </head>
 <body>
+    <div id="toast-container"></div>
     <div class="container">
         <header class="sh-header">
             <a href="index.html" class="sh-logo">
@@ -95,28 +112,30 @@
             </a>
             <div class="sh-nav">
                 <a href="index.html">Início</a>
-                <a href="denuncias.html">Denúncias</a>
+                <a href="denuncias.html" class="active">Denúncias</a>
                 <a href="avaliacoes.html">Avaliações</a>
                 <a href="conteudos.html">Conteúdos</a>
                 <a href="vagas.html">Vagas</a>
-                <a href="login.html" class="sh-btn" style="color: white;">Entrar</a>
+                <a href="login.html" class="sh-btn">Entrar</a>
                 <a href="escolha-cadastro.html" class="sh-btn-outline">Criar conta</a>
             </div>
         </header>
 
         <main>
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;flex-wrap:wrap;gap:16px;">
                 <div>
-                    <h2 class="sh-title">Minhas Denúncias</h2>
-                    <p class="sh-subtitle" style="margin-bottom: 0;">Acompanhe todas as denúncias que você enviou.</p>
+                    <h2 class="sh-title" style="margin-bottom:4px;">Minhas Denúncias</h2>
+                    <p class="sh-subtitle" style="margin-bottom:0;font-size:15px;">Acompanhe todas as denúncias que você enviou.</p>
                 </div>
-                <a href="denuncias.html" class="sh-btn"><i class="fa-solid fa-plus"></i> Nova Denúncia</a>
+                <a href="denuncias.html" class="sh-btn">
+                    <i class="fa-solid fa-plus"></i> Nova Denúncia
+                </a>
             </div>
 
             <div id="listaDenuncias">
                 <div class="empty-state">
                     <i class="fa-solid fa-spinner fa-spin"></i>
-                    <p>Carregando...</p>
+                    <p>Carregando suas denúncias...</p>
                 </div>
             </div>
         </main>
@@ -126,7 +145,7 @@
         <div class="container footer-content">
             <div class="footer-brand">
                 <a href="index.html">
-                    <img src="resources/images/logo-escudo.png" alt="SafeHer" class="sh-logo-img" style="filter: brightness(0) invert(1);">
+                    <img src="resources/images/logo-escudo.png" alt="SafeHer" class="sh-logo-img" style="filter:brightness(0) invert(1);">
                 </a>
                 <p>Protegendo mulheres, denunciando abusos e transformando o ambiente corporativo com transparência e justiça.</p>
             </div>
@@ -140,12 +159,12 @@
             </div>
             <div class="footer-emergency">
                 <h4>Contatos de Emergência</h4>
-                <p><i class="fa-solid fa-phone"></i> <strong>180</strong> - Central de Atendimento à Mulher</p>
-                <p><i class="fa-solid fa-phone"></i> <strong>190</strong> - Polícia Militar</p>
+                <p><i class="fa-solid fa-phone"></i> <strong>180</strong> — Central de Atendimento à Mulher</p>
+                <p><i class="fa-solid fa-phone"></i> <strong>190</strong> — Polícia Militar</p>
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2024 SafeHer. Todos os direitos reservados.</p>
+            <p>&copy; 2026 SafeHer. Todos os direitos reservados.</p>
         </div>
     </footer>
 
@@ -153,15 +172,15 @@
     <script src="usuario-session.js"></script>
     <script>
         async function carregarMinhasDenuncias() {
-            const usuario = getSessao();
+            const usuario   = getSessao();
             const container = document.getElementById('listaDenuncias');
 
             if (!usuario) {
                 container.innerHTML = `
                     <div class="empty-state">
                         <i class="fa-solid fa-lock"></i>
-                        <h3 style="margin-bottom: 10px;">Acesso restrito</h3>
-                        <p style="color: var(--text-gray); margin-bottom: 20px;">Faça login para ver suas denúncias.</p>
+                        <h3>Acesso restrito</h3>
+                        <p>Faça login para ver suas denúncias.</p>
                         <a href="login.html" class="sh-btn">Fazer Login</a>
                     </div>`;
                 return;
@@ -174,55 +193,55 @@
                     container.innerHTML = `
                         <div class="empty-state">
                             <i class="fa-solid fa-file-circle-check"></i>
-                            <h3 style="margin-bottom: 10px;">Nenhuma denúncia ainda</h3>
-                            <p style="color: var(--text-gray); margin-bottom: 20px;">Você ainda não enviou nenhuma denúncia.</p>
+                            <h3>Nenhuma denúncia ainda</h3>
+                            <p>Você ainda não enviou nenhuma denúncia.</p>
                             <a href="denuncias.html" class="sh-btn">Fazer Denúncia</a>
                         </div>`;
                     return;
                 }
 
-                container.innerHTML = `<p style="color: var(--text-gray); margin-bottom: 20px;">${denuncias.length} denúncia(s) encontrada(s)</p>`;
-                const RISCO_CORES  = ['#28a745','#7fb800','#f5a623','#e8743b','#dc3545'];
-                const RISCO_LABELS = ['Baixo','Atenção','Moderado','Alto','Crítico'];
+                container.innerHTML = `<p class="count-badge" style="margin-bottom:20px;">
+                    <i class="fa-solid fa-file-lines"></i> ${denuncias.length} denúncia(s) encontrada(s)
+                </p>`;
+
                 denuncias.forEach(d => {
-                    const sc = Math.min(Math.max(parseInt(d.score, 10) || 1, 1), 5);
-                    const idx = sc - 1;
-                    const estrelas = '★'.repeat(sc) + '☆'.repeat(5 - sc);
-                    const badgeRisco = `<span class="denuncia-badge" style="background:${RISCO_CORES[idx]}20; color:${RISCO_CORES[idx]}; border:1px solid ${RISCO_CORES[idx]};"><span style="letter-spacing:2px;">${estrelas}</span> ${sc}/5 — ${RISCO_LABELS[idx]}</span>`;
                     container.innerHTML += `
-                        <div class="denuncia-card" style="border-left-color:${RISCO_CORES[idx]};">
+                        <div class="denuncia-card">
                             <div class="denuncia-header">
                                 <span class="denuncia-id"><i class="fa-solid fa-hashtag"></i> ${d.id}</span>
-                                <span class="denuncia-data"><i class="fa-regular fa-calendar"></i> ${d.data || 'Sem data'}</span>
+                                <span class="denuncia-data">
+                                    <i class="fa-regular fa-calendar"></i> ${d.data || 'Sem data'}
+                                </span>
                             </div>
                             <p class="denuncia-texto">${d.descricao || 'Sem descrição'}</p>
-                            <div style="display: flex; justify-content: space-between; align-items: center; gap:8px; flex-wrap:wrap;">
-                                <div style="display:flex; gap:8px; flex-wrap:wrap;">
-                                    <span class="denuncia-badge badge-anonima"><i class="fa-solid fa-user-secret"></i> Anônima</span>
-                                    ${badgeRisco}
-                                </div>
-                                <button class="btn-delete" onclick="excluirDenuncia(${d.id})"><i class="fa-solid fa-trash"></i> Excluir</button>
+                            <div class="denuncia-footer">
+                                <span class="denuncia-badge">
+                                    <i class="fa-solid fa-user-secret"></i> Anônima e segura
+                                </span>
+                                <button class="btn-delete" onclick="excluirDenuncia(${d.id})">
+                                    <i class="fa-solid fa-trash"></i> Excluir
+                                </button>
                             </div>
                         </div>`;
                 });
             } catch (e) {
                 container.innerHTML = `
                     <div class="empty-state">
-                        <i class="fa-solid fa-triangle-exclamation" style="color: #D32F2F;"></i>
+                        <i class="fa-solid fa-triangle-exclamation" style="color:#dc2626;"></i>
                         <h3>Erro ao carregar</h3>
-                        <p style="color: var(--text-gray);">${e.message}</p>
+                        <p>${e.message}</p>
                     </div>`;
             }
         }
 
         async function excluirDenuncia(id) {
-            if (confirm('Deseja realmente excluir esta denúncia?')) {
-                try {
-                    await removerDenuncia(id);
-                    carregarMinhasDenuncias();
-                } catch (e) {
-                    alert('Erro ao excluir: ' + e.message);
-                }
+            if (!confirm('Deseja realmente excluir esta denúncia?')) return;
+            try {
+                await removerDenuncia(id);
+                showToast('Denúncia excluída.', 'info');
+                carregarMinhasDenuncias();
+            } catch (e) {
+                showToast('Erro ao excluir: ' + e.message, 'error');
             }
         }
 
