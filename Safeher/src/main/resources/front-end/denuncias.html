@@ -5,8 +5,130 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SafeHer</title>
     <link rel="stylesheet" href="global.css">
+    <style>
+        .form-security-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #f0fdf4;
+            color: #166534;
+            border: 1.5px solid #bbf7d0;
+            padding: 9px 16px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 28px;
+        }
+        .form-section-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-gray);
+            margin-bottom: 18px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-light);
+        }
+        .tipo-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .tipo-option {
+            border: 2px solid var(--border-light);
+            border-radius: 10px;
+            padding: 12px 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-gray);
+            background: white;
+        }
+        .tipo-option:hover { border-color: var(--pink-primary); color: var(--pink-primary); }
+        .tipo-option.selected {
+            border-color: var(--pink-primary);
+            background: var(--pink-lighter);
+            color: var(--pink-primary);
+        }
+        .tipo-option i { font-size: 16px; }
+        .char-count {
+            text-align: right;
+            font-size: 12px;
+            color: var(--text-gray);
+            margin-top: -14px;
+            margin-bottom: 20px;
+        }
+        .submit-btn-wrap { margin-top: 8px; }
+        .submit-btn-wrap .sh-btn {
+            width: 100%;
+            padding: 16px;
+            font-size: 16px;
+        }
+
+        .info-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .info-box {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-light);
+        }
+        .info-box h4 {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .info-box h4 i { color: var(--pink-primary); }
+        .info-box p { font-size: 13px; color: var(--text-gray); line-height: 1.6; }
+        .info-box ul { list-style: none; padding: 0; }
+        .info-box ul li {
+            font-size: 13px;
+            color: var(--text-gray);
+            padding: 7px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            border-bottom: 1px solid var(--border-light);
+        }
+        .info-box ul li:last-child { border-bottom: none; }
+        .info-box ul li i { color: var(--pink-primary); margin-top: 2px; flex-shrink: 0; }
+
+        .emergency-box {
+            background: linear-gradient(135deg, var(--pink-primary), var(--pink-dark));
+            border-radius: 16px;
+            padding: 24px;
+            color: white;
+        }
+        .emergency-box h4 { font-size: 15px; font-weight: 700; margin-bottom: 14px; }
+        .emergency-num {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+        .emergency-num strong { font-size: 24px; }
+        .emergency-num span { font-size: 12px; opacity: 0.85; }
+
+        @media (max-width: 768px) {
+            .tipo-grid { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
+    <div id="toast-container"></div>
     <div class="container">
         <header class="sh-header">
             <a href="index.html" class="sh-logo">
@@ -18,73 +140,112 @@
                 <a href="avaliacoes.html">Avaliações</a>
                 <a href="conteudos.html">Conteúdos</a>
                 <a href="vagas.html">Vagas</a>
-                <a href="login.html" class="sh-btn" style="color: white;">Entrar</a>
+                <a href="login.html" class="sh-btn">Entrar</a>
                 <a href="escolha-cadastro.html" class="sh-btn-outline">Criar conta</a>
             </div>
         </header>
 
         <main>
-            <div class="split-layout">
+            <div style="margin-bottom:32px;">
+                <h2 class="sh-title">Fazer uma Denúncia</h2>
+                <p class="sh-subtitle" style="margin-bottom:0;">Seu relato é seguro, anônimo e fundamental para construirmos ambientes de trabalho melhores.</p>
+            </div>
+
+            <div class="split-layout" style="align-items:start;">
                 <div>
-                    <h2 class="sh-title">Fazer uma Denúncia</h2>
-                    <p class="sh-subtitle">Seu relato é seguro, anônimo e fundamental para construirmos ambientes de trabalho melhores e protegermos outras mulheres.</p>
-
                     <div class="sh-card">
+                        <div class="form-security-badge">
+                            <i class="fa-solid fa-lock"></i>
+                            Envio anônimo e seguro — seus dados nunca são expostos
+                        </div>
+
                         <form id="formDenuncia" onsubmit="return false;">
-                            <label for="empresa" class="sh-label">Empresa</label>
-                            <input type="text" id="empresa" class="sh-input" placeholder="Qual empresa você deseja denunciar?" value="Tech Solutions S.A.">
+                            <p class="form-section-label">Informações da Empresa</p>
 
-                            <label for="tipoAbuso" class="sh-label">Tipo de Abuso / Problema</label>
-                            <select id="tipoAbuso" class="sh-input">
-                                <option>Assédio Moral</option>
-                                <option>Assédio Sexual</option>
-                                <option>Desigualdade Salarial</option>
-                                <option>Machismo / Misoginia</option>
-                                <option>Maternidade Desrespeitada</option>
-                            </select>
+                            <label for="empresa" class="sh-label">Nome da Empresa</label>
+                            <input type="text" id="empresa" class="sh-input" placeholder="Qual empresa você deseja denunciar?">
 
-                            <label for="relato" class="sh-label">Seu Relato (Totalmente Anônimo)</label>
-                            <textarea id="relato" class="sh-input" rows="5" placeholder="Descreva o que aconteceu em detalhes. Não se preocupe, seus dados não serão compartilhados..."></textarea>
-
-                            <!-- ÁREA DE ÁUDIO -->
-                            <label class="sh-label">Áudio do Relato (Opcional)</label>
-                            <div style="display: flex; gap: 10px; margin-bottom: 15px;">
-                                <button type="button" id="btnGravar" class="sh-btn-outline">🎤 Gravar Áudio</button>
-                                <button type="button" id="btnParar" class="sh-btn" style="display: none; background-color: #dc3545; border-color: #dc3545;">⏹ Parar Gravação</button>
-                            </div>
-                            <audio id="audioPlayback" controls style="display: none; width: 100%; margin-bottom: 15px;"></audio>
-
-                            <!-- CARD DE ANÁLISE DE IA (Azure Speech + Classificador de Risco) -->
-                            <div id="iaCard" style="display:none; margin-bottom:15px; padding:16px; border-radius:12px; background:linear-gradient(135deg,#fff0f5,#f5e8ff); border:1px solid #e9c7d8;">
-                                <div style="display:flex; align-items:center; gap:8px; font-weight:700; color:#a83279; margin-bottom:8px;">
-                                    <span>🤖</span><span>Análise automática SafeHer IA</span>
-                                    <span id="iaStatus" style="margin-left:auto; font-size:0.85rem; font-weight:500; color:#6a5a6e;"></span>
+                            <p class="form-section-label">Tipo de Ocorrência</p>
+                            <div class="tipo-grid" id="tipoGrid">
+                                <div class="tipo-option" onclick="selecionarTipo(this, 'Assédio Moral')">
+                                    <i class="fa-solid fa-face-angry"></i> Assédio Moral
                                 </div>
-                                <div style="font-size:0.85rem; color:#6a5a6e; margin-bottom:4px;">Transcrição (Azure Speech, pt-BR)</div>
-                                <div id="iaTexto" style="background:#fff; padding:10px 12px; border-radius:8px; font-style:italic; color:#333; margin-bottom:12px; min-height:20px;"></div>
-                                <div style="display:flex; align-items:center; gap:10px;">
-                                    <span style="font-size:0.85rem; color:#6a5a6e;">Nível de risco detectado:</span>
-                                    <span id="iaEstrelas" style="font-size:1.4rem; letter-spacing:2px;"></span>
-                                    <span id="iaLabel" style="font-weight:700;"></span>
+                                <div class="tipo-option" onclick="selecionarTipo(this, 'Assédio Sexual')">
+                                    <i class="fa-solid fa-hand-back-fist"></i> Assédio Sexual
+                                </div>
+                                <div class="tipo-option" onclick="selecionarTipo(this, 'Desigualdade Salarial')">
+                                    <i class="fa-solid fa-scale-unbalanced"></i> Desigualdade Salarial
+                                </div>
+                                <div class="tipo-option" onclick="selecionarTipo(this, 'Machismo / Misoginia')">
+                                    <i class="fa-solid fa-ban"></i> Machismo / Misoginia
+                                </div>
+                                <div class="tipo-option" onclick="selecionarTipo(this, 'Maternidade Desrespeitada')">
+                                    <i class="fa-solid fa-baby"></i> Maternidade Desrespeitada
+                                </div>
+                                <div class="tipo-option" onclick="selecionarTipo(this, 'Outro')">
+                                    <i class="fa-solid fa-ellipsis"></i> Outro
                                 </div>
                             </div>
-                            <!-- FIM DA ÁREA DE ÁUDIO -->
+                            <input type="hidden" id="tipoAbuso" value="">
 
-                            <button type="submit" class="sh-btn" style="width: 100%; padding: 16px;" onclick="enviarDenuncia()">Enviar Denúncia Anônima</button>
+                            <p class="form-section-label">Seu Relato</p>
+                            <label for="relato" class="sh-label">Descreva o que aconteceu <span style="color:var(--pink-primary);">*</span></label>
+                            <textarea id="relato" class="sh-input" rows="6"
+                                placeholder="Conte o que aconteceu com o máximo de detalhes que se sentir confortável. Não se preocupe — sua identidade é totalmente protegida."
+                                oninput="contarChars(this)" maxlength="2000"></textarea>
+                            <div class="char-count" id="charCount">0 / 2000</div>
+
+                            <div class="submit-btn-wrap">
+                                <button type="submit" class="sh-btn" onclick="enviarDenuncia()">
+                                    <i class="fa-solid fa-shield-heart"></i> Enviar Denúncia Anônima
+                                </button>
+                            </div>
                         </form>
                     </div>
                 </div>
-                <div class="image-container" style="text-align: center;">
-                    <img src="resources/images/reporting_illustration.jpeg" alt="Ilustração de mulher usando notebook e ícone de segurança" onerror="this.onerror=null; this.src='resources/images/fallback.svg';" style="max-width: 100%; height: auto; border-radius: 20px;">
+
+                <!-- sidebar informativa -->
+                <div class="info-sidebar">
+                    <div class="info-box">
+                        <h4><i class="fa-solid fa-user-secret"></i> Como protegemos você</h4>
+                        <ul>
+                            <li><i class="fa-solid fa-check-circle"></i> Seu nome jamais é vinculado à denúncia</li>
+                            <li><i class="fa-solid fa-check-circle"></i> Nenhum dado pessoal é compartilhado</li>
+                            <li><i class="fa-solid fa-check-circle"></i> Você pode optar pelo anonimato total</li>
+                            <li><i class="fa-solid fa-check-circle"></i> Relatos são usados para calcular o índice da empresa</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box">
+                        <h4><i class="fa-solid fa-circle-question"></i> O que acontece após o envio?</h4>
+                        <p>Sua denúncia alimenta o índice de segurança da empresa na SafeHer, ajudando outras mulheres a tomar decisões informadas sobre onde trabalhar.</p>
+                    </div>
+
+                    <div class="emergency-box">
+                        <h4><i class="fa-solid fa-phone-volume"></i> Precisa de ajuda agora?</h4>
+                        <div class="emergency-num">
+                            <strong>180</strong>
+                            <span>Central de Atendimento à Mulher</span>
+                        </div>
+                        <div class="emergency-num">
+                            <strong>190</strong>
+                            <span>Polícia Militar</span>
+                        </div>
+                        <div class="emergency-num">
+                            <strong>100</strong>
+                            <span>Direitos Humanos</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>
     </div>
+
     <footer class="sh-footer">
         <div class="container footer-content">
             <div class="footer-brand">
                 <a href="index.html">
-                    <img src="resources/images/logo-escudo.png" alt="SafeHer" class="sh-logo-img" style="filter: brightness(0) invert(1);">
+                    <img src="resources/images/logo-escudo.png" alt="SafeHer" class="sh-logo-img" style="filter:brightness(0) invert(1);">
                 </a>
                 <p>Protegendo mulheres, denunciando abusos e transformando o ambiente corporativo com transparência e justiça.</p>
             </div>
@@ -98,39 +259,67 @@
             </div>
             <div class="footer-emergency">
                 <h4>Contatos de Emergência</h4>
-                <p><i class="fa-solid fa-phone"></i> <strong>180</strong> - Central de Atendimento à Mulher</p>
-                <p><i class="fa-solid fa-phone"></i> <strong>190</strong> - Polícia Militar</p>
+                <p><i class="fa-solid fa-phone"></i> <strong>180</strong> — Central de Atendimento à Mulher</p>
+                <p><i class="fa-solid fa-phone"></i> <strong>190</strong> — Polícia Militar</p>
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2024 SafeHer. Todos os direitos reservados.</p>
+            <p>&copy; 2025 SafeHer. Todos os direitos reservados.</p>
         </div>
     </footer>
 
     <script src="api.js"></script>
     <script src="usuario-session.js"></script>
     <script>
-        // ==========================================
-        // AUTO-PREENCHIMENTO DE EMPRESA VIA URL (Extensão)
-        // ==========================================
-        window.addEventListener('DOMContentLoaded', () => {
-            const params = new URLSearchParams(window.location.search);
-            const empresaUrl = params.get('empresa');
-            if (empresaUrl) {
-                const inputEmpresa = document.getElementById('empresa');
-                if (inputEmpresa) {
-                    inputEmpresa.value = decodeURIComponent(empresaUrl);
-                }
-            }
-        });
+        let tipoSelecionado = '';
 
-        // ==========================================
-        // LÓGICA DE GRAVAÇÃO DE ÁUDIO (MediaRecorder)
-        // ==========================================
+        function selecionarTipo(el, tipo) {
+            document.querySelectorAll('.tipo-option').forEach(o => o.classList.remove('selected'));
+            el.classList.add('selected');
+            tipoSelecionado = tipo;
+            document.getElementById('tipoAbuso').value = tipo;
+        }
+
+        function contarChars(el) {
+            document.getElementById('charCount').textContent = el.value.length + ' / 2000';
+        }
+
+        async function enviarDenuncia() {
+            const usuario = getSessao();
+            if (!usuario) {
+                showToast('Você precisa estar logada para enviar uma denúncia.', 'error');
+                setTimeout(() => window.location.href = 'login.html', 1800);
+                return;
+            }
+            const descricao = document.getElementById('relato').value;
+            if (!descricao.trim()) {
+                showToast('Por favor, descreva o que aconteceu.', 'error');
+                return;
+            }
+            const denuncia = {
+                id: Math.floor(Math.random() * 100000),
+                descricao: (tipoSelecionado ? '[' + tipoSelecionado + '] ' : '') + descricao,
+                data: new Date().toISOString().split('T')[0],
+                anonima: true,
+                usuarioId: usuario.id,
+                empresaId: 0
+            };
+            try {
+                await cadastrarDenuncia(denuncia);
+                showToast('Denúncia enviada com sucesso! Obrigada por sua coragem.', 'success', 4500);
+                document.getElementById('formDenuncia').reset();
+                document.querySelectorAll('.tipo-option').forEach(o => o.classList.remove('selected'));
+                tipoSelecionado = '';
+                document.getElementById('charCount').textContent = '0 / 2000';
+            } catch (e) {
+                showToast('Erro ao enviar denúncia: ' + e.message, 'error');
+            }
+        }
+
+        // gravacao audio com MediaRecorder API
         let mediaRecorder;
         let audioChunks = [];
-        let audioBlobFinal = null;
-        let ultimoScoreIA = 0; // score de risco detectado pela IA no ultimo audio
+        let audioBlobFinal = null; 
 
         const btnGravar = document.getElementById('btnGravar');
         const btnParar = document.getElementById('btnParar');
@@ -154,8 +343,6 @@
                     
                     audioPlayback.src = audioUrl;
                     audioPlayback.style.display = 'block';
-
-                    analisarAudioComIA(audioBlobFinal);
                 };
 
                 mediaRecorder.start();
@@ -180,59 +367,8 @@
             }
         });
 
-        // ==========================================
-        // INTEGRAÇÃO COM IA (Azure Speech + Score)
-        // ==========================================
-        const iaCard     = document.getElementById('iaCard');
-        const iaTexto    = document.getElementById('iaTexto');
-        const iaEstrelas = document.getElementById('iaEstrelas');
-        const iaLabel    = document.getElementById('iaLabel');
-        const iaStatus   = document.getElementById('iaStatus');
-
-        const RISCO_CORES  = ['#28a745','#7fb800','#f5a623','#e8743b','#dc3545'];
-        const RISCO_LABELS = ['Baixo','Atenção','Moderado','Alto','Crítico'];
-
-        async function analisarAudioComIA(blob) {
-            iaCard.style.display = 'block';
-            iaStatus.innerText = 'Transcrevendo...';
-            iaTexto.innerText = '...';
-            iaEstrelas.innerText = '';
-            iaLabel.innerText = '';
-
-            const fd = new FormData();
-            fd.append('audio', blob, 'denuncia.webm');
-
-            try {
-                const resp = await fetch('/upload-audio', { method: 'POST', body: fd });
-                const data = await resp.json();
-                const texto = data.texto || '';
-                const score = parseInt(data.score, 10) || 1;
-                const idx   = Math.min(Math.max(score,1),5) - 1;
-
-                ultimoScoreIA = score;
-                iaTexto.innerText = texto || '(sem fala reconhecida)';
-                iaEstrelas.innerText = '★'.repeat(score) + '☆'.repeat(5 - score);
-                iaEstrelas.style.color = RISCO_CORES[idx];
-                iaLabel.innerText = `${score}/5 — ${RISCO_LABELS[idx]}`;
-                iaLabel.style.color = RISCO_CORES[idx];
-                iaStatus.innerText = '✓ Analisado por Azure Speech';
-
-                // Preenche o relato com a transcrição se estiver vazio
-                const relato = document.getElementById('relato');
-                if (texto && !relato.value.trim()) {
-                    relato.value = texto;
-                }
-            } catch (e) {
-                iaStatus.innerText = '⚠ Erro na análise';
-                iaTexto.innerText = 'Não foi possível conectar à IA: ' + e.message;
-            }
-        }
-
-        // ==========================================
-        // CONVERSÃO E ENVIO PARA O BACK-END
-        // ==========================================
-
-        // Transforma o arquivo de áudio em texto (Base64)
+        // conversao e envio pro backend
+        // transforma o arquivo de áudio em texto (Base64)
         function audioParaBase64(blob) {
             return new Promise((resolve, reject) => {
                 const reader = new FileReader();
@@ -257,38 +393,45 @@
                 return;
             }
 
-            // Converte o áudio para Base64 se houver gravação
+            // converte o áudio para Base64 se houver gravação
             let audioConvertido = null;
             if (audioBlobFinal) {
                 audioConvertido = await audioParaBase64(audioBlobFinal);
             }
 
-            // Prepara a denúncia com a string de áudio (Base64)
+            // prepara a denúncia com a string de áudio (Base64)
             const denuncia = {
                 descricao: descricao,
                 data: new Date().toISOString().split('T')[0],
                 anonima: true,
                 usuarioId: usuario.id,
-                empresaId: 1, // Ajuste para capturar o ID real da empresa futuramente
-                audio: audioConvertido,
-                score: ultimoScoreIA || 1
+                empresaId: 1, // ajuste para capturar o ID real da empresa futuramente
+                audio: audioConvertido 
             };
 
             try {
                 await cadastrarDenuncia(denuncia);
                 alert('Denúncia enviada com sucesso!');
                 
-                // Limpa o formulário e reseta o player
+                // limpa o formulário e reseta o player
                 document.getElementById('formDenuncia').reset();
                 audioPlayback.style.display = 'none';
                 audioPlayback.src = '';
                 audioBlobFinal = null;
-                ultimoScoreIA = 0;
                 btnGravar.innerText = '🎤 Gravar Áudio';
-                iaCard.style.display = 'none';
 
             } catch (e) {
                 alert('Erro ao enviar denúncia: ' + e.message);
+            }
+        }
+
+        // pre-preenche a empresa vinda da extensão de navegador (?empresa=...)
+        const urlParams = new URLSearchParams(window.location.search);
+        const empresaParam = urlParams.get('empresa');
+        if (empresaParam) {
+            const empresaInput = document.getElementById('empresa');
+            if (empresaInput) {
+                empresaInput.value = decodeURIComponent(empresaParam);
             }
         }
     </script>
