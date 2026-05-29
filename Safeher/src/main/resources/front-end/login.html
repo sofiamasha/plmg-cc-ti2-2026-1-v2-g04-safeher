@@ -5,103 +5,159 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SafeHer</title>
     <link rel="stylesheet" href="global.css">
+    <style>
+        .back-link {
+            position: absolute;
+            top: 28px;
+            left: 32px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-gray);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s;
+            z-index: 10;
+        }
+        .back-link:hover { color: var(--pink-primary); }
+        .close-btn {
+            position: absolute;
+            top: 28px;
+            right: 32px;
+            color: var(--text-gray);
+            text-decoration: none;
+            font-size: 22px;
+            transition: all 0.2s;
+            z-index: 10;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+        }
+        .close-btn:hover { color: var(--pink-primary); transform: scale(1.1); }
+    </style>
 </head>
 <body>
+    <div id="toast-container"></div>
     <main>
         <div class="auth-container">
             <div>
-                <img src="resources/images/login_illustration.jpeg" class="auth-illustration" alt="Mãos dadas">
+                <img src="resources/images/login_illustration.jpeg" class="auth-illustration" alt="Mulheres se apoiando">
             </div>
-            <div class="auth-form-wrapper">
-                <a href="index.html" style="position: absolute; top: 30px; right: 40px; color: var(--text-gray); font-size: 24px;"><i class="fa-solid fa-xmark"></i></a>
-                
+            <div class="auth-form-wrapper" style="position:relative;">
+                <a href="index.html" class="back-link">
+                    <i class="fa-solid fa-arrow-left"></i> Voltar
+                </a>
+                <a href="index.html" class="close-btn" title="Fechar">
+                    <i class="fa-solid fa-xmark"></i>
+                </a>
+
                 <div class="auth-card">
                     <div class="auth-shield">
                         <img src="resources/images/logo-escudo.png" alt="Escudo SafeHer">
                     </div>
-                    <h2>Login</h2>
+                    <h2>Entrar</h2>
 
                     <div class="login-tabs">
-                        <button id="tabMulher" onclick="trocarTab('mulher')" class="login-tab active">Mulher</button>
-                        <button id="tabEmpresa" onclick="trocarTab('empresa')" class="login-tab">Empresa</button>
+                        <button id="tabMulher" onclick="trocarTab('mulher')" class="login-tab active">
+                            <i class="fa-solid fa-heart"></i> Mulher
+                        </button>
+                        <button id="tabEmpresa" onclick="trocarTab('empresa')" class="login-tab">
+                            <i class="fa-solid fa-building"></i> Empresa
+                        </button>
                     </div>
 
                     <form id="formLogin" onsubmit="return false;">
                         <label class="sh-label" id="labelIdentificacao">Email</label>
-                        <input type="email" id="loginEmail" class="sh-input" placeholder="seuemail@email.com">
+                        <input type="email" id="loginEmail" class="sh-input" placeholder="seuemail@email.com"
+                            onkeydown="if(event.key==='Enter') fazerLogin()">
                         <label class="sh-label">Senha</label>
-                        <input type="password" id="loginSenha" class="sh-input" placeholder="********">
-                        <button type="submit" class="sh-btn" onclick="fazerLogin()">Entrar</button>
-                        <a href="escolha-cadastro.html" class="auth-link-bottom">Não tenho conta ainda</a>
+                        <input type="password" id="loginSenha" class="sh-input" placeholder="Sua senha"
+                            onkeydown="if(event.key==='Enter') fazerLogin()">
+                        <button type="submit" class="sh-btn" onclick="fazerLogin()">
+                            <i class="fa-solid fa-right-to-bracket"></i> Entrar
+                        </button>
+                        <a href="escolha-cadastro.html" class="auth-link-bottom">
+                            Não tenho conta ainda — Criar conta grátis
+                        </a>
                     </form>
                 </div>
 
                 <div class="social-login-container">
-                    <h3 class="social-login-title">ou</h3>
+                    <h3 class="social-login-title">ou continue com</h3>
                     <div class="social-btns">
-                        <a href="#" class="social-btn"><i class="fa-brands fa-google" style="color: #DB4437;"></i> Google</a>
-                        <a href="#" class="social-btn"><i class="fa-brands fa-linkedin" style="color: var(--pink-primary);"></i> LinkedIn</a>
+                        <a href="#" class="social-btn">
+                            <i class="fa-brands fa-google" style="color:#DB4437;"></i> Google
+                        </a>
+                        <a href="#" class="social-btn">
+                            <i class="fa-brands fa-linkedin" style="color:#0077B5;"></i> LinkedIn
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
     </main>
+
     <script src="api.js"></script>
+    <script src="usuario-session.js"></script>
     <script>
         let tipoLogin = 'mulher';
 
         function trocarTab(tipo) {
             tipoLogin = tipo;
-            const tabMulher = document.getElementById('tabMulher');
+            const tabMulher  = document.getElementById('tabMulher');
             const tabEmpresa = document.getElementById('tabEmpresa');
-            const label = document.getElementById('labelIdentificacao');
-            const input = document.getElementById('loginEmail');
+            const label      = document.getElementById('labelIdentificacao');
+            const input      = document.getElementById('loginEmail');
             if (tipo === 'mulher') {
                 tabMulher.classList.add('active');
                 tabEmpresa.classList.remove('active');
-                label.textContent = 'Email';
-                input.type = 'email';
-                input.placeholder = 'seuemail@email.com';
+                label.textContent  = 'Email';
+                input.type         = 'email';
+                input.placeholder  = 'seuemail@email.com';
             } else {
                 tabEmpresa.classList.add('active');
                 tabMulher.classList.remove('active');
                 label.textContent = 'Nome da Empresa';
-                input.type = 'text';
+                input.type        = 'text';
                 input.placeholder = 'Nome da sua empresa';
             }
         }
 
         async function fazerLogin() {
-            const email = document.getElementById('loginEmail').value;
+            const email = document.getElementById('loginEmail').value.trim();
             const senha = document.getElementById('loginSenha').value;
             if (!email || !senha) {
-                alert('Preencha todos os campos.');
+                showToast('Preencha todos os campos.', 'error');
                 return;
             }
             try {
                 if (tipoLogin === 'mulher') {
                     const usuarios = await listarUsuarios();
-                    const usuario = usuarios.find(u => u.email === email && u.senha === senha);
+                    const usuario  = usuarios.find(u => u.email === email && u.senha === senha);
                     if (usuario) {
                         localStorage.setItem('safeher_usuario', JSON.stringify(usuario));
                         localStorage.setItem('safeher_tipo', 'mulher');
-                        window.location.href = 'inicio-mulher.html';
+                        showToast('Bem-vinda de volta, ' + (usuario.nome || '') + '!', 'success');
+                        setTimeout(() => window.location.href = 'inicio-mulher.html', 900);
                     } else {
-                        alert('Email ou senha inválidos.');
+                        showToast('Email ou senha inválidos.', 'error');
                     }
                 } else {
                     const empresas = await listarEmpresas();
-                    const empresa = empresas.find(e => e.nome === email && e.senha === senha);
+                    const empresa  = empresas.find(e => e.nome === email && e.senha === senha);
                     if (empresa) {
                         localStorage.setItem('safeher_usuario', JSON.stringify(empresa));
                         localStorage.setItem('safeher_tipo', 'empresa');
-                        window.location.href = 'inicio-empresa.html';
+                        showToast('Bem-vinda, ' + empresa.nome + '!', 'success');
+                        setTimeout(() => window.location.href = 'inicio-empresa.html', 900);
                     } else {
-                        alert('Nome ou senha inválidos.');
+                        showToast('Nome ou senha inválidos.', 'error');
                     }
                 }
             } catch (e) {
-                alert('Erro ao fazer login: ' + e.message);
+                showToast('Erro ao fazer login: ' + e.message, 'error');
             }
         }
     </script>
