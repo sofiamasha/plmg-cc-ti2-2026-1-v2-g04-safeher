@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SafeHer - Vagas</title>
+    <title>SafeHer</title>
     <link rel="stylesheet" href="global.css">
     <style>
         .job-card {
@@ -126,7 +126,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2024 SafeHer. Todos os direitos reservados.</p>
+            <p>&copy; 2026 SafeHer. Todos os direitos reservados.</p>
         </div>
     </footer>
 
@@ -275,7 +275,7 @@
                                 ${tagsHtml}
                             </div>
                         </div>
-                        <a href="#" class="sh-btn" style="color: white; white-space: nowrap;" onclick="alert('Funcionalidade de candidatura em breve!'); return false;">
+                        <a href="#" class="sh-btn" style="color: white; white-space: nowrap;" onclick="showToast('Candidatura em breve disponível!', 'info'); return false;">
                             <i class="fa-solid fa-paper-plane"></i> Candidatar-se
                         </a>
                     </div>`;
@@ -307,12 +307,12 @@
             renderVagas(resultado);
         }
 
-        // Buscar ao pressionar Enter
+        // buscar ao pressionar Enter
         document.getElementById('busca-cargo').addEventListener('keydown', (e) => {
             if (e.key === 'Enter') filtrarVagas();
         });
 
-        // Render inicial com todas as vagas
+        // render inicial com todas as vagas
         renderVagas(vagas);
     </script>
 </body>
