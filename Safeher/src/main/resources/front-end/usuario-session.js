@@ -6,7 +6,7 @@
 })();
 
 (function redirectLogin() {
-    if (window.location.pathname.endsWith('/login.html') && !window.location.href.startsWith('http://127.0.0.1:5500/')) {
+    if (window.location.pathname.endsWith('/login.html') && window.location.port === '8080') {
         window.location.href = 'http://127.0.0.1:5500/Safeher/src/main/resources/front-end/login.html';
     }
 })();
@@ -172,10 +172,13 @@ function atualizarHeader() {
         const page = window.location.pathname.split('/').pop() || 'index.html';
         const isParceirosActive = page === 'parceiros.html';
         const isInicioActive = page === 'index.html' || page === '';
+        const loginUrl = (window.location.port === '8080')
+            ? 'http://127.0.0.1:5500/Safeher/src/main/resources/front-end/login.html'
+            : 'login.html';
         const links = `
             <a href="index.html" class="${isInicioActive ? 'active' : ''}">Início</a>
             <a href="parceiros.html" class="${isParceirosActive ? 'active' : ''}">Para Parceiros</a>
-            <a href="http://127.0.0.1:5500/Safeher/src/main/resources/front-end/login.html" class="sh-btn" style="color: white;">Entrar</a>
+            <a href="${loginUrl}" class="sh-btn" style="color: white;">Entrar</a>
             <a href="escolha-cadastro.html" class="sh-btn-outline">Criar conta</a>
         `;
         nav.innerHTML = links;

@@ -19,6 +19,38 @@ public class Aplicacao {
     private static CandidaturaService candidaturaService = new CandidaturaService();
 
     public static void main(String[] args) {
+        // Auto-geração dos ícones da extensão na inicialização do backend
+        try {
+            java.io.File sourceFile = new java.io.File("src/main/resources/front-end/resources/images/logo-escudo.png");
+            if (!sourceFile.exists()) {
+                sourceFile = new java.io.File("C:\\Users\\User\\OneDrive\\Área de Trabalho\\CC\\plmg-cc-ti2-2026-1-v2-g04-safeher\\Safeher\\src\\main\\resources\\front-end\\resources\\images\\logo-escudo.png");
+            }
+            if (sourceFile.exists()) {
+                java.awt.image.BufferedImage originalImage = javax.imageio.ImageIO.read(sourceFile);
+                int[] sizes = {16, 48, 128};
+                String destDir = "../SafeHer-Extension/";
+                java.io.File destDirFile = new java.io.File(destDir);
+                if (!destDirFile.exists()) {
+                    destDir = "C:\\Users\\User\\OneDrive\\Área de Trabalho\\CC\\plmg-cc-ti2-2026-1-v2-g04-safeher\\SafeHer-Extension\\";
+                }
+                for (int size : sizes) {
+                    java.awt.image.BufferedImage resizedImage = new java.awt.image.BufferedImage(size, size, java.awt.image.BufferedImage.TYPE_INT_ARGB);
+                    java.awt.Graphics2D g = resizedImage.createGraphics();
+                    g.setRenderingHint(java.awt.RenderingHints.KEY_INTERPOLATION, java.awt.RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+                    g.drawImage(originalImage, 0, 0, size, size, null);
+                    g.dispose();
+                    
+                    java.io.File outputFile = new java.io.File(destDir + "icon" + size + ".png");
+                    javax.imageio.ImageIO.write(resizedImage, "png", outputFile);
+                    System.out.println("[SafeHer] Ícone gerado: " + outputFile.getAbsolutePath());
+                }
+            } else {
+                System.out.println("[SafeHer] Aviso: Logo-escudo não encontrado para gerar ícones.");
+            }
+        } catch (Exception e) {
+            System.err.println("[SafeHer] Erro ao gerar ícones da extensão: " + e.getMessage());
+        }
+
         port(8080);
 
         staticFiles.location("/front-end");
