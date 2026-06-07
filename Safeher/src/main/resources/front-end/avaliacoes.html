@@ -220,7 +220,14 @@
         if (sessao && tipo === 'empresa') {
             carregarVisaoEmpresa();
         } else {
-            carregarEmpresas();
+            carregarEmpresas().then(() => {
+                const urlParams = new URLSearchParams(window.location.search);
+                const empresaParam = urlParams.get('empresa');
+                if (empresaParam && sessao && tipo === 'mulher') {
+                    const matched = empresasCache.find(e => e.nome.toLowerCase().trim() === empresaParam.toLowerCase().trim());
+                    abrirModal(empresaParam, matched ? matched.id : 0);
+                }
+            });
             carregarAvaliacoes();
         }
 

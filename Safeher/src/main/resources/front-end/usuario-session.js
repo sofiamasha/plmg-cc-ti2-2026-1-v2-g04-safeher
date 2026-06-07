@@ -5,6 +5,12 @@
     document.body.appendChild(el);
 })();
 
+(function redirectLogin() {
+    if (window.location.pathname.endsWith('/login.html') && !window.location.href.startsWith('http://127.0.0.1:5500/')) {
+        window.location.href = 'http://127.0.0.1:5500/Safeher/src/main/resources/front-end/login.html';
+    }
+})();
+
 /**
  * exibe uma notificação toast.
  * @param {string} mensagem - Texto da mensagem
@@ -89,7 +95,7 @@ function atualizarHeader() {
     const nav = document.querySelector('.sh-nav');
     if (!nav) return;
 
-    const btnEntrar = nav.querySelector('a[href="login.html"]');
+    const btnEntrar = nav.querySelector('a[href="login.html"]') || nav.querySelector('a[href="http://127.0.0.1:5500/Safeher/src/main/resources/front-end/login.html"]');
     const btnCriar  = nav.querySelector('a[href="escolha-cadastro.html"]');
 
     if (usuario) {
@@ -169,7 +175,7 @@ function atualizarHeader() {
         const links = `
             <a href="index.html" class="${isInicioActive ? 'active' : ''}">Início</a>
             <a href="parceiros.html" class="${isParceirosActive ? 'active' : ''}">Para Parceiros</a>
-            <a href="login.html" class="sh-btn" style="color: white;">Entrar</a>
+            <a href="http://127.0.0.1:5500/Safeher/src/main/resources/front-end/login.html" class="sh-btn" style="color: white;">Entrar</a>
             <a href="escolha-cadastro.html" class="sh-btn-outline">Criar conta</a>
         `;
         nav.innerHTML = links;
