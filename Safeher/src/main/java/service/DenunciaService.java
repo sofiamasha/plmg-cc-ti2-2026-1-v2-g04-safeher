@@ -6,7 +6,9 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonSerializer;
 import com.google.gson.JsonPrimitive;
 import dao.DenunciaDAO;
+import dao.EmpresaDAO;
 import model.Denuncia;
+import model.Empresa;
 import spark.Request;
 import spark.Response;
 
@@ -35,6 +37,8 @@ public class DenunciaService {
         res.type("application/json");
         try {
             Denuncia denuncia = gson.fromJson(req.body(), Denuncia.class);
+            ScoreService scoreService = new ScoreService();
+            denuncia.setScore(scoreService.calcularScore(denuncia.getDescricao()));
             denunciaDAO.insert(denuncia);
             return gson.toJson("{\"msg\":\"Denuncia inserida com sucesso\"}");
         } catch (Exception e) {
@@ -48,6 +52,17 @@ public class DenunciaService {
         try {
             Denuncia denuncia = gson.fromJson(req.body(), Denuncia.class);
             denuncia.setId(Integer.parseInt(req.params(":id")));
+            
+            // Validar plano da empresa para atualizacoes de denuncia (Compliance)
+            EmpresaDAO empresaDAO = new EmpresaDAO();
+            Empresa empresa = empresaDAO.get(denuncia.getEmpresaId());
+            if (empresa == null || empresa.getPlano() == null || !empresa.getPlano().equalsIgnoreCase("Premium")) {
+                res.status(403);
+                return gson.toJson("{\"erro\":\"Acesso negado: Recursos de tratativas de denúncias são exclusivos do plano Premium.\"}");
+            }
+            
+            ScoreService scoreService = new ScoreService();
+            denuncia.setScore(scoreService.calcularScore(denuncia.getDescricao()));
             denunciaDAO.update(denuncia);
             return gson.toJson("{\"msg\":\"Denuncia atualizada com sucesso\"}");
         } catch (Exception e) {
@@ -101,7 +116,17 @@ public class DenunciaService {
     public String listarPorEmpresa(Request req, Response res) {
         res.type("application/json");
         try {
-            return gson.toJson(denunciaDAO.listarPorEmpresa(Integer.parseInt(req.params(":empresaId"))));
+            int empresaId = Integer.parseInt(req.params(":empresaId"));
+            
+            // Validar plano da empresa para listar denúncias (Removido para permitir que qualquer empresa veja as denúncias)
+            /*
+            if (empresa.getPlano() == null || (!empresa.getPlano().equalsIgnoreCase("Premium") && !empresa.getPlano().equalsIgnoreCase("Plus"))) {
+                res.status(403);
+                return gson.toJson("{\"erro\":\"Acesso negado: O painel de denúncias corporativas é exclusivo dos planos Plus/Premium.\"}");
+            }
+            */
+            
+            return gson.toJson(denunciaDAO.listarPorEmpresa(empresaId));
         } catch (Exception e) {
             res.status(500);
             return gson.toJson("{\"erro\":\"" + e.getMessage() + "\"}");

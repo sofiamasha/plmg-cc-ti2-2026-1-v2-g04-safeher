@@ -15,7 +15,12 @@ CREATE TABLE Empresa (
     nome VARCHAR(100),
     email VARCHAR(100),
     senha VARCHAR(100),
-    indice DECIMAL(5,2)
+    indice DECIMAL(5,2),
+    cnpj VARCHAR(20),
+    cep VARCHAR(10),
+    endereco VARCHAR(200),
+    telefone VARCHAR(20),
+    plano VARCHAR(20) DEFAULT 'Free'
 );
 
 -- tabela de avaliações

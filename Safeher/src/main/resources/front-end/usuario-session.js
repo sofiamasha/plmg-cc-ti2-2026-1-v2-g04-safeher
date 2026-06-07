@@ -99,36 +99,62 @@ function atualizarHeader() {
         const tipo = getTipoSessao();
 
         if (tipo === 'empresa') {
-            const linkDenuncias = nav.querySelector('a[href="denuncias.html"]');
-            if (linkDenuncias) linkDenuncias.remove();
-            const linkVagas = nav.querySelector('a[href="vagas.html"]');
-            if (linkVagas) linkVagas.remove();
+            const page = window.location.pathname.split('/').pop() || 'inicio-empresa.html';
+            const links = `
+                <a href="inicio-empresa.html" class="${page === 'inicio-empresa.html' ? 'active' : ''}">Início</a>
+                <a href="empresa-dashboard.html" class="${page === 'empresa-dashboard.html' ? 'active' : ''}">Dashboard</a>
+                <a href="empresa-compliance.html" class="${page === 'empresa-compliance.html' ? 'active' : ''}"><i class="fa-solid fa-scale-balanced" style="margin-right:4px;"></i> Compliance</a>
+                <a href="empresa-ouvidoria.html" class="${page === 'empresa-ouvidoria.html' ? 'active' : ''}">Ouvidoria</a>
+                <a href="empresa-treinamentos.html" class="${page === 'empresa-treinamentos.html' ? 'active' : ''}">Treinamentos</a>
+                <a href="empresa-vagas.html" class="${page === 'empresa-vagas.html' ? 'active' : ''}">Vagas</a>
+                <a href="planos.html" style="font-weight: 700; color: var(--pink-primary);"><i class="fa-solid fa-gem"></i> Planos</a>
+            `;
+            nav.innerHTML = links;
+        } else if (tipo === 'mulher') {
+            const page = window.location.pathname.split('/').pop() || 'inicio-mulher.html';
+            const links = `
+                <a href="inicio-mulher.html" class="${page === 'inicio-mulher.html' ? 'active' : ''}">Início</a>
+                <a href="denuncias.html" class="${page === 'denuncias.html' ? 'active' : ''}">Denúncias</a>
+                <a href="avaliacoes.html" class="${page === 'avaliacoes.html' ? 'active' : ''}">Avaliações</a>
+                <a href="conteudos.html" class="${page === 'conteudos.html' ? 'active' : ''}">Conteúdos</a>
+                <a href="vagas.html" class="${page === 'vagas.html' ? 'active' : ''}">Vagas</a>
+            `;
+            nav.innerHTML = links;
         }
 
         const inicial   = usuario.nome ? usuario.nome.charAt(0).toUpperCase() : 'U';
         const labelTipo = tipo === 'empresa' ? 'Empresa' : 'Usuária';
+        const avatarHtml = usuario.foto
+            ? `<img src="${usuario.foto}" style="width:100%; height:100%; border-radius:50%; object-fit:cover; display:block;">`
+            : inicial;
 
         const menuDenuncias = tipo === 'mulher' ? `
             <a href="minhas-denuncias.html" class="user-dropdown-item">
                 <i class="fa-solid fa-file-lines"></i> Minhas Denúncias
             </a>` : '';
 
+        const menuPerfil = `
+            <a href="perfil.html" class="user-dropdown-item">
+                <i class="fa-solid fa-user-gear"></i> Meu Perfil
+            </a>`;
+
         const menuHTML = `
             <div class="user-menu">
                 <button class="user-menu-btn" onclick="toggleUserMenu()">
-                    <span class="user-avatar">${inicial}</span>
+                    <span class="user-avatar" style="overflow:hidden; display:flex; align-items:center; justify-content:center;">${avatarHtml}</span>
                     <span class="user-name">${usuario.nome || labelTipo}</span>
                     <i class="fa-solid fa-chevron-down" style="font-size:11px;"></i>
                 </button>
                 <div class="user-dropdown" id="userDropdown">
                     <div class="user-dropdown-header">
-                        <span class="user-avatar" style="width:40px;height:40px;font-size:18px;">${inicial}</span>
+                        <span class="user-avatar" style="width:40px;height:40px;font-size:18px; overflow:hidden; display:flex; align-items:center; justify-content:center;">${avatarHtml}</span>
                         <div>
                             <strong style="font-size:14px;">${usuario.nome || labelTipo}</strong>
                             <p style="font-size:12px;color:#888;margin:2px 0 0;">${usuario.email || ''}</p>
                             <p style="font-size:11px;color:var(--pink-primary);margin:2px 0 0;font-weight:700;">${labelTipo}</p>
                         </div>
                     </div>
+                    ${menuPerfil}
                     ${menuDenuncias}
                     <button class="user-dropdown-item" onclick="logout()">
                         <i class="fa-solid fa-right-from-bracket"></i> Sair da conta
@@ -136,6 +162,17 @@ function atualizarHeader() {
                 </div>
             </div>`;
         nav.insertAdjacentHTML('beforeend', menuHTML);
+    } else {
+        const page = window.location.pathname.split('/').pop() || 'index.html';
+        const isParceirosActive = page === 'parceiros.html';
+        const isInicioActive = page === 'index.html' || page === '';
+        const links = `
+            <a href="index.html" class="${isInicioActive ? 'active' : ''}">Início</a>
+            <a href="parceiros.html" class="${isParceirosActive ? 'active' : ''}">Para Parceiros</a>
+            <a href="login.html" class="sh-btn" style="color: white;">Entrar</a>
+            <a href="escolha-cadastro.html" class="sh-btn-outline">Criar conta</a>
+        `;
+        nav.innerHTML = links;
     }
 }
 

@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeHer - Divulgação de Vagas</title>
+    <link rel="stylesheet" href="global.css">
+    <style>
+        .page-header {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .actions-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: var(--shadow-lg);
+            animation: fadeInUp 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .modal h2 {
+            color: var(--pink-dark);
+            margin-bottom: 24px;
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-gray);
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            color: var(--pink-primary);
+            transform: scale(1.1);
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-dark);
+            font-size: 13.5px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #eee;
+            border-radius: var(--radius-md);
+            font-size: 14.5px;
+            transition: 0.3s;
+            box-sizing: border-box;
+        }
+
+        .form-control:focus {
+            border-color: var(--pink-primary);
+            outline: none;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* Job items */
+        .job-item {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 24px 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            margin-bottom: 20px;
+            border: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        .job-item:hover {
+            border-color: var(--pink-light);
+            box-shadow: 0 8px 20px rgba(227, 58, 127, 0.05);
+        }
+
+        .job-details h4 {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--pink-dark);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .job-details p {
+            font-size: 13.5px;
+            color: var(--text-gray);
+        }
+
+        .badge-priority {
+            background: var(--pink-light);
+            color: var(--pink-dark);
+            font-size: 10px;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 20px;
+            letter-spacing: 0.3px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .badge-standard {
+            background: #f5f5f5;
+            color: #777;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .hint-banner {
+            background: linear-gradient(135deg, var(--pink-lighter) 0%, white 100%);
+            border: 1px solid var(--pink-light);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .hint-text {
+            font-size: 14px;
+            color: var(--text-dark);
+            line-height: 1.5;
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-wrapper">
+        <div class="container">
+            <!-- Header -->
+            <header class="sh-header">
+                <a href="inicio-empresa.html" class="sh-logo">
+                    <img src="resources/images/logo-escudo.png" alt="SafeHer Logo" class="sh-logo-img">
+                </a>
+                <div class="sh-nav">
+                    <!-- Gerado dinamicamente pelo usuario-session.js -->
+                </div>
+            </header>
+
+            <main style="padding-bottom: 60px;">
+                <div class="page-header">
+                    <h2 class="sh-title">Divulgação de Vagas</h2>
+                    <p class="sh-subtitle">Anuncie oportunidades profissionais éticas voltadas a priorizar mulheres em seu ecossistema.</p>
+                </div>
+
+                <!-- Plan Upgrade Hint for non-Premium -->
+                <div class="hint-banner" id="premiumHint" style="display: none;">
+                    <div class="hint-text">
+                        <i class="fa-solid fa-wand-magic-sparkles" style="color:var(--pink-primary); margin-right: 8px;"></i>
+                        <strong>Seja um parceiro Premium!</strong> Suas vagas ganharão o **Selo Empresa Parceira / Vaga Prioritária** em destaque, atraindo até 3x mais talentos qualificados de nossa comunidade.
+                    </div>
+                    <a href="planos.html" class="sh-btn-outline" style="padding: 10px 20px; font-size: 13px; font-weight: 700;">Ver Plano Premium</a>
+                </div>
+
+                <!-- Actions Bar -->
+                <div class="actions-bar">
+                    <h3 style="font-size: 20px; font-weight: 800; color: var(--text-dark); margin: 0;">Suas Vagas Publicadas</h3>
+                    <button class="sh-btn" style="color: white;" onclick="abrirModalVaga()">
+                        <i class="fa-solid fa-plus" style="margin-right: 8px;"></i> Anunciar Nova Vaga
+                    </button>
+                </div>
+
+                <!-- Grid/List feed -->
+                <div id="vagasLista">
+                    <div style="text-align: center; padding: 40px;">
+                        <i class="fa-solid fa-spinner fa-spin" style="font-size: 32px; color: var(--pink-primary);"></i>
+                        <p style="color: var(--text-gray); margin-top: 12px;">Carregando vagas corporativas...</p>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal para Cadastro de Vaga -->
+    <div class="modal-overlay" id="modalVaga">
+        <div class="modal">
+            <button class="modal-close" onclick="fecharModalVaga()">&times;</button>
+            <h2><i class="fa-solid fa-briefcase" style="color: var(--pink-primary); margin-right: 8px;"></i> Cadastrar Nova Vaga</h2>
+            
+            <form id="formVaga" onsubmit="salvarNovaVaga(event)">
+                <div class="form-group">
+                    <label for="tituloVaga">Cargo / Título da Vaga</label>
+                    <input type="text" id="tituloVaga" class="form-control" placeholder="ex: Desenvolvedora Front-End Pleno" required>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="form-group">
+                        <label for="localVaga">Localidade</label>
+                        <input type="text" id="localVaga" class="form-control" placeholder="ex: São Paulo - SP ou Remoto" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="tipoVaga">Modelo de Trabalho</label>
+                        <select id="tipoVaga" class="form-control" required>
+                            <option value="Remoto">Remoto</option>
+                            <option value="Híbrido">Híbrido</option>
+                            <option value="Presencial">Presencial</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="salarioVaga">Faixa Salarial</label>
+                    <input type="text" id="salarioVaga" class="form-control" placeholder="ex: R$ 6.000 - R$ 9.000 ou A combinar" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="descricaoVaga">Descrição das Atribuições e Cultura</label>
+                    <textarea id="descricaoVaga" class="form-control" placeholder="Descreva os requisitos, responsabilidades, benefícios e a cultura de diversidade..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="tagsVaga">Requisitos / Palavras-chave (separadas por vírgula)</label>
+                    <input type="text" id="tagsVaga" class="form-control" placeholder="ex: React, TypeScript, Git" required>
+                </div>
+
+                <div id="modalPremiumAlert" style="display:none; background: #e8f5e9; border: 1px solid #c8e6c9; border-radius: 8px; padding: 12px; font-size:13px; color:#2e7d32; margin-bottom: 20px;">
+                    <i class="fa-solid fa-circle-check"></i> <strong>Selo de Vaga Prioritária:</strong> Como sua empresa possui o Plano **Premium**, esta vaga será publicada com selo de destaque automaticamente!
+                </div>
+
+                <button type="submit" class="sh-btn" style="width: 100%; padding: 14px; font-size: 16px; color: white;">
+                    <i class="fa-solid fa-paper-plane" style="margin-right: 6px;"></i> Publicar Oportunidade
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para Triagem de Candidatas (Premium) -->
+    <div class="modal-overlay" id="modalCandidatas">
+        <div class="modal" style="max-width: 680px;">
+            <button class="modal-close" onclick="fecharModalCandidatas()">&times;</button>
+            <h2 id="modalCandidatasTitulo"><i class="fa-solid fa-users-viewfinder" style="color: var(--pink-primary); margin-right: 8px;"></i> Triagem de Candidatas</h2>
+            
+            <!-- Upgrade Banner Block if not Premium -->
+            <div id="complianceBlock" style="display:none; text-align:center; padding: 40px 20px;">
+                <i class="fa-solid fa-lock" style="font-size: 48px; color: #ffa500; margin-bottom: 16px;"></i>
+                <h3 style="margin-bottom:12px; color: var(--text-dark);">Painel Bloqueado</h3>
+                <p style="color: var(--text-gray); margin-bottom: 24px; font-size:14px; line-height: 1.6;">
+                    A triagem de candidatas qualificadas da comunidade é exclusiva para assinantes do plano **Premium**. Faça o upgrade de sua assinatura para desbloquear candidaturas automáticas e indicações inteligentes baseadas em competências!
+                </p>
+                <a href="planos.html" class="sh-btn" style="color:white; padding:12px 24px;"><i class="fa-solid fa-gem"></i> Conhecer Plano Premium</a>
+            </div>
+
+            <!-- Candidatas Content if Premium -->
+            <div id="candidatasContent" style="display:none;">
+                <p style="font-size:13.5px; color: var(--text-gray); margin-bottom: 24px;">
+                    Abaixo estão as candidaturas recebidas de profissionais qualificadas da nossa comunidade para esta vaga.
+                </p>
+
+                <div id="candidatasLista" style="display:flex; flex-direction:column; gap:20px;">
+                    <!-- Perfis Fictícios -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="sh-footer">
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <a href="inicio-empresa.html">
+                    <img src="resources/images/logo-escudo.png" alt="SafeHer" class="sh-logo-img" style="filter: brightness(0) invert(1);">
+                </a>
+                <p>Conectando mulheres e empresas por um mercado de trabalho mais justo, transparente e seguro.</p>
+            </div>
+            <div class="footer-emergency">
+                <h4>Contatos de Emergência</h4>
+                <p><i class="fa-solid fa-phone"></i> <strong>180</strong> - Central de Atendimento à Mulher</p>
+                <p><i class="fa-solid fa-phone"></i> <strong>190</strong> - Polícia Militar</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 SafeHer. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="api.js"></script>
+    <script src="usuario-session.js"></script>
+    <script>
+        const usuario = getSessao();
+        const plano = usuario ? (usuario.plano || 'Free') : 'Free';
+
+        window.addEventListener('DOMContentLoaded', () => {
+            if (!usuario || getTipoSessao() !== 'empresa') {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Exibir dica para upgrade se nao for Premium
+            if (plano !== 'Premium') {
+                document.getElementById('premiumHint').style.display = 'flex';
+            } else {
+                document.getElementById('modalPremiumAlert').style.display = 'block';
+            }
+
+            carregarVagasCorporativas();
+        });
+
+        async function carregarVagasCorporativas() {
+            const container = document.getElementById('vagasLista');
+            try {
+                const res = await listarVagasPorEmpresa(usuario.id);
+
+                if (!res || res.length === 0) {
+                    container.innerHTML = `
+                        <div style="text-align: center; padding: 60px 20px; background: white; border-radius: 20px; border: 1px solid var(--border-light);">
+                            <i class="fa-solid fa-briefcase" style="font-size: 56px; color: #ddd; margin-bottom: 20px;"></i>
+                            <h3 style="color: var(--text-dark); margin-bottom: 10px;">Nenhuma vaga publicada</h3>
+                            <p style="color: var(--text-gray); margin-bottom: 16px;">Sua empresa ainda não publicou nenhuma vaga de emprego.</p>
+                            <button class="sh-btn-outline" style="padding: 10px 20px;" onclick="abrirModalVaga()">Anunciar Primeira Vaga</button>
+                        </div>`;
+                    return;
+                }
+
+                container.innerHTML = '';
+                
+                // Buscar contagem de candidaturas para cada vaga de forma paralela
+                const vagasComContagem = await Promise.all(res.map(async (v) => {
+                    let count = 0;
+                    try {
+                        const candidatas = await listarCandidaturasPorVaga(v.id);
+                        count = candidatas.length;
+                    } catch (cErr) {
+                        console.warn("Erro ao buscar candidatas para a vaga " + v.id, cErr);
+                    }
+                    return { ...v, count };
+                }));
+
+                vagasComContagem.forEach(v => {
+                    const tagBadge = v.selo 
+                        ? '<span class="badge-priority"><i class="fa-solid fa-shield-heart"></i> Vaga Prioritária (Premium)</span>' 
+                        : '<span class="badge-standard"><i class="fa-solid fa-briefcase"></i> Vaga Padrão</span>';
+
+                    const botaoCandidatas = `<button class="sh-btn-outline" style="padding: 10px 20px; font-size: 13px;" onclick="gerenciarCandidatas(${v.id}, '${v.titulo.replace(/'/g, "\\'")}')">
+                               <i class="fa-solid fa-users-viewfinder"></i> Candidatas
+                           </button>`;
+
+                    container.innerHTML += `
+                        <div class="job-item">
+                            <div class="job-details">
+                                <h4>${v.titulo} ${tagBadge}</h4>
+                                <p><i class="fa-solid fa-location-dot"></i> ${v.local} • <i class="fa-solid fa-house-laptop"></i> ${v.tipo} • <i class="fa-solid fa-money-bill-wave"></i> ${v.salario} • <i class="fa-solid fa-users"></i> ${v.count} candidata(s) inscrita(s)</p>
+                            </div>
+                            <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+                                ${botaoCandidatas}
+                                <button class="btn-denunciar-empresa" style="padding: 10px 20px; font-size: 13px; margin:0;" onclick="excluirVagaCorporativa(${v.id})">
+                                    <i class="fa-solid fa-trash"></i> Excluir
+                                </button>
+                            </div>
+                        </div>`;
+                });
+
+            } catch (err) {
+                container.innerHTML = `<p style="text-align: center; color: #D32F2F;">Erro ao listar vagas: ${err.message}</p>`;
+            }
+        }
+
+        function abrirModalVaga() {
+            document.getElementById('modalVaga').classList.add('active');
+            document.getElementById('formVaga').reset();
+        }
+
+        function fecharModalVaga() {
+            document.getElementById('modalVaga').classList.remove('active');
+        }
+
+        async function salvarNovaVaga(e) {
+            e.preventDefault();
+
+            const titulo = document.getElementById('tituloVaga').value.trim();
+            const local = document.getElementById('localVaga').value.trim();
+            const tipo = document.getElementById('tipoVaga').value;
+            const salario = document.getElementById('salarioVaga').value.trim();
+            const descricao = document.getElementById('descricaoVaga').value.trim();
+            const tags = document.getElementById('tagsVaga').value.trim();
+
+            const isSelo = (plano === 'Premium');
+
+            const payload = {
+                id: 0,
+                titulo: titulo,
+                empresa: usuario.nome || 'Empresa',
+                local: local,
+                tipo: tipo,
+                salario: salario,
+                descricao: descricao,
+                tags: tags,
+                selo: isSelo,
+                empresaId: usuario.id
+            };
+
+            try {
+                await cadastrarVaga(payload);
+                showToast('Oportunidade profissional publicada com sucesso!', 'success');
+                fecharModalVaga();
+                carregarVagasCorporativas();
+            } catch (err) {
+                showToast('Erro ao publicar vaga: ' + err.message, 'error');
+            }
+        }
+
+        async function excluirVagaCorporativa(vagaId) {
+            if (!confirm('Deseja realmente excluir esta vaga de forma permanente?')) return;
+
+            try {
+                await removerVaga(vagaId);
+                showToast('Vaga removida com sucesso!', 'success');
+                carregarVagasCorporativas();
+            } catch (e) {
+                showToast('Erro ao excluir vaga: ' + e.message, 'error');
+            }
+        }
+
+        async function gerenciarCandidatas(vagaId, cargo) {
+            document.getElementById('modalCandidatas').classList.add('active');
+            document.getElementById('modalCandidatasTitulo').innerHTML = `<i class="fa-solid fa-users-viewfinder" style="color: var(--pink-primary); margin-right: 8px;"></i> Triagem: ${cargo}`;
+            
+            document.getElementById('complianceBlock').style.display = 'none';
+            document.getElementById('candidatasContent').style.display = 'block';
+            
+            const container = document.getElementById('candidatasLista');
+            container.innerHTML = `
+                <div style="text-align: center; padding: 20px;">
+                    <i class="fa-solid fa-spinner fa-spin" style="font-size: 24px; color: var(--pink-primary);"></i>
+                    <p style="color: var(--text-gray); margin-top: 8px;">Buscando candidatas qualificadas...</p>
+                </div>`;
+
+            try {
+                const candidatas = await listarCandidaturasPorVaga(vagaId);
+
+                if (candidatas.length === 0) {
+                    container.innerHTML = `
+                        <div style="text-align:center; padding: 40px 20px;">
+                            <i class="fa-regular fa-folder-open" style="font-size: 48px; color: #ddd; margin-bottom: 16px;"></i>
+                            <p style="color: var(--text-gray); font-size:14px; margin:0;">Nenhuma candidata se inscreveu para esta vaga ainda.</p>
+                        </div>`;
+                } else {
+                    container.innerHTML = '';
+                    candidatas.forEach((c, idx) => {
+                        const skills = ["Comunicação", "Trabalho em Equipe", "Proatividade"];
+                        const skillsTags = skills.map(s => `<span class="badge-standard" style="background:var(--pink-light); color:var(--pink-dark); margin-right:6px; margin-top:6px;">${s}</span>`).join('');
+                        
+                        container.innerHTML += `
+                            <div class="candidata-card" style="background:#fafafa; border-radius:12px; padding:20px; border:1px solid #eee; display:flex; flex-direction:column; gap:12px; text-align:left;">
+                                <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:10px;">
+                                    <div style="display:flex; align-items:center; gap:12px;">
+                                        <img src="${c.candidataFoto}" alt="${c.candidataNome}" style="width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 2px solid var(--pink-primary);">
+                                        <div>
+                                            <h4 style="color:var(--text-dark); font-size:16px; font-weight:800; margin:0;">${c.candidataNome}</h4>
+                                            <span style="font-size:12px; color:var(--text-gray);"><i class="fa-solid fa-envelope"></i> ${c.candidataEmail} | <i class="fa-solid fa-phone"></i> ${c.candidataTelefone}</span>
+                                        </div>
+                                    </div>
+                                    <button id="btn-candidata-${idx}" class="sh-btn" style="padding: 8px 16px; font-size: 12.5px; color:white; margin:0;" onclick="aprovarCandidata('${c.candidataNome.replace(/'/g, "\\'")}', '${c.candidataEmail}', ${idx})">
+                                        <i class="fa-solid fa-circle-check"></i> Aprovar para Entrevista
+                                    </button>
+                                </div>
+                                <p style="font-size:13px; color:var(--text-gray); line-height:1.6; margin:0;">
+                                    Candidatura submetida via plataforma SafeHer em ${new Date(c.data).toLocaleDateString('pt-BR')} às ${new Date(c.data).toLocaleTimeString('pt-BR')}.
+                                </p>
+                                <div style="display:flex; flex-wrap:wrap; margin-top:4px;">
+                                    ${skillsTags}
+                                </div>
+                            </div>`;
+                    });
+                }
+            } catch (err) {
+                container.innerHTML = `
+                    <div style="text-align:center; padding: 40px 20px; color: #D32F2F;">
+                        <i class="fa-solid fa-circle-exclamation" style="font-size: 48px; margin-bottom: 16px;"></i>
+                        <p style="font-size:14px; margin:0;">Erro ao listar candidatas: ${err.message}</p>
+                    </div>`;
+            }
+        }
+
+        function fecharModalCandidatas() {
+            document.getElementById('modalCandidatas').classList.remove('active');
+        }
+
+        function aprovarCandidata(nome, email, idx) {
+            const btn = document.getElementById(`btn-candidata-${idx}`);
+            btn.innerHTML = '<i class="fa-solid fa-circle-check"></i> Aprovada';
+            btn.style.background = '#2e7d32';
+            btn.style.borderColor = '#2e7d32';
+            btn.style.boxShadow = 'none';
+            btn.disabled = true;
+            
+            showToast(`Triagem Concluída! ${nome} foi aprovada. E-mail de convite enviado para ${email}`, 'success', 4500);
+        }
+    </script>
+</body>
+</html>

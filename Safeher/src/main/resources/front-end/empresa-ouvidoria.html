@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeHer - Ouvidoria e Avaliações</title>
+    <link rel="stylesheet" href="global.css">
+    <style>
+        .page-header {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .stars { color: #FFB800; font-size: 18px; }
+
+        .eval-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            margin-bottom: 24px;
+            border-left: 5px solid var(--pink-primary);
+            border-right: 1px solid var(--border-light);
+            border-top: 1px solid var(--border-light);
+            border-bottom: 1px solid var(--border-light);
+            transition: var(--transition);
+        }
+
+        .eval-card:hover {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+        }
+
+        .eval-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .eval-user {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--pink-dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .eval-content {
+            font-size: 14.5px;
+            color: var(--text-gray);
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        /* Reply container */
+        .reply-container {
+            background: #fdf2f6;
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin-top: 16px;
+            border-left: 3px solid var(--pink-primary);
+        }
+
+        .reply-header {
+            font-weight: 700;
+            font-size: 13px;
+            color: var(--pink-primary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .reply-text {
+            font-size: 13.5px;
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+
+        /* Replying Form */
+        .reply-form {
+            margin-top: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .reply-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #eee;
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            resize: vertical;
+            min-height: 70px;
+            transition: 0.3s;
+            box-sizing: border-box;
+        }
+
+        .reply-input:focus {
+            border-color: var(--pink-primary);
+            outline: none;
+        }
+
+        /* Free plan replying wall */
+        .free-reply-wall {
+            background: #fcfcfc;
+            border: 2px dashed #e2e2e2;
+            border-radius: var(--radius-md);
+            padding: 20px;
+            text-align: center;
+            margin-top: 16px;
+        }
+
+        .free-reply-wall p {
+            font-size: 13px;
+            color: var(--text-gray);
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .summary-stats {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 40px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .summary-stat-box {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: 20px 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            text-align: center;
+            border: 1px solid var(--border-light);
+            min-width: 180px;
+        }
+
+        .summary-stat-val {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--pink-primary);
+        }
+
+        .summary-stat-lbl {
+            font-size: 12px;
+            color: var(--text-gray);
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-wrapper">
+        <div class="container">
+            <!-- Header -->
+            <header class="sh-header">
+                <a href="inicio-empresa.html" class="sh-logo">
+                    <img src="resources/images/logo-escudo.png" alt="SafeHer Logo" class="sh-logo-img">
+                </a>
+                <div class="sh-nav">
+                    <!-- Gerado dinamicamente pelo usuario-session.js -->
+                </div>
+            </header>
+
+            <main style="padding-bottom: 60px;">
+                <div class="page-header">
+                    <h2 class="sh-title">Ouvidoria & Avaliações</h2>
+                    <p class="sh-subtitle">Acompanhe as avaliações feitas de forma anônima pelas funcionárias e responda de forma oficial.</p>
+                </div>
+
+                <!-- Stats summary -->
+                <div class="summary-stats">
+                    <div class="summary-stat-box">
+                        <div class="summary-stat-val" id="statNota">5.0</div>
+                        <div class="summary-stat-lbl"><i class="fa-solid fa-star" style="color: #ffb800;"></i> Nota Média</div>
+                    </div>
+                    <div class="summary-stat-box">
+                        <div class="summary-stat-val" id="statTotal">0</div>
+                        <div class="summary-stat-lbl"><i class="fa-solid fa-comments"></i> Avaliações</div>
+                    </div>
+                </div>
+
+                <!-- Feed section -->
+                <h3 style="font-size: 20px; font-weight: 800; color: var(--text-dark); margin-bottom: 24px;">Feed de Feedback</h3>
+                
+                <div id="ouvidoriaFeed">
+                    <div style="text-align: center; padding: 40px;">
+                        <i class="fa-solid fa-spinner fa-spin" style="font-size: 32px; color: var(--pink-primary);"></i>
+                        <p style="color: var(--text-gray); margin-top: 12px;">Carregando avaliações...</p>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="sh-footer">
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <a href="inicio-empresa.html">
+                    <img src="resources/images/logo-escudo.png" alt="SafeHer" class="sh-logo-img" style="filter: brightness(0) invert(1);">
+                </a>
+                <p>Conectando mulheres e empresas por um mercado de trabalho mais justo, transparente e seguro.</p>
+            </div>
+            <div class="footer-emergency">
+                <h4>Contatos de Emergência</h4>
+                <p><i class="fa-solid fa-phone"></i> <strong>180</strong> - Central de Atendimento à Mulher</p>
+                <p><i class="fa-solid fa-phone"></i> <strong>190</strong> - Polícia Militar</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 SafeHer. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="api.js"></script>
+    <script src="usuario-session.js"></script>
+    <script>
+        const usuario = getSessao();
+        const plano = usuario ? (usuario.plano || 'Free') : 'Free';
+
+        window.addEventListener('DOMContentLoaded', () => {
+            if (!usuario || getTipoSessao() !== 'empresa') {
+                window.location.href = 'login.html';
+                return;
+            }
+            carregarOuvidoria();
+        });
+
+        function gerarEstrelas(nota) {
+            let html = '';
+            for (let i = 0; i < 5; i++) {
+                html += i < nota ? '<i class="fa-solid fa-star"></i>' : '<i class="fa-regular fa-star"></i>';
+            }
+            return html;
+        }
+
+        async function carregarOuvidoria() {
+            const feed = document.getElementById('ouvidoriaFeed');
+            try {
+                const res = await listarAvaliacoesPorEmpresa(usuario.id);
+                
+                if (!res || res.length === 0) {
+                    feed.innerHTML = `
+                        <div style="text-align: center; padding: 60px 20px; background: white; border-radius: 20px; border: 1px solid var(--border-light);">
+                            <i class="fa-regular fa-comments" style="font-size: 56px; color: #ddd; margin-bottom: 20px;"></i>
+                            <h3 style="color: var(--text-dark); margin-bottom: 10px;">Nenhuma avaliação registrada</h3>
+                            <p style="color: var(--text-gray);">Sua empresa ainda não recebeu feedbacks anônimos de colaboradoras.</p>
+                        </div>`;
+                    document.getElementById('statNota').textContent = '5.0';
+                    document.getElementById('statTotal').textContent = '0';
+                    return;
+                }
+
+                const total = res.length;
+                const soma = res.reduce((acc, c) => acc + c.nota, 0);
+                const media = (soma / total).toFixed(1);
+
+                document.getElementById('statNota').textContent = media;
+                document.getElementById('statTotal').textContent = total;
+
+                feed.innerHTML = '';
+                res.forEach(a => {
+                    let interactionArea = '';
+
+                    // Check if already replied
+                    if (a.resposta) {
+                        const botoesEdicao = (plano === 'Plus' || plano === 'Premium') ? `
+                            <div style="display: flex; gap: 8px;">
+                                <button class="sh-btn-outline" style="padding: 4px 8px; font-size: 11px; font-weight: 700; cursor: pointer;" onclick="habilitarEdicaoResposta(${a.id}, \`${a.resposta.replace(/`/g, '\\`').replace(/\$/g, '\\$')}\`)">
+                                    <i class="fa-solid fa-pen"></i> Editar
+                                </button>
+                                <button class="sh-btn-outline" style="padding: 4px 8px; font-size: 11px; font-weight: 700; background: #FFF3F3; color: #D32F2F; border-color: #FFC1C1; cursor: pointer;" onclick="excluirResposta(${a.id})">
+                                    <i class="fa-solid fa-trash"></i> Excluir
+                                </button>
+                            </div>` : '';
+
+                        interactionArea = `
+                            <div class="reply-container" id="repl-box-${a.id}">
+                                <div class="reply-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                    <span><i class="fa-solid fa-reply"></i> Resposta Oficial da Empresa</span>
+                                    ${botoesEdicao}
+                                </div>
+                                <div class="reply-text" id="text-repl-${a.id}">"${a.resposta}"</div>
+                                <div class="reply-form" id="edit-form-repl-${a.id}" style="display: none;">
+                                    <textarea class="reply-input" id="edit-inp-repl-${a.id}"></textarea>
+                                    <div style="display: flex; gap: 8px; align-self: flex-end; margin-top: 8px;">
+                                        <button class="sh-btn-outline" style="padding: 6px 12px; font-size: 12px; font-weight: 700; cursor: pointer;" onclick="cancelarEdicaoResposta(${a.id})">
+                                            Cancelar
+                                        </button>
+                                        <button class="sh-btn" style="padding: 6px 12px; font-size: 12px; font-weight: 700; color: white; cursor: pointer;" onclick="salvarEdicaoResposta(${a.id})">
+                                            Salvar Alterações
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>`;
+                    } else {
+                        // Not replied yet. Check plan limits
+                        if (plano === 'Plus' || plano === 'Premium') {
+                            interactionArea = `
+                                <div class="reply-form" id="form-repl-${a.id}">
+                                    <textarea class="reply-input" id="inp-repl-${a.id}" placeholder="Escreva a resposta oficial da sua empresa..."></textarea>
+                                    <button class="sh-btn" style="align-self: flex-end; padding: 8px 20px; font-size: 13px; color: white;" onclick="enviarResposta(${a.id})">
+                                        <i class="fa-solid fa-paper-plane" style="margin-right: 6px;"></i> Enviar Resposta
+                                    </button>
+                                </div>`;
+                        } else {
+                            // Free Plan can NOT reply. Display lock
+                            interactionArea = `
+                                <div class="free-reply-wall">
+                                    <p><i class="fa-solid fa-lock" style="color:var(--pink-primary); margin-right: 6px;"></i> Deseja responder a este feedback de forma oficial e pública para a comunidade?</p>
+                                    <a href="planos.html" class="sh-btn-outline" style="padding: 6px 16px; font-size: 12px; font-weight: 700;">Assinar Plano Plus</a>
+                                </div>`;
+                        }
+                    }
+
+                    feed.innerHTML += `
+                        <div class="eval-card">
+                            <div class="eval-header">
+                                <div class="eval-user">
+                                    <i class="fa-solid fa-user-shield"></i> Colaboradora Anônima
+                                </div>
+                                <div class="stars">${gerarEstrelas(a.nota)}</div>
+                            </div>
+                            <div class="eval-content">"${a.comentario || 'Sem comentários textuais.'}"</div>
+                            ${interactionArea}
+                        </div>`;
+                });
+
+            } catch (err) {
+                feed.innerHTML = `<p style="text-align: center; color: #D32F2F;">Erro ao carregar a ouvidoria: ${err.message}</p>`;
+            }
+        }
+
+        async function enviarResposta(avaliacaoId) {
+            const input = document.getElementById(`inp-repl-${avaliacaoId}`);
+            const respostaText = input.value.trim();
+
+            if (!respostaText) {
+                showToast('Por favor, escreva a sua resposta antes de enviar.', 'error');
+                return;
+            }
+
+            try {
+                await responderAvaliacao(avaliacaoId, respostaText);
+                showToast('Resposta enviada e publicada com sucesso!', 'success');
+                carregarOuvidoria();
+            } catch (e) {
+                showToast('Erro ao enviar resposta: ' + e.message, 'error');
+            }
+        }
+
+        function habilitarEdicaoResposta(id, texto) {
+            document.getElementById(`text-repl-${id}`).style.display = 'none';
+            document.getElementById(`edit-form-repl-${id}`).style.display = 'flex';
+            document.getElementById(`edit-inp-repl-${id}`).value = texto;
+        }
+
+        function cancelarEdicaoResposta(id) {
+            document.getElementById(`text-repl-${id}`).style.display = 'block';
+            document.getElementById(`edit-form-repl-${id}`).style.display = 'none';
+        }
+
+        async function salvarEdicaoResposta(id) {
+            const input = document.getElementById(`edit-inp-repl-${id}`);
+            const respostaText = input.value.trim();
+
+            if (!respostaText) {
+                showToast('Por favor, escreva a sua resposta antes de salvar.', 'error');
+                return;
+            }
+
+            try {
+                await responderAvaliacao(id, respostaText);
+                showToast('Resposta atualizada com sucesso!', 'success');
+                carregarOuvidoria();
+            } catch (e) {
+                showToast('Erro ao atualizar resposta: ' + e.message, 'error');
+            }
+        }
+
+        async function excluirResposta(id) {
+            if (!confirm('Deseja realmente excluir sua resposta oficial permanentemente?')) return;
+            try {
+                await excluirRespostaAvaliacao(id);
+                showToast('Resposta excluída com sucesso!', 'success');
+                carregarOuvidoria();
+            } catch (e) {
+                showToast('Erro ao excluir resposta: ' + e.message, 'error');
+            }
+        }
+    </script>
+</body>
+</html>

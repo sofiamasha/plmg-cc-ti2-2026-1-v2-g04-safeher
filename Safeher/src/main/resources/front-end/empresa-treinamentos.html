@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SafeHer — Conteúdos e Seus Direitos</title>
+    <title>SafeHer - Módulo de Treinamentos</title>
     <link rel="stylesheet" href="global.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
@@ -91,6 +91,91 @@
             justify-content: space-between;
         }
 
+        /* Upsell Block */
+        .upsell-container {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 80px 40px;
+            text-align: center;
+            border: 1px solid var(--border-light);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 450px;
+        }
+
+        .upsell-bg-blobs {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        .upsell-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(50px);
+        }
+
+        .upsell-blob-1 {
+            width: 300px;
+            height: 300px;
+            background: var(--pink-primary);
+            top: -50px;
+            left: -50px;
+        }
+
+        .upsell-blob-2 {
+            width: 250px;
+            height: 250px;
+            background: #ffb800;
+            bottom: -50px;
+            right: -50px;
+        }
+
+        .upsell-content {
+            position: relative;
+            z-index: 2;
+            max-width: 550px;
+        }
+
+        .upsell-icon {
+            font-size: 64px;
+            color: var(--pink-primary);
+            margin-bottom: 24px;
+            animation: pulse 2.5s infinite;
+        }
+
+        .upsell-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 16px;
+        }
+
+        .upsell-desc {
+            font-size: 15px;
+            color: var(--text-gray);
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+
+        @media (max-width: 992px) {
+            .trainings-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 576px) {
+            .trainings-grid { grid-template-columns: 1fr; }
+        }
+
         /* Modal Styles */
         .modal-overlay {
             display: none;
@@ -139,126 +224,128 @@
         .modal-close:hover {
             color: var(--pink-primary);
         }
-
-        @media (max-width: 992px) {
-            .trainings-grid { grid-template-columns: repeat(2, 1fr); }
-        }
-
-        @media (max-width: 576px) {
-            .trainings-grid { grid-template-columns: 1fr; }
-        }
     </style>
 </head>
 <body>
-    <div id="toast-container"></div>
     <div class="main-wrapper">
         <div class="container">
             <!-- Header -->
             <header class="sh-header">
-                <a href="index.html" class="sh-logo">
+                <a href="inicio-empresa.html" class="sh-logo">
                     <img src="resources/images/logo-escudo.png" alt="SafeHer Logo" class="sh-logo-img">
                 </a>
                 <div class="sh-nav">
-                    <a href="index.html">Início</a>
-                    <a href="denuncias.html">Denúncias</a>
-                    <a href="avaliacoes.html">Avaliações</a>
-                    <a href="conteudos.html" class="active">Conteúdos</a>
-                    <a href="vagas.html">Vagas</a>
-                    <a href="login.html" class="sh-btn" style="color: white;">Entrar</a>
-                    <a href="escolha-cadastro.html" class="sh-btn-outline">Criar conta</a>
+                    <!-- Gerado dinamicamente pelo usuario-session.js -->
                 </div>
             </header>
 
             <main style="padding-bottom: 60px;">
                 <div class="page-header">
-                    <h2 class="sh-title" style="text-align: center;">Conteúdos e Seus Direitos</h2>
-                    <p class="sh-subtitle" style="text-align: center; max-width: 800px; margin: 0 auto;">Capacite-se com guias sobre seus direitos trabalhistas na CLT, como identificar abusos no trabalho e governança interna corporativa.</p>
+                    <h2 class="sh-title" style="text-align: center;">Treinamentos Preventivos</h2>
+                    <p class="sh-subtitle" style="text-align: center; max-width: 800px; margin: 0 auto;">Capacite as suas equipes internas com guias de igualdade de gênero, prevenção ao assédio e ouvidoria ética.</p>
                 </div>
 
-                <div class="trainings-grid">
-                    <!-- Course 1 -->
-                    <div class="training-card">
-                        <div class="training-header">
-                            <i class="fa-solid fa-scale-balanced"></i>
-                        </div>
-                        <div class="training-body">
-                            <h4 class="training-title">Workshop: Seus Direitos na CLT</h4>
-                            <p class="training-desc">Trilha completa sobre estabilidade profissional, licença-maternidade e o combate ativo à discriminação salarial.</p>
-                            <div class="progress-bar-container">
-                                <div class="progress-bar-fill" id="progress-fill-1" style="width: 0%;"></div>
-                            </div>
-                            <div class="progress-text">
-                                <span id="progress-status-1">Status: Não Iniciado</span>
-                                <span id="progress-percent-1">0%</span>
-                            </div>
-                        </div>
-                        <div id="btn-container-1" style="padding: 0 24px 24px; display: flex; flex-direction: column; gap: 10px;">
-                            <button class="sh-btn" style="color: white; margin: 0; width: 100%; cursor: pointer;" onclick="abrirLeituraCurso(1)">
-                                <i class="fa-solid fa-graduation-cap"></i> Acessar Conteúdo Real
-                            </button>
-                        </div>
+                <!-- Painel Bloqueado (Free/Plus) -->
+                <div class="upsell-container" id="upsellWall" style="display: none;">
+                    <div class="upsell-bg-blobs">
+                        <div class="upsell-blob upsell-blob-1"></div>
+                        <div class="upsell-blob upsell-blob-2"></div>
                     </div>
-
-                    <!-- Course 2 -->
-                    <div class="training-card">
-                        <div class="training-header" style="background: linear-gradient(135deg, #ff9800 0%, #e65100 100%);">
-                            <i class="fa-solid fa-heart"></i>
-                        </div>
-                        <div class="training-body">
-                            <h4 class="training-title">Workshop: Identificando Assédio Moral</h4>
-                            <p class="training-desc">Saiba reconhecer microagressões diárias, gaslighting e como registrar provas legítimas e confidenciais.</p>
-                            <div class="progress-bar-container">
-                                <div class="progress-bar-fill" id="progress-fill-2" style="width: 0%;"></div>
-                            </div>
-                            <div class="progress-text">
-                                <span id="progress-status-2">Status: Não Iniciado</span>
-                                <span id="progress-percent-2">0%</span>
-                            </div>
-                        </div>
-                        <div id="btn-container-2" style="padding: 0 24px 24px; display: flex; flex-direction: column; gap: 10px;">
-                            <button class="sh-btn" style="color: white; margin: 0; width: 100%; cursor: pointer;" onclick="abrirLeituraCurso(2)">
-                                <i class="fa-solid fa-graduation-cap"></i> Acessar Conteúdo Real
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Course 3 -->
-                    <div class="training-card">
-                        <div class="training-header" style="background: linear-gradient(135deg, #2196f3 0%, #0d47a1 100%);">
-                            <i class="fa-solid fa-shield-heart"></i>
-                        </div>
-                        <div class="training-body">
-                            <h4 class="training-title">Workshop: Ouvidoria e Defesa CIPA+A</h4>
-                            <p class="training-desc">Entenda como funcionam as denúncias confidenciais, a Lei 14.457/2022 e a governança ética corporativa.</p>
-                            <div class="progress-bar-container">
-                                <div class="progress-bar-fill" id="progress-fill-3" style="width: 0%;"></div>
-                            </div>
-                            <div class="progress-text">
-                                <span id="progress-status-3">Status: Não Iniciado</span>
-                                <span id="progress-percent-3">0%</span>
-                            </div>
-                        </div>
-                        <div id="btn-container-3" style="padding: 0 24px 24px; display: flex; flex-direction: column; gap: 10px;">
-                            <button class="sh-btn" style="color: white; margin: 0; width: 100%; cursor: pointer;" onclick="abrirLeituraCurso(3)">
-                                <i class="fa-solid fa-graduation-cap"></i> Acessar Conteúdo Real
-                            </button>
-                        </div>
+                    <div class="upsell-content">
+                        <i class="fa-solid fa-graduation-cap upsell-icon"></i>
+                        <h3 class="upsell-title">Qualifique Suas Equipes</h3>
+                        <p class="upsell-desc">Empresas no plano **Premium** contam com o ecossistema EAD completo da SafeHer. Capacite líderes, colaboradores e equipes de RH e conquiste o **Selo de Empresa Certificada** para atração de talentos femininos.</p>
+                        <a href="planos.html" class="sh-btn" style="padding: 14px 36px; font-size: 16px;"><i class="fa-solid fa-gem" style="margin-right: 8px;"></i> Fazer Upgrade para Premium</a>
                     </div>
                 </div>
 
-                <!-- Caixa de Sugestão de Novos Conteúdos -->
-                <div style="background: white; border-radius: var(--radius-lg); border: 1px solid var(--border-light); padding: 36px; margin-top: 50px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); max-width: 600px; margin-left: auto; margin-right: auto; text-align: center;">
-                    <h4 style="font-size: 18px; font-weight: 800; color: var(--pink-dark); margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                        <i class="fa-solid fa-lightbulb" style="color: #ffb800;"></i> Sugerir Novo Conteúdo
-                    </h4>
-                    <p style="font-size: 13.5px; color: var(--text-gray); line-height: 1.6; margin-bottom: 24px;">
-                        Sente falta de algum assunto de direito do trabalho, liderança ou bem-estar? Deixe sua sugestão para que possamos trazer novos workshops!
-                    </p>
-                    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
-                        <input type="text" id="inputSugestao" placeholder="Ex: Direitos das mães adotivas, burnout feminino..." style="flex: 1; padding: 12px 16px; border: 2px solid #eee; border-radius: 12px; font-size: 14.5px; transition: 0.3s;" onfocus="this.style.borderColor='var(--pink-primary)'" onblur="this.style.borderColor='#eee'">
-                        <button class="sh-btn" style="margin: 0; padding: 12px 24px; color: white; border: none; cursor: pointer;" onclick="enviarSugestao()">
-                            <i class="fa-solid fa-paper-plane"></i> Enviar Sugestão
-                        </button>
+                <!-- Painel Desbloqueado (Premium) -->
+                <div id="trainingContent" style="display: none;">
+                    <div class="trainings-grid">
+                        <!-- Course 1 -->
+                        <div class="training-card">
+                            <div class="training-header">
+                                <i class="fa-solid fa-shield-halved"></i>
+                            </div>
+                            <div class="training-body">
+                                <h4 class="training-title">Workshop: Prevenção ao Assédio</h4>
+                                <p class="training-desc">Trilha obrigatória sobre conformidade legal, assédio moral e sexual e criação de ambientes saudáveis.</p>
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar-fill" id="progress-fill-1" style="width: 0%;"></div>
+                                </div>
+                                <div class="progress-text">
+                                    <span id="progress-status-1">Status: Não Iniciado</span>
+                                    <span id="progress-percent-1">0%</span>
+                                </div>
+                            </div>
+                            <div id="btn-container-1" style="padding: 0 24px 24px; display: flex; flex-direction: column; gap: 10px;">
+                                <button class="sh-btn" style="color: white; margin: 0; width: 100%; cursor: pointer;" onclick="abrirLeituraCurso(1)">
+                                    <i class="fa-solid fa-graduation-cap"></i> Acessar Conteúdo Real
+                                </button>
+                            </div>
+                        </div>
+  
+                        <!-- Course 2 -->
+                        <div class="training-card">
+                            <div class="training-header" style="background: linear-gradient(135deg, #ff9800 0%, #e65100 100%);">
+                                <i class="fa-solid fa-users-viewfinder"></i>
+                            </div>
+                            <div class="training-body">
+                                <h4 class="training-title">Workshop: Liderança Inclusiva</h4>
+                                <p class="training-desc">Trilha teórica avançada para gestores sobre viés inconsciente, equidade salarial e recrutamento justo.</p>
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar-fill" id="progress-fill-2" style="width: 0%;"></div>
+                                </div>
+                                <div class="progress-text">
+                                    <span id="progress-status-2">Status: Não Iniciado</span>
+                                    <span id="progress-percent-2">0%</span>
+                                </div>
+                            </div>
+                            <div id="btn-container-2" style="padding: 0 24px 24px; display: flex; flex-direction: column; gap: 10px;">
+                                <button class="sh-btn" style="color: white; margin: 0; width: 100%; cursor: pointer;" onclick="abrirLeituraCurso(2)">
+                                    <i class="fa-solid fa-graduation-cap"></i> Acessar Conteúdo Real
+                                </button>
+                            </div>
+                        </div>
+  
+                        <!-- Course 3 -->
+                        <div class="training-card">
+                            <div class="training-header" style="background: linear-gradient(135deg, #2196f3 0%, #0d47a1 100%);">
+                                <i class="fa-solid fa-handshake-angle"></i>
+                            </div>
+                            <div class="training-body">
+                                <h4 class="training-title">Workshop: Ouvidoria Ética</h4>
+                                <p class="training-desc">Como estruturar uma comissão interna de compliance neutra e canais seguros de ouvidoria corporativa.</p>
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar-fill" id="progress-fill-3" style="width: 0%;"></div>
+                                </div>
+                                <div class="progress-text">
+                                    <span id="progress-status-3">Status: Não Iniciado</span>
+                                    <span id="progress-percent-3">0%</span>
+                                </div>
+                            </div>
+                            <div id="btn-container-3" style="padding: 0 24px 24px; display: flex; flex-direction: column; gap: 10px;">
+                                <button class="sh-btn" style="color: white; margin: 0; width: 100%; cursor: pointer;" onclick="abrirLeituraCurso(3)">
+                                    <i class="fa-solid fa-graduation-cap"></i> Acessar Conteúdo Real
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Caixa de Sugestão de Novos Workshops -->
+                    <div style="background: white; border-radius: var(--radius-lg); border: 1px solid var(--border-light); padding: 36px; margin-top: 50px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); max-width: 600px; margin-left: auto; margin-right: auto; text-align: center;">
+                        <h4 style="font-size: 18px; font-weight: 800; color: var(--pink-dark); margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                            <i class="fa-solid fa-lightbulb" style="color: #ffb800;"></i> Sugerir Novo Workshop
+                        </h4>
+                        <p style="font-size: 13.5px; color: var(--text-gray); line-height: 1.6; margin-bottom: 24px;">
+                            Sua empresa sente falta de algum tema específico de conformidade, diversidade ou direitos? Envie-nos uma sugestão para criarmos novos workshops!
+                        </p>
+                        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                            <input type="text" id="inputSugestao" placeholder="Ex: Comunicação Não-Violenta, Parentalidade no Trabalho..." style="flex: 1; padding: 12px 16px; border: 2px solid #eee; border-radius: 12px; font-size: 14.5px; transition: 0.3s;" onfocus="this.style.borderColor='var(--pink-primary)'" onblur="this.style.borderColor='#eee'">
+                            <button class="sh-btn" style="margin: 0; padding: 12px 24px; color: white; border: none; cursor: pointer;" onclick="enviarSugestao()">
+                                <i class="fa-solid fa-paper-plane"></i> Enviar Sugestão
+                            </button>
+                        </div>
                     </div>
                 </div>
             </main>
@@ -267,9 +354,9 @@
 
     <!-- Modal de Leitura de Treinamentos (Conteúdo de Verdade) -->
     <div class="modal-overlay" id="modalLeitura">
-        <div class="modal">
+        <div class="modal" style="max-width: 720px; text-align: left; border-radius: var(--radius-lg); border: 2px solid var(--pink-light);">
             <button class="modal-close" onclick="fecharModalLeituraSempre()">&times;</button>
-            <h2 id="modalLeituraTitulo" style="color: var(--pink-primary); font-size:22px; font-weight:800; display:flex; align-items:center; gap:8px;">Título do Workshop</h2>
+            <h2 id="modalLeituraTitulo" style="color: var(--pink-primary); font-size:22px; font-weight:800; display:flex; align-items:center; gap:8px;">Título do Curso</h2>
             
             <div id="modalLeituraCorpo" style="font-size: 14.5px; color: var(--text-gray); line-height: 1.7; text-align: justify; display:flex; flex-direction:column; gap:16px; max-height: 55vh; overflow-y: auto; padding-right:10px; margin-top:20px;">
                 <!-- Texto Educativo Real e Quiz -->
@@ -285,23 +372,15 @@
     <footer class="sh-footer">
         <div class="container footer-content">
             <div class="footer-brand">
-                <a href="index.html">
+                <a href="inicio-empresa.html">
                     <img src="resources/images/logo-escudo.png" alt="SafeHer" class="sh-logo-img" style="filter: brightness(0) invert(1);">
                 </a>
-                <p>Protegendo mulheres, denunciando abusos e transformando o ambiente corporativo com transparência e justiça.</p>
-            </div>
-            <div class="footer-links">
-                <h4>Nossas Redes Sociais</h4>
-                <div class="social-icons">
-                    <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
-                    <a href="#" aria-label="Twitter/X"><i class="fa-brands fa-twitter"></i></a>
-                </div>
+                <p>Conectando mulheres e empresas por um mercado de trabalho mais justo, transparente e seguro.</p>
             </div>
             <div class="footer-emergency">
                 <h4>Contatos de Emergência</h4>
-                <p><i class="fa-solid fa-phone"></i> <strong>180</strong> — Central de Atendimento à Mulher</p>
-                <p><i class="fa-solid fa-phone"></i> <strong>190</strong> — Polícia Militar</p>
+                <p><i class="fa-solid fa-phone"></i> <strong>180</strong> - Central de Atendimento à Mulher</p>
+                <p><i class="fa-solid fa-phone"></i> <strong>190</strong> - Polícia Militar</p>
             </div>
         </div>
         <div class="footer-bottom">
@@ -319,25 +398,30 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             usuario = getSessao();
-            if (!usuario || getTipoSessao() !== 'mulher') {
-                showToast('Você precisa estar logada como candidata (mulher) para acessar os conteúdos e workshops.', 'error');
-                setTimeout(() => {
-                    window.location.href = 'login.html';
-                }, 2000);
+            if (!usuario || getTipoSessao() !== 'empresa') {
+                window.location.href = 'login.html';
                 return;
             }
 
-            const userKey = usuario ? usuario.id : 'anonima';
-            KEY = `safeher_conteudos_${userKey}`;
-            
-            // Inicializar ou ler do localStorage
-            const localData = localStorage.getItem(KEY);
-            if (localData) {
-                progresso = JSON.parse(localData);
+            const plano = usuario.plano || 'Free';
+
+            if (plano === 'Premium') {
+                document.getElementById('trainingContent').style.display = 'block';
+                document.getElementById('upsellWall').style.display = 'none';
+                KEY = `safeher_treinamentos_${usuario.id}`;
+                
+                // Inicializar ou ler do localStorage
+                const localData = localStorage.getItem(KEY);
+                if (localData) {
+                    progresso = JSON.parse(localData);
+                } else {
+                    localStorage.setItem(KEY, JSON.stringify(progresso));
+                }
+                atualizarUIProgresso();
             } else {
-                localStorage.setItem(KEY, JSON.stringify(progresso));
+                document.getElementById('trainingContent').style.display = 'none';
+                document.getElementById('upsellWall').style.display = 'flex';
             }
-            atualizarUIProgresso();
         });
 
         function atualizarUIProgresso() {
@@ -358,7 +442,7 @@
                         statusEl.style.fontWeight = '800';
                         fillEl.style.background = '#4CAF50';
                         
-                        // Exibir botão de certificado
+                        // Garantir que o botão de Certificado seja exibido
                         if (!document.getElementById(`btn-cert-${id}`)) {
                             const certBtn = document.createElement('button');
                             certBtn.id = `btn-cert-${id}`;
@@ -388,129 +472,141 @@
             const corpoEl = document.getElementById('modalLeituraCorpo');
             const btnConcluir = document.getElementById('btnConcluirLeitura');
             
+            // Reset button to locked state
             btnConcluir.disabled = true;
             btnConcluir.style.opacity = '0.6';
             btnConcluir.style.cursor = 'not-allowed';
             btnConcluir.innerHTML = '<i class="fa-solid fa-lock"></i> Responda o Quiz de Fixação para Concluir';
 
             if (cursoId === 1) {
-                tituloEl.innerHTML = '<i class="fa-solid fa-scale-balanced"></i> Workshop: Seus Direitos na CLT';
+                tituloEl.innerHTML = '<i class="fa-solid fa-shield-halved"></i> Prevenção ao Assédio';
                 corpoEl.innerHTML = `
-                    <p><strong>Workshop: Seus Direitos na CLT e Igualdade Salarial (Lei 14.611/2023)</strong></p>
-                    <p>A Consolidação das Leis do Trabalho (CLT) protege a mulher de qualquer forma de discriminação no ingresso ou na permanência no emprego. Além disso, garante direitos específicos para proteger a maternidade e promover a igualdade de oportunidades.</p>
-                    <p><strong>Principais Direitos Garantidos:</strong></p>
+                    <p><strong>Prevenção ao Assédio Moral e Sexual no Trabalho (Lei 14.457/2022)</strong></p>
+                    <p>A Lei nº 14.457, de 21 de setembro de 2022, instituiu o Programa Emprega + Mulheres e estabeleceu novas regras rígidas para a prevenção ao assédio de gênero dentro do ambiente organizacional brasileiro. De acordo com a regulamentação, as comissões internas de prevenção de acidentes (CIPA) passaram a ser denominadas <strong>CIPA + A (Comissão Interna de Prevenção de Acidentes e Assédio)</strong>.</p>
+                    <p><strong>Diretrizes Obrigatórias de Prevenção:</strong></p>
                     <ul style="padding-left: 20px; margin-bottom: 10px;">
-                        <li><strong>Estabilidade e Licença Maternidade:</strong> Licença remunerada de 120 dias (que pode chegar a 180 dias no programa Empresa Cidadã), com estabilidade provisória garantida desde a confirmação da gravidez até cinco meses após o parto.</li>
-                        <li><strong>Lei da Igualdade Salarial (Lei nº 14.611/2023):</strong> Garante o direito a salário idêntico para funções idênticas. Empresas que violam essa regra estão sujeitas a multas elevadas, correspondentes a dez vezes o novo salário devido à empregada discriminada.</li>
-                        <li><strong>Intervalos para Amamentação:</strong> A mulher tem direito a dois descansos diários de meia hora cada para amamentar o próprio filho até que este complete seis meses de idade.</li>
+                        <li><strong>Código de Conduta Ética:</strong> A empresa deve redigir, divulgar e revisar anualmente um manual de comportamento profissional que proíba explicitamente todas as formas de assédio.</li>
+                        <li><strong>Canal de Ouvidoria Integrado:</strong> Adoção de ferramentas seguras e confidenciais para recebimento e acompanhamento de relatos, preservando o anonimato das denunciantes.</li>
+                        <li><strong>Capacitação Periódica:</strong> Treinamentos regulares em todos os níveis hierárquicos para o reconhecimento e prevenção de condutas abusivas.</li>
                     </ul>
+                    <p><strong>Assédio Moral vs. Assédio Sexual:</strong></p>
+                    <p>O <em>Assédio Moral</em> caracteriza-se pela repetição sistemática de agressões verbais, isolamento forçado ou exigência de metas inalcançáveis, minando a saúde mental da colaboradora. Já o <em>Assédio Sexual</em> consiste em constrangimento com fins de obter favorecimento sexual, prevalecendo-se o agente de sua condição de superior hierárquico ou influência.</p>
                     
-                    <!-- QUIZ -->
+                    <!-- QUIZ WORKSHOP -->
                     <div style="background: #FFF5F8; border: 1.5px solid #FBCFE8; border-radius: 12px; padding: 20px; margin-top: 25px;">
                         <h4 style="color: #BE185D; font-weight: 800; margin-top: 0; margin-bottom: 12px; font-size: 15px; display: flex; align-items: center; gap: 8px;">
-                            <i class="fa-solid fa-circle-question"></i> Quiz de Fixação
+                            <i class="fa-solid fa-circle-question"></i> Quiz do Workshop Prático
                         </h4>
                         <p style="font-weight: 700; margin-bottom: 15px; font-size: 13.5px; color: #1a1a2e;">
-                            Qual a penalidade prevista na nova Lei de Igualdade Salarial (Lei 14.611/2023) para empresas que pagam salários desiguais para a mesma função por motivo de gênero?
+                            De acordo com a Lei 14.457/2022, qual das seguintes condutas NÃO representa uma exigência legal para a CIPA+A e os canais de conformidade?
                         </p>
                         <div style="display: flex; flex-direction: column; gap: 10px; font-size: 13px;">
                             <label style="display: grid; grid-template-columns: 20px 1fr; align-items: start; gap: 10px; cursor: pointer; background: white; padding: 12px 16px; border-radius: 8px; border: 1px solid #E5E7EB; transition: all 0.2s;">
                                 <input type="radio" name="quiz1" value="A" style="margin-top: 3px; cursor: pointer;">
-                                <span style="font-size: 13.5px; line-height: 1.4; color: var(--text-dark);">A) Nenhuma penalidade, apenas uma advertência por escrito.</span>
+                                <span style="font-size: 13.5px; line-height: 1.4; color: var(--text-dark);">A) Criação e ampla divulgação de regras de conduta contra o assédio moral e sexual.</span>
                             </label>
                             <label style="display: grid; grid-template-columns: 20px 1fr; align-items: start; gap: 10px; cursor: pointer; background: white; padding: 12px 16px; border-radius: 8px; border: 1px solid #E5E7EB; transition: all 0.2s;">
                                 <input type="radio" name="quiz1" value="B" style="margin-top: 3px; cursor: pointer;">
-                                <span style="font-size: 13.5px; line-height: 1.4; color: var(--text-dark);">B) Multa administrativa de até dez vezes o valor do novo salário devido à empregada discriminada (duplicada em caso de reincidência), além de indenização por danos morais.</span>
+                                <span style="font-size: 13.5px; line-height: 1.4; color: var(--text-dark);">B) Estabelecimento de procedimentos para recebimento e apuração de denúncias.</span>
                             </label>
                             <label style="display: grid; grid-template-columns: 20px 1fr; align-items: start; gap: 10px; cursor: pointer; background: white; padding: 12px 16px; border-radius: 8px; border: 1px solid #E5E7EB; transition: all 0.2s;">
                                 <input type="radio" name="quiz1" value="C" style="margin-top: 3px; cursor: pointer;">
-                                <span style="font-size: 13.5px; line-height: 1.4; color: var(--text-dark);">C) Perda imediata do alvará de funcionamento da empresa parceira.</span>
+                                <span style="font-size: 13.5px; line-height: 1.4; color: var(--text-dark);">C) Demissão imediata por justa causa de qualquer colaborador acusado por boatos, sem apuração confidencial prévia.</span>
+                            </label>
+                            <label style="display: grid; grid-template-columns: 20px 1fr; align-items: start; gap: 10px; cursor: pointer; background: white; padding: 12px 16px; border-radius: 8px; border: 1px solid #E5E7EB; transition: all 0.2s;">
+                                <input type="radio" name="quiz1" value="D" style="margin-top: 3px; cursor: pointer;">
+                                <span style="font-size: 13.5px; line-height: 1.4; color: var(--text-dark);">D) Realização de, no mínimo, uma ação anual de capacitação, orientação e sensibilização dos colaboradores.</span>
                             </label>
                         </div>
-                        <button class="sh-btn" style="margin: 15px 0 0; width: 100%; padding: 10px; font-size: 13px; color: white;" onclick="validarResposta(1, 'B')">
-                            Validar Resposta
+                        <button class="sh-btn" style="margin: 15px 0 0; width: 100%; padding: 10px; font-size: 13px; color: white;" onclick="validarResposta(1, 'C')">
+                            Validar Resposta do Workshop
                         </button>
                         <div id="quiz-feedback-1" style="margin-top: 12px; font-size: 13px; font-weight: 700; display: none;"></div>
                     </div>
                 `;
             } else if (cursoId === 2) {
-                tituloEl.innerHTML = '<i class="fa-solid fa-heart"></i> Workshop: Identificando Assédio Moral';
+                tituloEl.innerHTML = '<i class="fa-solid fa-users-viewfinder"></i> Liderança Inclusiva';
                 corpoEl.innerHTML = `
-                    <p><strong>Workshop: Identificando Assédio Moral e Gaslighting no Ambiente Profissional</strong></p>
-                    <p>O assédio moral configura-se pela exposição repetitiva e prolongada de colaboradoras a situações humilhantes e constrangedoras no exercício de suas funções, desestabilizando sua integridade psíquica.</p>
-                    <p><strong>Reconhecendo o Gaslighting:</strong></p>
-                    <p>O <em>Gaslighting</em> é uma forma sutil de violência psicológica onde o abusador distorce informações para fazer a vítima duvidar de sua própria memória, percepção ou sanidade. No trabalho, manifesta-se através de frases como "você está sendo sensível demais", "eu nunca disse isso" ou críticas constantes que fazem a profissional sentir-se incompetente de forma infundada.</p>
-                    <p><strong>Como Agir e Produzir Provas:</strong></p>
-                    <ul style="padding-left: 20px; margin-bottom: 10px;">
-                        <li><strong>Registro Cronológico:</strong> Anote datas, horários, locais, frases exatas ditas e testemunhas presenciais dos abusos.</li>
-                        <li><strong>Guarde Provas Escritas:</strong> Salve e-mails, prints de mensagens no Teams, Slack ou WhatsApp e mantenha backups seguros fora dos computadores da empresa.</li>
-                        <li><strong>Procure Ouvidoria e CIPA+A:</strong> Registre um relato formal detalhado utilizando os canais internos da organização ou via plataforma SafeHer.</li>
-                    </ul>
+                    <p><strong>Fomentando a Igualdade e Liderança Feminina nas Empresas</strong></p>
+                    <p>A liderança inclusiva é um pilar estratégico que visa remover os obstáculos históricos enfrentados por minorias e mulheres no crescimento corporativo. A diversidade em cargos de tomada de decisão não é apenas uma diretriz ética, mas também um gerador comprovado de inovação e resultados financeiros.</p>
+                    <p><strong>Vieses Inconscientes:</strong></p>
+                    <p>Vieses cognitivos de gênero muitas vezes operam de forma silenciosa durante o recrutamento, na delegação de atribuições críticas e na avaliação de desempenho anual. Identificar e mitigar o <em>Viés da Maternidade</em> (presumir que mãe profissional é menos comprometida) e o <em>Viés da Performance</em> (exigir mais provas de competência de mulheres do que de homens) é o primeiro passo para processos justos.</p>
+                    <p><strong>Equidade Salarial (Lei nº 14.611/2023):</strong></p>
+                    <p>A CLT estabelece de forma peremptória: trabalho de igual valor, prestado ao mesmo empregador na mesma localidade, deve receber salário idêntico, sem distinção de sexo, etnia ou idade. A fiscalização governamental exige relatórios periódicos de transparência salarial, e as disparidades injustificadas sujeitam a corporação a severas multas e danos à reputação de marca.</p>
                     
-                    <!-- QUIZ -->
+                    <!-- QUIZ WORKSHOP -->
                     <div style="background: #FFFDF5; border: 1.5px solid #FDE68A; border-radius: 12px; padding: 20px; margin-top: 25px;">
                         <h4 style="color: #D97706; font-weight: 800; margin-top: 0; margin-bottom: 12px; font-size: 15px; display: flex; align-items: center; gap: 8px;">
-                            <i class="fa-solid fa-circle-question"></i> Quiz de Fixação
+                            <i class="fa-solid fa-circle-question"></i> Quiz do Workshop Prático
                         </h4>
                         <p style="font-weight: 700; margin-bottom: 15px; font-size: 13.5px; color: #1a1a2e;">
-                            Qual das seguintes condutas caracteriza tipicamente o Gaslighting corporativo?
+                            Qual alternativa descreve corretamente o "Viés da Maternidade" nas avaliações corporativas e como mitigá-lo?
                         </p>
                         <div style="display: flex; flex-direction: column; gap: 10px; font-size: 13px;">
                             <label style="display: grid; grid-template-columns: 20px 1fr; align-items: start; gap: 10px; cursor: pointer; background: white; padding: 12px 16px; border-radius: 8px; border: 1px solid #E5E7EB; transition: all 0.2s;">
                                 <input type="radio" name="quiz2" value="A" style="margin-top: 3px; cursor: pointer;">
-                                <span style="font-size: 13.5px; line-height: 1.4; color: var(--text-dark);">A) Dar feedback construtivo e estruturado em cima de metas e indicadores claros.</span>
+                                <span style="font-size: 13.5px; line-height: 1.4; color: var(--text-dark);">A) Presumir de forma automática e injustificada que mães profissionais são menos comprometidas, produtivas ou ambiciosas, mitigando-o por meio de avaliações 100% estruturadas in dados objetivos.</span>
                             </label>
                             <label style="display: grid; grid-template-columns: 20px 1fr; align-items: start; gap: 10px; cursor: pointer; background: white; padding: 12px 16px; border-radius: 8px; border: 1px solid #E5E7EB; transition: all 0.2s;">
                                 <input type="radio" name="quiz2" value="B" style="margin-top: 3px; cursor: pointer;">
-                                <span style="font-size: 13.5px; line-height: 1.4; color: var(--text-dark);">B) Negar sistematicamente ordens dadas anteriormente, fazendo a colaboradora duvidar de si mesma e atribuindo falsamente erros ao comportamento "emocional" dela.</span>
+                                <span style="font-size: 13.5px; line-height: 1.4; color: var(--text-dark);">B) A crença de que as mulheres não desejam cargos executivos por preferirem cuidar das finanças domésticas.</span>
                             </label>
                             <label style="display: grid; grid-template-columns: 20px 1fr; align-items: start; gap: 10px; cursor: pointer; background: white; padding: 12px 16px; border-radius: 8px; border: 1px solid #E5E7EB; transition: all 0.2s;">
                                 <input type="radio" name="quiz2" value="C" style="margin-top: 3px; cursor: pointer;">
-                                <span style="font-size: 13.5px; line-height: 1.4; color: var(--text-dark);">C) Oferecer treinamento de inteligência emocional com mentores especializados.</span>
+                                <span style="font-size: 13.5px; line-height: 1.4; color: var(--text-dark);">C) Conceder promoções automáticas baseando-se unicamente no número de filhos dos colaboradores.</span>
+                            </label>
+                            <label style="display: grid; grid-template-columns: 20px 1fr; align-items: start; gap: 10px; cursor: pointer; background: white; padding: 12px 16px; border-radius: 8px; border: 1px solid #E5E7EB; transition: all 0.2s;">
+                                <input type="radio" name="quiz2" value="D" style="margin-top: 3px; cursor: pointer;">
+                                <span style="font-size: 13.5px; line-height: 1.4; color: var(--text-dark);">D) Reduzir o salário de funcionárias grávidas preventivamente devido a afastamento futuro por licença-maternidade.</span>
                             </label>
                         </div>
-                        <button class="sh-btn" style="margin: 15px 0 0; width: 100%; padding: 10px; font-size: 13px; color: white; background: #ff9800; border-color: #ff9800;" onclick="validarResposta(2, 'B')">
-                            Validar Resposta
+                        <button class="sh-btn" style="margin: 15px 0 0; width: 100%; padding: 10px; font-size: 13px; color: white; background: #ff9800; border-color: #ff9800;" onclick="validarResposta(2, 'A')">
+                            Validar Resposta do Workshop
                         </button>
                         <div id="quiz-feedback-2" style="margin-top: 12px; font-size: 13px; font-weight: 700; display: none;"></div>
                     </div>
                 `;
             } else if (cursoId === 3) {
-                tituloEl.innerHTML = '<i class="fa-solid fa-shield-heart"></i> Workshop: Ouvidoria e CIPA+A';
+                tituloEl.innerHTML = '<i class="fa-solid fa-handshake-angle"></i> Ouvidoria Ética e Integridade';
                 corpoEl.innerHTML = `
-                    <p><strong>Workshop: O papel da CIPA+A e o Funcionamento dos Canais de Ouvidoria</strong></p>
-                    <p>Com a promulgação da Lei nº 14.457/2022, as empresas brasileiras tornaram-se obrigadas a adotar regras de conduta contra assédio moral e sexual, além de disponibilizar canais éticos para denúncia e resolução de desvios.</p>
-                    <p><strong>O que você deve exigir dos canais corporativos:</strong></p>
+                    <p><strong>Princípios de Integridade na Ouvidoria Corporativa</strong></p>
+                    <p>Um canal de denúncia só é efetivo se for percebido como totalmente ético, confiável e neutro por todos os colaboradores da organização.</p>
+                    <p><strong>Pilares de uma Ouvidoria Saudável:</strong></p>
                     <ul style="padding-left: 20px; margin-bottom: 10px;">
-                        <li><strong>Proteção total ao Anonimato:</strong> Ninguém na empresa deve ser exposta por usar os canais de relato de assédio ou preconceito.</li>
-                        <li><strong>Prazo de Resolução:</strong> Toda denúncia legítima deve ser respondida e apurada em prazos razoáveis pré-estabelecidos.</li>
-                        <li><strong>Medidas de Proteção:</strong> O agressor deve ser isolado administrativamente da vítima (como alteração de setores ou home office) enquanto o processo disciplinar tramitar.</li>
+                        <li><strong>Garantia de Anonimato:</strong> A denunciante não deve sofrer nenhum risco de identificação, permitindo o reporte honesto sem receio de represálias profissionais.</li>
+                        <li><strong>Ausência de Conflito de Interesses:</strong> A equipe que apura os fatos deve ter autonomia total e não responder a gestores potencialmente implicados nas denúncias.</li>
+                        <li><strong>Tratamento e Retorno Imparciais:</strong> Todo relato válido deve gerar um plano formal de averiguação com registro cronológico e resposta conclusiva sobre as decisões e sanções disciplinares adotadas.</li>
                     </ul>
+                    <p>A ouvidoria representa a primeira linha de integridade corporativa, prevenindo que desvios éticos escalem para litígios jurídicos e insatisfações gerais.</p>
                     
-                    <!-- QUIZ -->
+                    <!-- QUIZ WORKSHOP -->
                     <div style="background: #F0FDF4; border: 1.5px solid #BBF7D0; border-radius: 12px; padding: 20px; margin-top: 25px;">
                         <h4 style="color: #16A34A; font-weight: 800; margin-top: 0; margin-bottom: 12px; font-size: 15px; display: flex; align-items: center; gap: 8px;">
-                            <i class="fa-solid fa-circle-question"></i> Quiz de Fixação
+                            <i class="fa-solid fa-circle-question"></i> Quiz do Workshop Prático
                         </h4>
                         <p style="font-weight: 700; margin-bottom: 15px; font-size: 13.5px; color: #1a1a2e;">
-                            Qual a principal responsabilidade agregada à CIPA com a entrada em vigor da Lei 14.457/2022?
+                            Para assegurar a máxima confiabilidade no canal de ouvidoria de uma empresa, qual das opções é recomendada como melhor prática de governança?
                         </p>
                         <div style="display: flex; flex-direction: column; gap: 10px; font-size: 13px;">
                             <label style="display: grid; grid-template-columns: 20px 1fr; align-items: start; gap: 10px; cursor: pointer; background: white; padding: 12px 16px; border-radius: 8px; border: 1px solid #E5E7EB; transition: all 0.2s;">
                                 <input type="radio" name="quiz3" value="A" style="margin-top: 3px; cursor: pointer;">
-                                <span style="font-size: 13.5px; line-height: 1.4; color: var(--text-dark);">A) Organizar apenas torneios internos de futebol para incentivo ao esporte.</span>
+                                <span style="font-size: 13.5px; line-height: 1.4; color: var(--text-dark);">A) Forçar que todos os reportes sejam assinados publicamente no Slack para demover denúncias.</span>
                             </label>
                             <label style="display: grid; grid-template-columns: 20px 1fr; align-items: start; gap: 10px; cursor: pointer; background: white; padding: 12px 16px; border-radius: 8px; border: 1px solid #E5E7EB; transition: all 0.2s;">
                                 <input type="radio" name="quiz3" value="B" style="margin-top: 3px; cursor: pointer;">
-                                <span style="font-size: 13.5px; line-height: 1.4; color: var(--text-dark);">B) Integrar ações contínuas de prevenção e combate ao assédio sexual, assédio moral e outras formas de violência de gênero no trabalho.</span>
+                                <span style="font-size: 13.5px; line-height: 1.4; color: var(--text-dark);">B) Garantir a confidencialidade absoluta ou anonimato integral das denunciantes, aliada a uma comissão investigadora imparcial e sem conflitos de interesse.</span>
                             </label>
                             <label style="display: grid; grid-template-columns: 20px 1fr; align-items: start; gap: 10px; cursor: pointer; background: white; padding: 12px 16px; border-radius: 8px; border: 1px solid #E5E7EB; transition: all 0.2s;">
                                 <input type="radio" name="quiz3" value="C" style="margin-top: 3px; cursor: pointer;">
-                                <span style="font-size: 13.5px; line-height: 1.4; color: var(--text-dark);">C) Isentar gerentes seniores de penalidades caso sejam denunciados por assédio.</span>
+                                <span style="font-size: 13.5px; line-height: 1.4; color: var(--text-dark);">C) Delegar a comissão de investigações ao chefe direto da colaboradora denunciante.</span>
+                            </label>
+                            <label style="display: grid; grid-template-columns: 20px 1fr; align-items: start; gap: 10px; cursor: pointer; background: white; padding: 12px 16px; border-radius: 8px; border: 1px solid #E5E7EB; transition: all 0.2s;">
+                                <input type="radio" name="quiz3" value="D" style="margin-top: 3px; cursor: pointer;">
+                                <span style="font-size: 13.5px; line-height: 1.4; color: var(--text-dark);">D) Excluir denúncias anônimas de assédio sexual sem apurá-las.</span>
                             </label>
                         </div>
                         <button class="sh-btn" style="margin: 15px 0 0; width: 100%; padding: 10px; font-size: 13px; color: white; background: #2196f3; border-color: #2196f3;" onclick="validarResposta(3, 'B')">
-                            Validar Resposta
+                            Validar Resposta do Workshop
                         </button>
                         <div id="quiz-feedback-3" style="margin-top: 12px; font-size: 13px; font-weight: 700; display: none;"></div>
                     </div>
@@ -571,33 +667,19 @@
         }
 
         function gerarCertificado(cursoId) {
-            if (!usuario || getTipoSessao() !== 'mulher') {
-                showToast('Você precisa estar logada como candidata mulher para gerar seu certificado com seu nome!', 'error');
-                return;
-            }
             showToast('Consolidando dados e emitindo o seu certificado...', 'info');
 
             const cursoNomes = {
-                1: "Workshop: Seus Direitos na CLT e Igualdade Salarial",
-                2: "Workshop: Identificando Assédio Moral e Gaslighting no Trabalho",
-                3: "Workshop: Ouvidoria, Governança Ética e a CIPA+A"
+                1: "Prevenção ao Assédio Moral e Sexual no Trabalho (Lei 14.457/2022)",
+                2: "Liderança Inclusiva e Igualdade de Gênero nas Organizações",
+                3: "Ouvidoria Ética, Canal de Denúncias e Integridade Corporativa"
             };
 
             const cursoNome = cursoNomes[cursoId];
-            const candidataNome = usuario ? usuario.nome : "Candidata";
-            const email = usuario ? (usuario.email || "Não cadastrado") : "Não cadastrado";
+            const empresaNome = usuario ? usuario.nome : "Empresa Parceira";
+            const cnpj = usuario ? (usuario.cnpj || "Não cadastrado") : "Não cadastrado";
 
-            // Container para evitar poluição de layout no PDF, coberto por um loader
-            const parentWrapper = document.createElement('div');
-            parentWrapper.style.position = 'fixed';
-            parentWrapper.style.left = '0';
-            parentWrapper.style.top = '0';
-            parentWrapper.style.width = '297mm';
-            parentWrapper.style.height = '210mm';
-            parentWrapper.style.overflow = 'hidden';
-            parentWrapper.style.zIndex = '99999';
-
-            // Elemento temporário para o Certificado (alinhamento corrigido)
+            // Elemento temporário para o Certificado
             const certElement = document.createElement('div');
             certElement.style.width = '297mm';
             certElement.style.height = '210mm';
@@ -634,14 +716,14 @@
                         
                         <!-- Conteúdo Principal -->
                         <div style="max-width: 800px; z-index: 10; margin: 0 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; flex-grow: 1; padding: 10px 0;">
-                            <h1 style="font-size: 30px; color: #1e1b4b; font-weight: 800; letter-spacing: 1px; margin: 0 0 10px 0; text-transform: uppercase; text-align: center; width: 100%;">Certificado de Capacitação</h1>
-                            <p style="font-size: 11px; color: #4b5563; text-transform: uppercase; letter-spacing: 2px; margin: 0 0 15px 0; font-weight: 500; text-align: center;">Este documento certifica a capacitação individual de:</p>
+                            <h1 style="font-size: 30px; color: #1e1b4b; font-weight: 800; letter-spacing: 1px; margin: 0 0 10px 0; text-transform: uppercase; text-align: center; width: 100%;">Certificado de Capacitação Corporativa</h1>
+                            <p style="font-size: 11px; color: #4b5563; text-transform: uppercase; letter-spacing: 2px; margin: 0 0 15px 0; font-weight: 500; text-align: center;">Este documento certifica a capacitação corporativa de:</p>
                             
-                            <h2 style="font-size: 26px; color: #E33A7F; font-weight: 800; margin: 0 auto 6px auto; border-bottom: 2px solid rgba(227, 58, 127, 0.2); display: inline-block; padding-bottom: 6px; min-width: 320px; text-align: center;">${candidataNome}</h2>
-                            <p style="font-size: 10.5px; color: #6b7280; margin: 0 0 20px 0; font-family: monospace; text-align: center;">E-mail: ${email}</p>
+                            <h2 style="font-size: 26px; color: #E33A7F; font-weight: 800; margin: 0 auto 6px auto; border-bottom: 2px solid rgba(227, 58, 127, 0.2); display: inline-block; padding-bottom: 6px; min-width: 320px; text-align: center;">${empresaNome}</h2>
+                            <p style="font-size: 10.5px; color: #6b7280; margin: 0 0 20px 0; font-family: monospace; text-align: center;">CNPJ: ${cnpj}</p>
                             
                             <p style="font-size: 13.5px; color: #374151; line-height: 1.6; margin: 0 auto; text-align: center; font-weight: 500; max-width: 750px;">
-                                Concluiu com aproveitamento o workshop interativo sobre <strong style="color: #BE185D;">${cursoNome}</strong>, demonstrando domínio nos temas de direitos trabalhistas, combate ativo à discriminação de gênero e boas práticas de integridade no ambiente de trabalho.
+                                Concluiu com aproveitamento a trilha teórica e prática de capacitação preventiva em <strong style="color: #BE185D;">${cursoNome}</strong>, promovendo a conscientização ética, prevenção ao assédio e fomento à igualdade no mercado de trabalho.
                             </p>
                         </div>
                         
@@ -653,7 +735,7 @@
                                     <td style="width: 33%; text-align: center; border: none; padding: 0; vertical-align: bottom;">
                                         <div style="display: inline-block; text-align: center; margin: 0 auto; width: 100%;">
                                             <div style="font-family: 'Georgia', serif; font-style: italic; font-size: 18px; color: #E33A7F; margin-bottom: 5px; height: 28px; line-height: 28px;">SafeHer Brasil</div>
-                                            <div style="border-bottom: 1.5px solid #d1d5db; width: 180px; margin: 0 auto 6px auto; border-radius: 0;"></div>
+                                            <div style="border-bottom: 1.5px solid #d1d5db; width: 180px; margin: 0 auto 6px auto;"></div>
                                             <strong style="color: #1e1b4b; font-size: 10.5px; display: block; font-weight: 700; text-align: center;">Comissão de Auditoria Ética</strong>
                                             <span style="color: #6b7280; font-size: 8.5px; display: block; text-align: center;">SafeHer Certificação</span>
                                         </div>
@@ -674,9 +756,9 @@
                                     <td style="width: 33%; text-align: center; border: none; padding: 0; vertical-align: bottom;">
                                         <div style="display: inline-block; text-align: center; margin: 0 auto; width: 100%;">
                                             <p style="color: #374151; font-size: 10.5px; margin: 0 0 10px 0; text-align: center;">Emitido em: <strong>${new Date().toLocaleDateString('pt-BR')}</strong></p>
-                                            <div style="border-bottom: 1.5px solid #d1d5db; width: 180px; margin: 0 auto 6px auto; border-radius: 0;"></div>
+                                            <div style="border-bottom: 1.5px solid #d1d5db; width: 180px; margin: 0 auto 6px auto;"></div>
                                             <strong style="color: #E33A7F; font-size: 9.5px; display: block; letter-spacing: 0.5px; font-weight: 700; text-align: center;">AUTENTICAÇÃO DIGITAL</strong>
-                                            <span style="color: #6b7280; font-size: 8.5px; display: block; font-family: monospace; text-align: center;">Hash: SH_CERT_USR_${Math.random().toString(36).substring(2, 10).toUpperCase()}</span>
+                                            <span style="color: #6b7280; font-size: 8.5px; display: block; font-family: monospace; text-align: center;">Hash: SH_CERT_EMP_${Math.random().toString(36).substring(2, 10).toUpperCase()}</span>
                                         </div>
                                     </td>
                                 </tr>
@@ -687,8 +769,7 @@
                 </div>
             `;
 
-            parentWrapper.appendChild(certElement);
-            document.body.appendChild(parentWrapper);
+            document.body.appendChild(certElement);
 
             // Loader overlay
             const loader = document.createElement('div');
@@ -697,7 +778,7 @@
             loader.style.top = '0';
             loader.style.width = '100%';
             loader.style.height = '100%';
-            loader.style.backgroundColor = 'rgba(255, 255, 255, 0.98)';
+            loader.style.backgroundColor = 'rgba(255, 255, 255, 1.0)';
             loader.style.zIndex = '100000';
             loader.style.display = 'flex';
             loader.style.flexDirection = 'column';
@@ -709,24 +790,34 @@
             `;
             document.body.appendChild(loader);
 
-            const opt = {
-                margin: 0,
-                filename: `SafeHer_Certificado_${cursoId}_${candidataNome.replace(/\s+/g, '_')}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true, logging: false, scrollY: 0, scrollX: 0 },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' },
-                pagebreak: { mode: ['avoid-all'] }
-            };
+            // Guardar posições de rolagem
+            const scrollX = window.scrollX || window.pageXOffset;
+            const scrollY = window.scrollY || window.pageYOffset;
+            window.scrollTo(0, 0);
 
-            html2pdf().set(opt).from(certElement).save().then(() => {
-                showToast('Certificado em PDF baixado com sucesso!', 'success');
-                parentWrapper.remove();
-                loader.remove();
-            }).catch(err => {
-                showToast('Erro ao gerar certificado: ' + err.message, 'error');
-                parentWrapper.remove();
-                loader.remove();
-            });
+            // Executar com pequeno timeout para garantir reflow da página
+            setTimeout(() => {
+                const opt = {
+                    margin: 0,
+                    filename: `SafeHer_Certificado_${cursoId}_${empresaNome.replace(/\s+/g, '_')}.pdf`,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2, useCORS: true, logging: false },
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' },
+                    pagebreak: { mode: ['avoid-all'] }
+                };
+
+                html2pdf().set(opt).from(certElement).save().then(() => {
+                    showToast('Certificado em PDF baixado com sucesso!', 'success');
+                    certElement.remove();
+                    loader.remove();
+                    window.scrollTo(scrollX, scrollY);
+                }).catch(err => {
+                    showToast('Erro ao gerar certificado: ' + err.message, 'error');
+                    certElement.remove();
+                    loader.remove();
+                    window.scrollTo(scrollX, scrollY);
+                });
+            }, 250);
         }
 
         function enviarSugestao() {

@@ -1,9 +1,11 @@
 package app;
 
 import service.AvaliacaoService;
+import service.CandidaturaService;
 import service.DenunciaService;
 import service.EmpresaService;
 import service.UsuarioService;
+import service.VagaService;
 
 import static spark.Spark.*;
 
@@ -13,6 +15,8 @@ public class Aplicacao {
     private static EmpresaService empresaService = new EmpresaService();
     private static AvaliacaoService avaliacaoService = new AvaliacaoService();
     private static DenunciaService denunciaService = new DenunciaService();
+    private static VagaService vagaService = new VagaService();
+    private static CandidaturaService candidaturaService = new CandidaturaService();
 
     public static void main(String[] args) {
         port(8080);
@@ -56,6 +60,7 @@ public class Aplicacao {
         get("/empresas/:id", (req, res) -> empresaService.get(req, res));
         get("/empresas", (req, res) -> empresaService.listar(req, res));
         get("/empresa/score", (req, res) -> empresaService.obterScorePublico(req, res));
+        post("/api/assinatura", (req, res) -> empresaService.atualizarAssinatura(req, res));
 
         post("/avaliacoes", (req, res) -> avaliacaoService.insert(req, res));
         put("/avaliacoes/:id", (req, res) -> avaliacaoService.update(req, res));
@@ -63,6 +68,17 @@ public class Aplicacao {
         get("/avaliacoes/:id", (req, res) -> avaliacaoService.get(req, res));
         get("/avaliacoes", (req, res) -> avaliacaoService.listar(req, res));
         get("/avaliacoes/empresa/:empresaId", (req, res) -> avaliacaoService.listarPorEmpresa(req, res));
+        post("/avaliacoes/:id/resposta", (req, res) -> avaliacaoService.salvarResposta(req, res));
+        delete("/avaliacoes/:id/resposta", (req, res) -> avaliacaoService.excluirResposta(req, res));
+
+        post("/vagas", (req, res) -> vagaService.insert(req, res));
+        get("/vagas", (req, res) -> vagaService.listar(req, res));
+        get("/vagas/:id", (req, res) -> vagaService.get(req, res));
+        get("/vagas/empresa/:empresaId", (req, res) -> vagaService.listarPorEmpresa(req, res));
+        delete("/vagas/:id", (req, res) -> vagaService.remove(req, res));
+
+        post("/candidaturas", (req, res) -> candidaturaService.insert(req, res));
+        get("/candidaturas/vaga/:vagaId", (req, res) -> candidaturaService.listarPorVaga(req, res));
 
         post("/denuncias", (req, res) -> denunciaService.insert(req, res));
         put("/denuncias/:id", (req, res) -> denunciaService.update(req, res));

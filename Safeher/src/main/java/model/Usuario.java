@@ -9,8 +9,17 @@ public class Usuario {
     private String email;
     private String senha;
     private LocalDate data;
+    private String foto;
 
     public Usuario() {
+    }
+
+    public String getFoto() {
+        return foto;
+    }
+
+    public void setFoto(String foto) {
+        this.foto = foto;
     }
 
     public int getId() {

@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeHer - Dashboard Analítico</title>
+    <link rel="stylesheet" href="global.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        .page-header {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .metric-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 30px 24px;
+            text-align: center;
+            border: 1px solid var(--border-light);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            transition: var(--transition);
+        }
+
+        .metric-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(227, 58, 127, 0.08);
+            border-color: var(--pink-light);
+        }
+
+        .metric-value {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--pink-primary);
+            margin-bottom: 8px;
+        }
+
+        .metric-label {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .charts-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .chart-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 36px;
+            border: 1px solid var(--border-light);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        }
+
+        .chart-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chart-title i {
+            color: var(--pink-primary);
+        }
+
+        /* Glassmorphism Upsell Wall */
+        .upsell-container {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 80px 40px;
+            text-align: center;
+            border: 1px solid var(--border-light);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 450px;
+        }
+
+        .upsell-bg-blobs {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        .upsell-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(50px);
+        }
+
+        .upsell-blob-1 {
+            width: 300px;
+            height: 300px;
+            background: var(--pink-primary);
+            top: -50px;
+            left: -50px;
+        }
+
+        .upsell-blob-2 {
+            width: 250px;
+            height: 250px;
+            background: #ffb800;
+            bottom: -50px;
+            right: -50px;
+        }
+
+        .upsell-content {
+            position: relative;
+            z-index: 2;
+            max-width: 550px;
+        }
+
+        .upsell-icon {
+            font-size: 64px;
+            color: var(--pink-primary);
+            margin-bottom: 24px;
+            animation: pulse 2.5s infinite;
+        }
+
+        .upsell-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 16px;
+        }
+
+        .upsell-desc {
+            font-size: 15px;
+            color: var(--text-gray);
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+
+        .bar-chart-container {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            height: 200px;
+            padding-top: 20px;
+            border-bottom: 2px solid var(--border-light);
+            margin-bottom: 20px;
+        }
+
+        .bar-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            max-width: 60px;
+            height: calc(100% - 30px);
+            justify-content: flex-end;
+            position: relative;
+        }
+
+        .bar-fill {
+            width: 100%;
+            border-radius: 6px 6px 0 0;
+            background: linear-gradient(180deg, var(--pink-primary) 0%, var(--pink-light) 100%);
+            transition: height 1s cubic-bezier(0.4, 0, 0.2, 1);
+            height: 0;
+            position: relative;
+        }
+
+        .bar-fill::after {
+            content: attr(data-val);
+            position: absolute;
+            top: -24px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--pink-dark);
+        }
+
+        .bar-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-gray);
+            position: absolute;
+            bottom: -30px;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 992px) {
+            .dashboard-grid { grid-template-columns: repeat(2, 1fr); }
+            .charts-row { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 576px) {
+            .dashboard-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-wrapper">
+        <div class="container">
+            <!-- Header -->
+            <header class="sh-header">
+                <a href="inicio-empresa.html" class="sh-logo">
+                    <img src="resources/images/logo-escudo.png" alt="SafeHer Logo" class="sh-logo-img">
+                </a>
+                <div class="sh-nav">
+                    <!-- Gerado dinamicamente pelo usuario-session.js -->
+                </div>
+            </header>
+
+            <main style="padding-bottom: 60px;">
+                <div class="page-header">
+                    <h2 class="sh-title">Dashboard Analítico</h2>
+                    <p class="sh-subtitle">Estatísticas, tendências internas de conformidade e relatórios corporativos.</p>
+                </div>
+
+                <!-- Painel Bloqueado (Free) -->
+                <div class="upsell-container" id="upsellWall" style="display: none;">
+                    <div class="upsell-bg-blobs">
+                        <div class="upsell-blob upsell-blob-1"></div>
+                        <div class="upsell-blob upsell-blob-2"></div>
+                    </div>
+                    <div class="upsell-content">
+                        <i class="fa-solid fa-chart-line upsell-icon"></i>
+                        <h3 class="upsell-title">Desbloqueie o Clima Organizacional</h3>
+                        <p class="upsell-desc">Empresas no plano **Plus** ou **Premium** têm acesso a análises estatísticas de incidentes, tendências corporativas de equidade, média detalhada de respeito e relatórios consolidados em PDF prontos para download.</p>
+                        <a href="planos.html" class="sh-btn" style="padding: 14px 36px; font-size: 16px;"><i class="fa-solid fa-gem" style="margin-right: 8px;"></i> Conhecer Planos SafeHer</a>
+                    </div>
+                </div>
+
+                <!-- Painel Desbloqueado (Plus/Premium) -->
+                <div id="dashboardContent" style="display: none;">
+                    
+                    <!-- Metrics Row -->
+                    <div class="dashboard-grid">
+                        <div class="metric-card">
+                            <div class="metric-value" id="valNota">4.8</div>
+                            <div class="metric-label">Nota Média de Segurança</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="valAvaliacoes">14</div>
+                            <div class="metric-label">Avaliações Totais</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="valDenuncias" style="color: #4CAF50;">0</div>
+                            <div class="metric-label">Denúncias Críticas</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value" id="valApoio">98%</div>
+                            <div class="metric-label">Apoio a Igualdade</div>
+                        </div>
+                    </div>
+
+                    <!-- Charts Row -->
+                    <div class="charts-row">
+                        <!-- Chart Estrelas -->
+                        <div class="chart-card">
+                            <div class="chart-title">
+                                <i class="fa-solid fa-star" style="color: #FFB800;"></i>
+                                <span>Quantidade de Estrelas Recebidas</span>
+                            </div>
+                            <div class="bar-chart-container">
+                                <div class="bar-item">
+                                    <div class="bar-fill" id="barStar1" style="height: 0%;" data-val="0"></div>
+                                    <div class="bar-label">1 ★</div>
+                                </div>
+                                <div class="bar-item">
+                                    <div class="bar-fill" id="barStar2" style="height: 0%;" data-val="0"></div>
+                                    <div class="bar-label">2 ★</div>
+                                </div>
+                                <div class="bar-item">
+                                    <div class="bar-fill" id="barStar3" style="height: 0%;" data-val="0"></div>
+                                    <div class="bar-label">3 ★</div>
+                                </div>
+                                <div class="bar-item">
+                                    <div class="bar-fill" id="barStar4" style="height: 0%;" data-val="0"></div>
+                                    <div class="bar-label">4 ★</div>
+                                </div>
+                                <div class="bar-item">
+                                    <div class="bar-fill" id="barStar5" style="height: 0%;" data-val="0"></div>
+                                    <div class="bar-label">5 ★</div>
+                                </div>
+                            </div>
+                            <p id="feedbackGrafico" style="font-size: 13px; color: var(--text-gray); line-height: 1.5; text-align: center; margin-top: 35px;">
+                                <i class="fa-solid fa-circle-check" style="color:#4CAF50; margin-right: 6px;"></i> Distribuição de estrelas recebidas por colaboradoras avaliando sua empresa.
+                            </p>
+                        </div>
+
+                        <!-- Report Box -->
+                        <div class="chart-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+                            <div>
+                                <div class="chart-title">
+                                    <i class="fa-solid fa-file-pdf"></i>
+                                    <span>Relatório Mensal</span>
+                                </div>
+                                <p style="font-size: 14px; color: var(--text-gray); line-height: 1.6; margin-bottom: 20px;">
+                                    Baixe o relatório analítico completo com feedback consolidado das suas colaboradoras em formato de auditoria de conformidade corporativa.
+                                </p>
+                            </div>
+                            <button class="sh-btn" style="width: 100%; padding: 14px; font-size: 14px; color: white;" onclick="baixarRelatorio()">
+                                <i class="fa-solid fa-download" style="margin-right: 8px;"></i> Baixar Relatório (PDF)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Seção de Listagens Reais -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 30px;">
+                        <!-- Coluna 1: Denúncias do Mês -->
+                        <div class="chart-card">
+                            <div class="chart-title">
+                                <i class="fa-solid fa-triangle-exclamation" style="color: #D32F2F;"></i>
+                                <span>Últimas Denúncias do Mês (Maio 2026)</span>
+                            </div>
+                            <div id="listaDenunciasMes" style="display: flex; flex-direction: column; gap: 15px; max-height: 350px; overflow-y: auto; padding-right: 8px;">
+                                <p style="color: var(--text-gray); font-size: 13.5px; text-align: center; padding: 20px;">Nenhuma denúncia crítica registrada este mês.</p>
+                            </div>
+                        </div>
+
+                        <!-- Coluna 2: Avaliações da Semana -->
+                        <div class="chart-card">
+                            <div class="chart-title">
+                                <i class="fa-solid fa-comments"></i>
+                                <span>Últimas Avaliações da Semana</span>
+                            </div>
+                            <div id="listaAvaliacoesSemana" style="display: flex; flex-direction: column; gap: 15px; max-height: 350px; overflow-y: auto; padding-right: 8px;">
+                                <p style="color: var(--text-gray); font-size: 13.5px; text-align: center; padding: 20px;">Nenhuma avaliação nova esta semana.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="sh-footer">
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <a href="inicio-empresa.html">
+                    <img src="resources/images/logo-escudo.png" alt="SafeHer" class="sh-logo-img" style="filter: brightness(0) invert(1);">
+                </a>
+                <p>Conectando mulheres e empresas por um mercado de trabalho mais justo, transparente e seguro.</p>
+            </div>
+            <div class="footer-emergency">
+                <h4>Contatos de Emergência</h4>
+                <p><i class="fa-solid fa-phone"></i> <strong>180</strong> - Central de Atendimento à Mulher</p>
+                <p><i class="fa-solid fa-phone"></i> <strong>190</strong> - Polícia Militar</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 SafeHer. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="api.js"></script>
+    <script src="usuario-session.js"></script>
+    <script>
+        let usuario = null;
+        let denunciasMes = [];
+        let avaliacoesSemana = [];
+        let avaliacoesCache = [];
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            usuario = getSessao();
+            if (!usuario || getTipoSessao() !== 'empresa') {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const plano = usuario.plano || 'Free';
+
+            if (plano === 'Free') {
+                document.getElementById('upsellWall').style.display = 'flex';
+            } else {
+                document.getElementById('dashboardContent').style.display = 'block';
+                
+                // Buscar dados reais da empresa para preencher o Dashboard
+                try {
+                    const id = usuario.id;
+                    const res = await listarAvaliacoesPorEmpresa(id);
+                    const denuncias = await listarDenunciasPorEmpresa(id);
+                    
+                    avaliacoesCache = res || [];
+                    let media = '5.0';
+                    let total = 0;
+
+                    let counts = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+
+                    if (res && res.length > 0) {
+                        total = res.length;
+                        const soma = res.reduce((acc, current) => acc + current.nota, 0);
+                        media = (soma / total).toFixed(1);
+                        
+                        document.getElementById('valNota').textContent = media;
+                        document.getElementById('valAvaliacoes').textContent = total;
+                        
+                        res.forEach(a => {
+                            if (counts[a.nota] !== undefined) {
+                                counts[a.nota]++;
+                            }
+                        });
+
+                        const maxCount = Math.max(1, ...Object.values(counts));
+                        for (let star = 1; star <= 5; star++) {
+                            const bar = document.getElementById(`barStar${star}`);
+                            if (bar) {
+                                const count = counts[star];
+                                bar.setAttribute('data-val', count);
+                                bar.style.height = `${(count / maxCount) * 100}%`;
+                            }
+                        }
+                    } else {
+                        document.getElementById('valNota').textContent = '0.0';
+                        document.getElementById('valAvaliacoes').textContent = '0';
+                        
+                        for (let star = 1; star <= 5; star++) {
+                            const bar = document.getElementById(`barStar${star}`);
+                            if (bar) {
+                                bar.setAttribute('data-val', '0');
+                                bar.style.height = '0%';
+                            }
+                        }
+                    }
+
+                    if (denuncias && denuncias.length > 0) {
+                        const denVal = document.getElementById('valDenuncias');
+                        denVal.textContent = denuncias.length;
+                        denVal.style.color = '#D32F2F';
+                    }
+
+                    // Filtrar denúncias do mês corrente (Maio 2026)
+                    const agora = new Date();
+                    const anoMesAtual = "2026-05"; // Fixado para alinhar com o tempo atual do sistema do usuário
+                    denunciasMes = (denuncias || []).filter(d => d.data && d.data.startsWith(anoMesAtual));
+
+                    // Filtrar últimas avaliações da semana (top 5 mais recentes)
+                    avaliacoesSemana = (res || []).slice(0, 5);
+
+                    // Renderizar UI para Denúncias do Mês
+                    const divDenuncias = document.getElementById('listaDenunciasMes');
+                    if (denunciasMes.length > 0) {
+                        divDenuncias.innerHTML = '';
+                        denunciasMes.forEach(d => {
+                            const dateFormatted = d.data ? new Date(d.data + 'T00:00:00').toLocaleDateString('pt-BR') : '';
+                            divDenuncias.innerHTML += `
+                                <div style="background: #FFF3E0; border-left: 4px solid #FF9800; border-radius: 8px; padding: 12px 16px; font-size: 13px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); text-align: left;">
+                                    <div style="display: flex; justify-content: space-between; font-weight: 700; color: #E65100; margin-bottom: 6px;">
+                                        <span><i class="fa-solid fa-flag"></i> Relato Anônimo</span>
+                                        <span style="font-size: 11.5px; color: var(--text-gray); font-weight: 600;">${dateFormatted}</span>
+                                    </div>
+                                    <p style="color: var(--text-dark); line-height: 1.5; margin: 0; font-style: italic;">"${d.descricao}"</p>
+                                    <div style="margin-top: 8px; font-size: 11.5px; color: var(--text-gray); font-weight: 600;">
+                                        Grau de Risco: <span style="color: #D32F2F;">🔥 ${d.score}/100</span> | Status: <span style="color: #FF9800;">${d.status}</span>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                    } else {
+                        divDenuncias.innerHTML = '<p style="color: var(--text-gray); font-size: 13px; text-align: center; padding: 20px;">Nenhuma denúncia crítica registrada este mês.</p>';
+                    }
+
+                    // Renderizar UI para Avaliações da Semana
+                    const divAvaliacoes = document.getElementById('listaAvaliacoesSemana');
+                    if (avaliacoesSemana.length > 0) {
+                        divAvaliacoes.innerHTML = '';
+                        const mockDates = ["Hoje", "Ontem", "3 dias atrás", "4 dias atrás", "5 dias atrás"];
+                        avaliacoesSemana.forEach((a, idx) => {
+                            const mockDate = mockDates[idx] || "Esta semana";
+                            const estrelas = '★'.repeat(a.nota) + '☆'.repeat(5 - a.nota);
+                            
+                            const isAnonimo = !a.comentario.startsWith("[Identificada]");
+                            const comentarioLimpo = isAnonimo ? a.comentario : a.comentario.replace("[Identificada] ", "").replace("[IdentificadaComFoto] ", "");
+                            const autorNome = isAnonimo ? "Colaboradora Anônima" : "Colaboradora Identificada";
+
+                            divAvaliacoes.innerHTML += `
+                                <div style="background: #FDF2F6; border-left: 4px solid var(--pink-primary); border-radius: 8px; padding: 12px 16px; font-size: 13px; box-shadow: 0 2px 8px rgba(0,0,0,0.02); text-align: left;">
+                                    <div style="display: flex; justify-content: space-between; font-weight: 700; color: var(--pink-dark); margin-bottom: 6px;">
+                                        <span><i class="fa-solid fa-user-shield"></i> ${autorNome}</span>
+                                        <span style="font-size: 11.5px; color: var(--text-gray); font-weight: 600;">${mockDate}</span>
+                                    </div>
+                                    <div style="color: #FFB800; font-size: 12px; margin-bottom: 6px;">${estrelas} <strong style="color: var(--text-dark); margin-left: 4px;">${a.nota}/5</strong></div>
+                                    <p style="color: var(--text-dark); line-height: 1.5; margin: 0; font-style: italic;">"${comentarioLimpo}"</p>
+                                </div>
+                            `;
+                        });
+                    } else {
+                        divAvaliacoes.innerHTML = '<p style="color: var(--text-gray); font-size: 13px; text-align: center; padding: 20px;">Nenhuma avaliação nova esta semana.</p>';
+                    }
+
+                } catch (e) {
+                    console.error('Erro ao buscar dados reais do Dashboard:', e);
+                }
+            }
+        });
+
+        function baixarRelatorio() {
+            showToast('Consolidando dados e gerando PDF...', 'info');
+
+            const empresaNome = usuario ? usuario.nome : 'Empresa Parceira';
+            const cnpj = usuario ? (usuario.cnpj || 'Não cadastrado') : 'Não cadastrado';
+            const endereco = usuario ? (usuario.endereco || 'Não cadastrado') : 'Não cadastrado';
+            const planoVal = usuario ? (usuario.plano || 'Free') : 'Free';
+            
+            const notaMedia = document.getElementById('valNota').textContent;
+            const avaliacoesTotais = document.getElementById('valAvaliacoes').textContent;
+            const denunciasCriticas = document.getElementById('valDenuncias').textContent;
+            const apoioIgualdade = document.getElementById('valApoio').textContent;
+
+            let counts = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+            avaliacoesCache.forEach(a => {
+                if (counts[a.nota] !== undefined) {
+                    counts[a.nota]++;
+                }
+            });
+            const maxCount = Math.max(1, ...Object.values(counts));
+            
+            const countStar1 = counts[1];
+            const countStar2 = counts[2];
+            const countStar3 = counts[3];
+            const countStar4 = counts[4];
+            const countStar5 = counts[5];
+            
+            const heightStar1 = Math.max(5, (countStar1 / maxCount) * 75);
+            const heightStar2 = Math.max(5, (countStar2 / maxCount) * 75);
+            const heightStar3 = Math.max(5, (countStar3 / maxCount) * 75);
+            const heightStar4 = Math.max(5, (countStar4 / maxCount) * 75);
+            const heightStar5 = Math.max(5, (countStar5 / maxCount) * 75);
+
+            // Construir tabelas de Denúncias no PDF
+            let denunciasHtml = '';
+            if (denunciasMes.length > 0) {
+                denunciasMes.forEach(d => {
+                    const dateFormatted = d.data ? new Date(d.data + 'T00:00:00').toLocaleDateString('pt-BR') : '';
+                    denunciasHtml += `
+                        <div style="border-bottom: 1px solid #eee; padding: 10px 0; font-size: 12px; text-align: left;">
+                            <div style="display: flex; justify-content: space-between; font-weight: bold; color: #D32F2F; margin-bottom: 4px;">
+                                <span>Relato Anônimo (Risco: 🔥 ${d.score}/100 | Status: ${d.status})</span>
+                                <span style="color: #888;">${dateFormatted}</span>
+                            </div>
+                            <p style="margin: 0; color: #444; font-style: italic; line-height: 1.4;">"${d.descricao}"</p>
+                        </div>
+                    `;
+                });
+            } else {
+                denunciasHtml = '<p style="color: #888; font-size: 12px; font-style: italic; text-align: center; padding: 10px;">Nenhuma denúncia crítica registrada no mês corrente.</p>';
+            }
+
+            // Construir tabelas de Avaliações no PDF
+            let avaliacoesHtml = '';
+            if (avaliacoesSemana.length > 0) {
+                const mockDates = ["Hoje", "Ontem", "3 dias atrás", "4 dias atrás", "5 dias atrás"];
+                avaliacoesSemana.forEach((a, idx) => {
+                    const mockDate = mockDates[idx] || "Esta semana";
+                    const estrelas = '★'.repeat(a.nota) + '☆'.repeat(5 - a.nota);
+                    
+                    const isAnonimo = !a.comentario.startsWith("[Identificada]");
+                    const comentarioLimpo = isAnonimo ? a.comentario : a.comentario.replace("[Identificada] ", "").replace("[IdentificadaComFoto] ", "");
+                    const autorNome = isAnonimo ? "Colaboradora Anônima" : "Colaboradora Identificada";
+
+                    avaliacoesHtml += `
+                        <div style="border-bottom: 1px solid #eee; padding: 10px 0; font-size: 12px; text-align: left;">
+                            <div style="display: flex; justify-content: space-between; font-weight: bold; color: #E33A7F; margin-bottom: 4px;">
+                                <span>${autorNome} (${estrelas} | ${a.nota}/5)</span>
+                                <span style="color: #888;">${mockDate}</span>
+                            </div>
+                            <p style="margin: 0; color: #444; font-style: italic; line-height: 1.4;">"${comentarioLimpo}"</p>
+                        </div>
+                    `;
+                });
+            } else {
+                avaliacoesHtml = '<p style="color: #888; font-size: 12px; font-style: italic; text-align: center; padding: 10px;">Nenhuma avaliação nova registrada na semana corrente.</p>';
+            }
+
+            // Elemento temporário formatado de forma sofisticada para o PDF (alinhamento corrigido)
+            const element = document.createElement('div');
+            element.style.width = '190mm'; // Encaixa perfeitamente no formato A4 com 10mm de margem
+            element.style.padding = '0';
+            element.style.boxSizing = 'border-box';
+            element.style.fontFamily = "'Poppins', sans-serif";
+            element.style.color = '#1a1a2e';
+            element.style.backgroundColor = '#ffffff';
+
+            element.innerHTML = `
+                <style>
+                    .pdf-report-root * {
+                        box-sizing: border-box !important;
+                    }
+                    .pdf-card {
+                        background: #ffffff;
+                        border: 1px solid #eee;
+                        border-radius: 12px;
+                        padding: 20px;
+                        margin-bottom: 20px;
+                        page-break-inside: avoid;
+                        break-inside: avoid;
+                        text-align: left;
+                    }
+                    .pdf-header {
+                        border-bottom: 3px solid #E33A7F;
+                        padding-bottom: 15px;
+                        margin-bottom: 25px;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        width: 100%;
+                    }
+                </style>
+                <div class="pdf-report-root" style="padding: 20px;">
+                    <!-- Cabeçalho -->
+                    <div class="pdf-header">
+                        <div style="text-align: left;">
+                            <h1 style="color: #E33A7F; font-size: 26px; font-weight: 800; margin: 0; letter-spacing: 0.5px;">SafeHer</h1>
+                            <p style="font-size: 10px; color: #6E6E6E; margin: 2px 0 0; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600;">Auditoria de Conformidade e Clima Organizacional</p>
+                        </div>
+                        <div style="text-align: right;">
+                            <span style="font-size: 11px; background: #F9E6EF; color: #B31B6E; padding: 6px 14px; border-radius: 20px; font-weight: 700; text-transform: uppercase;">
+                                Plano ${planoVal}
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Dados Cadastrais -->
+                    <div class="pdf-card">
+                        <h3 style="font-size: 13px; font-weight: 800; color: #1a1a2e; text-transform: uppercase; margin: 0 0 10px; border-bottom: 1px solid #eee; padding-bottom: 6px;">
+                            Dados Cadastrais da Empresa
+                        </h3>
+                        <table style="width: 100%; font-size: 12px; border-collapse: collapse;">
+                             <tr>
+                                 <td style="padding: 6px 0; color: #6E6E6E; width: 35%;"><strong>Razão Social:</strong></td>
+                                 <td style="padding: 6px 0; color: #1a1a2e;">${empresaNome}</td>
+                             </tr>
+                             <tr>
+                                 <td style="padding: 6px 0; color: #6E6E6E;"><strong>CNPJ:</strong></td>
+                                 <td style="padding: 6px 0; color: #1a1a2e;">${cnpj}</td>
+                             </tr>
+                             <tr>
+                                 <td style="padding: 6px 0; color: #6E6E6E;"><strong>Endereço Comercial:</strong></td>
+                                 <td style="padding: 6px 0; color: #1a1a2e;">${endereco}</td>
+                             </tr>
+                             <tr>
+                                 <td style="padding: 6px 0; color: #6E6E6E;"><strong>Data da Emissão:</strong></td>
+                                 <td style="padding: 6px 0; color: #1a1a2e;">${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR')}</td>
+                             </tr>
+                        </table>
+                    </div>
+
+                    <!-- Indicadores Chave -->
+                    <div class="pdf-card">
+                        <h3 style="font-size: 13px; font-weight: 800; color: #1a1a2e; text-transform: uppercase; margin: 0 0 12px;">
+                            Indicadores de Clima & Integridade SafeHer
+                        </h3>
+                        <table style="width: 100%; border-collapse: separate; border-spacing: 10px; margin: 0;">
+                            <tr>
+                                <td style="width: 50%; border: 1px solid #eee; border-radius: 12px; padding: 16px; text-align: center; background: #fff9fb; vertical-align: middle;">
+                                    <span style="font-size: 26px; font-weight: 800; color: #E33A7F; display: block; margin-bottom: 2px;">${notaMedia}</span>
+                                    <span style="font-size: 10px; font-weight: 700; color: #6E6E6E; text-transform: uppercase;">Nota Média de Segurança</span>
+                                </td>
+                                <td style="width: 50%; border: 1px solid #eee; border-radius: 12px; padding: 16px; text-align: center; background: #fff9fb; vertical-align: middle;">
+                                    <span style="font-size: 26px; font-weight: 800; color: #E33A7F; display: block; margin-bottom: 2px;">${avaliacoesTotais}</span>
+                                    <span style="font-size: 10px; font-weight: 700; color: #6E6E6E; text-transform: uppercase;">Avaliações Totais</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 50%; border: 1px solid #eee; border-radius: 12px; padding: 16px; text-align: center; background: #fff9fb; vertical-align: middle;">
+                                    <span style="font-size: 26px; font-weight: 800; color: #4CAF50; display: block; margin-bottom: 2px;">${denunciasCriticas}</span>
+                                    <span style="font-size: 10px; font-weight: 700; color: #6E6E6E; text-transform: uppercase;">Denúncias Totais</span>
+                                </td>
+                                <td style="width: 50%; border: 1px solid #eee; border-radius: 12px; padding: 16px; text-align: center; background: #fff9fb; vertical-align: middle;">
+                                    <span style="font-size: 26px; font-weight: 800; color: #E33A7F; display: block; margin-bottom: 2px;">${apoioIgualdade}</span>
+                                    <span style="font-size: 10px; font-weight: 700; color: #6E6E6E; text-transform: uppercase;">Índice de Apoio a Equidade</span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- Gráfico Integrado no PDF -->
+                    <div class="pdf-card">
+                        <h3 style="font-size: 13px; font-weight: 800; color: #1a1a2e; text-transform: uppercase; margin: 0 0 10px; border-bottom: 1px solid #eee; padding-bottom: 6px;">
+                            Gráfico de Distribuição de Estrelas Recebidas
+                        </h3>
+                        <div style="display: flex; align-items: flex-end; justify-content: space-around; height: 110px; padding: 10px 0; box-sizing: border-box; width: 100%;">
+                            <div style="display: flex; flex-direction: column; align-items: center; width: 50px;">
+                                <div style="width: 25px; height: ${heightStar1}px; background: #fbcfe8; border-radius: 4px 4px 0 0; text-align: center; color: #be185d; font-size: 10px; font-weight: bold; padding-top: 4px; box-sizing: border-box;">${countStar1}</div>
+                                <span style="font-size: 9px; color: #6e6e6e; margin-top: 6px;">1 ★</span>
+                            </div>
+                            <div style="display: flex; flex-direction: column; align-items: center; width: 50px;">
+                                <div style="width: 25px; height: ${heightStar2}px; background: #fbcfe8; border-radius: 4px 4px 0 0; text-align: center; color: #be185d; font-size: 10px; font-weight: bold; padding-top: 4px; box-sizing: border-box;">${countStar2}</div>
+                                <span style="font-size: 9px; color: #6e6e6e; margin-top: 6px;">2 ★</span>
+                            </div>
+                            <div style="display: flex; flex-direction: column; align-items: center; width: 50px;">
+                                <div style="width: 25px; height: ${heightStar3}px; background: #fbcfe8; border-radius: 4px 4px 0 0; text-align: center; color: #be185d; font-size: 10px; font-weight: bold; padding-top: 4px; box-sizing: border-box;">${countStar3}</div>
+                                <span style="font-size: 9px; color: #6e6e6e; margin-top: 6px;">3 ★</span>
+                            </div>
+                            <div style="display: flex; flex-direction: column; align-items: center; width: 50px;">
+                                <div style="width: 25px; height: ${heightStar4}px; background: #f472b6; border-radius: 4px 4px 0 0; text-align: center; color: white; font-size: 10px; font-weight: bold; padding-top: 4px; box-sizing: border-box;">${countStar4}</div>
+                                <span style="font-size: 9px; color: #6e6e6e; margin-top: 6px;">4 ★</span>
+                            </div>
+                            <div style="display: flex; flex-direction: column; align-items: center; width: 50px;">
+                                <div style="width: 25px; height: ${heightStar5}px; background: #e33a7f; border-radius: 4px 4px 0 0; text-align: center; color: white; font-size: 10px; font-weight: bold; padding-top: 4px; box-sizing: border-box;">${countStar5}</div>
+                                <span style="font-size: 9px; color: #6e6e6e; margin-top: 6px;">5 ★</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Listagem de Denúncias no PDF -->
+                    <div class="pdf-card">
+                        <h3 style="font-size: 13px; font-weight: 800; color: #1a1a2e; text-transform: uppercase; margin: 0 0 10px; border-bottom: 1px solid #eee; padding-bottom: 6px; text-align: left;">
+                            Últimas Denúncias do Mês
+                        </h3>
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            ${denunciasHtml}
+                        </div>
+                    </div>
+
+                    <!-- Listagem de Avaliações no PDF -->
+                    <div class="pdf-card">
+                        <h3 style="font-size: 13px; font-weight: 800; color: #1a1a2e; text-transform: uppercase; margin: 0 0 10px; border-bottom: 1px solid #eee; padding-bottom: 6px; text-align: left;">
+                            Últimas Avaliações da Semana
+                        </h3>
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            ${avaliacoesHtml}
+                        </div>
+                    </div>
+
+                    <!-- Parecer e Assinatura -->
+                    <div class="pdf-card">
+                        <p style="font-size: 11px; color: #6E6E6E; line-height: 1.5; text-align: justify; margin-bottom: 30px;">
+                            Este certificado é emitido eletronicamente pela auditoria interna da SafeHer. Os indicadores expostos refletem a consolidação das avaliações anônimas e identificadas realizadas por colaboradoras da comunidade e os tratamentos preventivos registrados em nossos canais de compliance até a data atual. Recomenda-se manter melhorias contínuas para a conservação de ambientes de trabalho inclusivos e seguros.
+                        </p>
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 11px;">
+                            <div>
+                                <p style="margin: 0; font-weight: 700; color: #1a1a2e;">SafeHer Brasil</p>
+                                <p style="margin: 2px 0 0; color: #6E6E6E;">Comissão de Integridade de Gênero</p>
+                            </div>
+                            <div style="text-align: right;">
+                                <p style="margin: 0; font-weight: 700; color: #E33A7F;">AUTENTICADO VIA BANCO POSTGRESQL</p>
+                                <p style="margin: 2px 0 0; color: #6E6E6E;">Chave Hash: SH_${Math.random().toString(36).substring(2, 10).toUpperCase()}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.body.appendChild(element);
+
+            // Loader overlay to cover the element while rendering
+            const loader = document.createElement('div');
+            loader.style.position = 'fixed';
+            loader.style.left = '0';
+            loader.style.top = '0';
+            loader.style.width = '100%';
+            loader.style.height = '100%';
+            loader.style.backgroundColor = 'rgba(255, 255, 255, 1.0)';
+            loader.style.zIndex = '100000';
+            loader.style.display = 'flex';
+            loader.style.flexDirection = 'column';
+            loader.style.alignItems = 'center';
+            loader.style.justifyContent = 'center';
+            loader.innerHTML = `
+                <i class="fa-solid fa-spinner fa-spin" style="font-size: 44px; color: var(--pink-primary); margin-bottom: 16px;"></i>
+                <p style="font-family: 'Poppins', sans-serif; font-size: 16px; color: var(--text-dark); font-weight: 600;">Gerando relatório consolidado em PDF...</p>
+            `;
+            document.body.appendChild(loader);
+
+            // Guardar posições de rolagem
+            const scrollX = window.scrollX || window.pageXOffset;
+            const scrollY = window.scrollY || window.pageYOffset;
+            window.scrollTo(0, 0);
+
+            // Executar com pequeno timeout para garantir reflow da página
+            setTimeout(() => {
+                const opt = {
+                    margin: 10,
+                    filename: `SafeHer_Relatorio_${empresaNome.replace(/\s+/g, '_')}.pdf`,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2, useCORS: true },
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                    pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+                };
+
+                html2pdf().set(opt).from(element).save().then(() => {
+                    showToast('Relatório em PDF exportado com sucesso!', 'success');
+                    element.remove();
+                    loader.remove();
+                    window.scrollTo(scrollX, scrollY);
+                }).catch(err => {
+                    showToast('Erro ao gerar PDF: ' + err.message, 'error');
+                    element.remove();
+                    loader.remove();
+                    window.scrollTo(scrollX, scrollY);
+                });
+            }, 250);
+        }
+    </script>
+</body>
+</html>

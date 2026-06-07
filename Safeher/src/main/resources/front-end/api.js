@@ -162,3 +162,68 @@ async function listarDenunciasPorEmpresa(empresaId) {
     const res = await fetch(`${API}/denuncias/empresa/${empresaId}`);
     return res.json();
 }
+
+// vagas
+
+async function cadastrarVaga(vaga) {
+    const res = await fetch(`${API}/vagas`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(vaga)
+    });
+    return res.json();
+}
+
+async function listarVagas() {
+    const res = await fetch(`${API}/vagas`);
+    return res.json();
+}
+
+async function listarVagasPorEmpresa(empresaId) {
+    const res = await fetch(`${API}/vagas/empresa/${empresaId}`);
+    return res.json();
+}
+
+async function removerVaga(id) {
+    const res = await fetch(`${API}/vagas/${id}`, { method: "DELETE" });
+    return res.json();
+}
+
+// responder avaliacao
+
+async function responderAvaliacao(avaliacaoId, resposta) {
+    const res = await fetch(`${API}/avaliacoes/${avaliacaoId}/resposta`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ resposta: resposta })
+    });
+    return res.json();
+}
+
+async function excluirRespostaAvaliacao(avaliacaoId) {
+    const res = await fetch(`${API}/avaliacoes/${avaliacaoId}/resposta`, {
+        method: "DELETE"
+    });
+    return res.json();
+}
+
+// candidaturas
+
+async function cadastrarCandidatura(candidatura) {
+    const res = await fetch(`${API}/candidaturas`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(candidatura)
+    });
+    return res.json();
+}
+
+async function listarCandidaturasPorVaga(vagaId) {
+    const res = await fetch(`${API}/candidaturas/vaga/${vagaId}`);
+    if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.erro || `Erro de autorização (Status ${res.status}).`);
+    }
+    return res.json();
+}
+

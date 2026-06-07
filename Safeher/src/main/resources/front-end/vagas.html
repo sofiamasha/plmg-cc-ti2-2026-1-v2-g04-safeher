@@ -28,6 +28,42 @@
             box-shadow: 0 10px 25px rgba(227, 58, 127, 0.1);
         }
         .job-card.hidden { display: none; }
+        .job-card.premium {
+            border: 2px solid transparent;
+            background-image: linear-gradient(white, white), linear-gradient(135deg, #ff007f, #ffb800);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+            background-color: #fff9fb;
+            box-shadow: 0 8px 30px rgba(255, 184, 0, 0.12);
+            position: relative;
+            overflow: hidden;
+            animation: borderGlow 3s ease-in-out infinite alternate;
+        }
+        @keyframes borderGlow {
+            0% { box-shadow: 0 8px 30px rgba(255, 0, 127, 0.1); }
+            100% { box-shadow: 0 8px 30px rgba(255, 184, 0, 0.2); }
+        }
+        .badge-premium-partner {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 800;
+            margin-left: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 5px rgba(255, 165, 0, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            animation: pulse-badge 2s infinite;
+        }
+        @keyframes pulse-badge {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
         .job-title { font-size: 22px; font-weight: 700; color: var(--pink-dark); margin-bottom: 8px; }
         .job-company { font-size: 15px; color: var(--text-gray); display: flex; align-items: center; gap: 8px; font-weight: 500; }
         .job-meta { display: flex; gap: 16px; margin-top: 16px; font-size: 14px; color: var(--text-gray); flex-wrap: wrap; }
@@ -260,13 +296,19 @@
                     : v.tipo === 'Híbrido'
                         ? '<span class="badge-hybrid"><i class="fa-solid fa-arrows-left-right"></i> Híbrido</span>'
                         : '<span class="badge-safe" style="background:#FFF3E0;color:#E65100;"><i class="fa-solid fa-building"></i> Presencial</span>';
-                const seloBadge = v.selo ? '<span class="badge-safe"><i class="fa-solid fa-shield-heart"></i> Empresa Segura</span>' : '';
+                
+                const isPremium = v.planoEmpresa === 'Premium';
+                const seloBadge = isPremium 
+                    ? '<span class="badge-premium-partner"><i class="fa-solid fa-crown"></i> Prioritária - Empresa Parceira</span>'
+                    : (v.selo ? '<span class="badge-safe"><i class="fa-solid fa-shield-heart"></i> Empresa Segura</span>' : '');
+                
                 const tagsHtml = v.tags.map(t => `<span>${t}</span>`).join('');
+                const jobCardClass = isPremium ? 'job-card premium' : 'job-card';
 
                 container.innerHTML += `
-                    <div class="job-card">
-                        <div style="flex: 1;">
-                            <div class="job-title">${v.titulo} ${tipoBadge} ${seloBadge}</div>
+                    <div class="${jobCardClass}">
+                        <div style="flex: 1; text-align: left;">
+                            <div class="job-title" style="display:flex; align-items:center; flex-wrap:wrap; gap:8px;">${v.titulo} ${tipoBadge} ${seloBadge}</div>
                             <div class="job-company"><i class="fa-solid fa-building"></i> ${v.empresa}</div>
                             <p class="job-description">${v.descricao}</p>
                             <p class="job-salary"><i class="fa-solid fa-money-bill-wave"></i> ${v.salario}</p>
@@ -275,11 +317,104 @@
                                 ${tagsHtml}
                             </div>
                         </div>
-                        <a href="#" class="sh-btn" style="color: white; white-space: nowrap;" onclick="showToast('Candidatura em breve disponível!', 'info'); return false;">
+                        <button class="sh-btn" style="color: white; white-space: nowrap; border: none; cursor: pointer;" onclick="candidatarVaga(${v.id}, '${v.titulo.replace(/'/g, "\\'")}', '${v.empresa.replace(/'/g, "\\'")}')">
                             <i class="fa-solid fa-paper-plane"></i> Candidatar-se
-                        </a>
+                        </button>
                     </div>`;
             });
+        }
+
+        async function candidatarVaga(vagaId, vagaTitulo, empresa) {
+            const sessao = getSessao();
+            const tipo = getTipoSessao();
+
+            if (!sessao || tipo !== 'mulher') {
+                showToast('Você precisa estar logada como candidata mulher para se candidatar.', 'error');
+                setTimeout(() => {
+                    window.location.href = 'login.html';
+                }, 2000);
+                return;
+            }
+
+            const candidaturas = JSON.parse(localStorage.getItem('safeher_candidaturas') || '[]');
+            
+            const jaCandidatou = candidaturas.some(c => Number(c.vagaId) === Number(vagaId) && Number(c.candidataId) === Number(sessao.id));
+            if (jaCandidatou) {
+                showToast('Você já se candidatou a esta vaga!', 'info');
+                return;
+            }
+
+            const novaCandidatura = {
+                vagaId: Number(vagaId),
+                candidataId: Number(sessao.id),
+                candidataNome: sessao.nome,
+                candidataEmail: sessao.email,
+                candidataTelefone: sessao.telefone || '(31) 98765-4321',
+                candidataFoto: sessao.foto || 'https://cdn-icons-png.flaticon.com/512/147/147144.png',
+                data: new Date().toISOString()
+            };
+
+            try {
+                // Salvar no backend/banco de dados se for uma vaga real (ID menor que 1000)
+                if (Number(vagaId) < 1000) {
+                    await cadastrarCandidatura(novaCandidatura);
+                }
+
+                // Salvar também no localStorage local para fallback
+                candidaturas.push({
+                    id: Date.now(),
+                    vagaTitulo: vagaTitulo,
+                    empresa: empresa,
+                    ...novaCandidatura
+                });
+                localStorage.setItem('safeher_candidaturas', JSON.stringify(candidaturas));
+                
+                showToast('Candidatura enviada com sucesso! Boa sorte!', 'success');
+            } catch (err) {
+                console.error("Erro ao registrar candidatura no backend:", err);
+                showToast('Erro ao enviar candidatura: ' + err.message, 'error');
+            }
+        }
+
+        async function carregarFeedVagas() {
+            try {
+                const [apiVagas, empresas] = await Promise.all([listarVagas(), listarEmpresas()]);
+                const planoById = new Map(empresas.map(e => [e.id, e.plano]));
+                const planoByName = new Map(empresas.map(e => [e.nome.toLowerCase().trim(), e.plano]));
+
+                const adaptadas = apiVagas.map(v => ({
+                    id: v.id,
+                    titulo: v.titulo,
+                    empresa: v.empresa,
+                    local: v.local,
+                    tipo: v.tipo,
+                    salario: v.salario,
+                    descricao: v.descricao,
+                    tags: v.tags ? v.tags.split(',').map(t => t.trim()) : [],
+                    selo: v.selo,
+                    planoEmpresa: planoById.get(v.empresaId) || 'Free'
+                }));
+
+                const mockAdaptadas = vagas.map((v, index) => ({
+                    ...v,
+                    id: 1000 + index,
+                    planoEmpresa: planoByName.get(v.empresa.toLowerCase().trim()) || (v.empresa === 'TechNova Soluções' ? 'Premium' : 'Free')
+                }));
+
+                window.vagasFeed = [...adaptadas, ...mockAdaptadas];
+                window.vagasFeed.sort((a, b) => {
+                    const isAPremium = a.planoEmpresa === 'Premium';
+                    const isBPremium = b.planoEmpresa === 'Premium';
+                    if (isAPremium && !isBPremium) return -1;
+                    if (!isAPremium && isBPremium) return 1;
+                    return 0;
+                });
+                renderVagas(window.vagasFeed);
+            } catch (e) {
+                console.error("Erro ao carregar vagas dinâmicas do banco:", e);
+                window.vagasFeed = vagas.map((v, index) => ({ ...v, id: 1000 + index, planoEmpresa: v.empresa === 'TechNova Soluções' ? 'Premium' : 'Free' }));
+                renderVagas(window.vagasFeed);
+            }
         }
 
         function filtrarVagas() {
@@ -287,7 +422,7 @@
             const local = document.getElementById('filtro-local').value;
             const tipo = document.getElementById('filtro-tipo').value;
 
-            let resultado = vagas;
+            let resultado = window.vagasFeed || vagas;
 
             if (busca) {
                 resultado = resultado.filter(v =>
@@ -312,8 +447,8 @@
             if (e.key === 'Enter') filtrarVagas();
         });
 
-        // render inicial com todas as vagas
-        renderVagas(vagas);
+        // render inicial dinâmico
+        carregarFeedVagas();
     </script>
 </body>
 </html>

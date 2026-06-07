@@ -8,8 +8,28 @@ import java.util.List;
 
 public class UsuarioDAO extends ConexaoDAO {
 
+    public UsuarioDAO() {
+        executarMigracao();
+    }
+
+    private void executarMigracao() {
+        String sql = "ALTER TABLE Usuario ADD COLUMN IF NOT EXISTS foto TEXT";
+        try {
+            abrirConexao();
+            Statement stmt = getConexao().createStatement();
+            stmt.executeUpdate(sql);
+            stmt.close();
+        } catch (Exception e) {
+            System.err.println("Erro ao rodar migracao da tabela Usuario: " + e.getMessage());
+        } finally {
+            try {
+                fecharConexao();
+            } catch (Exception ex) {}
+        }
+    }
+
     public void insert(Usuario usuario) throws SQLException {
-        String sql = "INSERT INTO Usuario (id, nome, email, senha, data) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Usuario (id, nome, email, senha, data, foto) VALUES (?, ?, ?, ?, ?, ?)";
         try {
             abrirConexao();
             PreparedStatement stmt = getConexao().prepareStatement(sql);
@@ -18,6 +38,7 @@ public class UsuarioDAO extends ConexaoDAO {
             stmt.setString(3, usuario.getEmail());
             stmt.setString(4, usuario.getSenha());
             stmt.setDate(5, Date.valueOf(usuario.getData()));
+            stmt.setString(6, usuario.getFoto());
             stmt.executeUpdate();
             stmt.close();
         } finally {
@@ -26,7 +47,7 @@ public class UsuarioDAO extends ConexaoDAO {
     }
 
     public void update(Usuario usuario) throws SQLException {
-        String sql = "UPDATE Usuario SET nome=?, email=?, senha=?, data=? WHERE id=?";
+        String sql = "UPDATE Usuario SET nome=?, email=?, senha=?, data=?, foto=? WHERE id=?";
         try {
             abrirConexao();
             PreparedStatement stmt = getConexao().prepareStatement(sql);
@@ -34,7 +55,8 @@ public class UsuarioDAO extends ConexaoDAO {
             stmt.setString(2, usuario.getEmail());
             stmt.setString(3, usuario.getSenha());
             stmt.setDate(4, Date.valueOf(usuario.getData()));
-            stmt.setInt(5, usuario.getId());
+            stmt.setString(5, usuario.getFoto());
+            stmt.setInt(6, usuario.getId());
             stmt.executeUpdate();
             stmt.close();
         } finally {
@@ -70,6 +92,7 @@ public class UsuarioDAO extends ConexaoDAO {
                 usuario.setEmail(rs.getString("email"));
                 usuario.setSenha(rs.getString("senha"));
                 usuario.setData(rs.getDate("data").toLocalDate());
+                usuario.setFoto(rs.getString("foto"));
             }
             rs.close();
             stmt.close();
@@ -93,6 +116,7 @@ public class UsuarioDAO extends ConexaoDAO {
                 usuario.setEmail(rs.getString("email"));
                 usuario.setSenha(rs.getString("senha"));
                 usuario.setData(rs.getDate("data").toLocalDate());
+                usuario.setFoto(rs.getString("foto"));
                 lista.add(usuario);
             }
             rs.close();

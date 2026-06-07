@@ -189,6 +189,29 @@
                             <input type="hidden" id="tipoAbuso" value="">
 
                             <p class="form-section-label">Seu Relato</p>
+
+                            <!-- Painel de Relato por Áudio com IA (Restaurado) -->
+                            <div style="background: #FAF8F9; border: 1.5px dashed var(--pink-primary); border-radius: 12px; padding: 20px; margin-bottom: 20px; text-align: center;">
+                                <h4 style="color: var(--pink-dark); font-weight: 700; margin: 0 0 10px 0; font-size: 14px;">
+                                    <i class="fa-solid fa-microphone"></i> Denúncia por Áudio com Inteligência Artificial
+                                </h4>
+                                <p style="font-size: 12.5px; color: var(--text-gray); margin: 0 0 15px 0;">
+                                    Grave seu relato e nossa IA transcreverá para texto e avaliará a gravidade automaticamente.
+                                </p>
+                                <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 12px;">
+                                    <button type="button" id="btnGravar" class="sh-btn-outline" style="margin: 0; padding: 10px 20px; font-size: 13px; cursor: pointer;">
+                                        <i class="fa-solid fa-circle" style="color: #D32F2F; margin-right: 6px;"></i> Iniciar Gravação
+                                    </button>
+                                    <button type="button" id="btnParar" class="sh-btn" style="margin: 0; padding: 10px 20px; font-size: 13px; display: none; background: #D32F2F; color: white; border: none; cursor: pointer;">
+                                        <i class="fa-solid fa-stop" style="margin-right: 6px;"></i> Parar Gravação
+                                    </button>
+                                </div>
+                                <audio id="audioPlayback" controls style="display: none; width: 100%; margin: 10px 0;"></audio>
+                                <button type="button" id="btnConverterAudio" class="sh-btn" style="margin: 8px 0 0; width: 100%; padding: 12px; font-size: 14px; color: white; display: none; background: linear-gradient(135deg, var(--pink-primary), #7e22ce); cursor: pointer;">
+                                    <i class="fa-solid fa-wand-magic-sparkles"></i> Transcrever e Analisar Relato com IA
+                                </button>
+                            </div>
+
                             <label for="relato" class="sh-label">Descreva o que aconteceu <span style="color:var(--pink-primary);">*</span></label>
                             <textarea id="relato" class="sh-input" rows="6"
                                 placeholder="Conte o que aconteceu com o máximo de detalhes que se sentir confortável. Não se preocupe — sua identidade é totalmente protegida."
@@ -291,26 +314,58 @@
                 setTimeout(() => window.location.href = 'login.html', 1800);
                 return;
             }
+            const nomeEmpresaDigitado = document.getElementById('empresa').value.trim();
             const descricao = document.getElementById('relato').value;
             if (!descricao.trim()) {
-                showToast('Por favor, descreva o que aconteceu.', 'error');
+                showToast('Por favor, descreva o que aconteceu no relato.', 'error');
                 return;
             }
+
+            // Tentar mapear para uma empresa cadastrada caso o nome coincida
+            let empresaId = 0;
+            try {
+                const empresas = await listarEmpresas();
+                const matched = empresas.find(e => e.nome.toLowerCase().trim() === nomeEmpresaDigitado.toLowerCase().trim());
+                if (matched) {
+                    empresaId = matched.id;
+                }
+            } catch (e) {
+                console.error("Erro ao cruzar nome da empresa:", e);
+            }
+
+            // converte o áudio para Base64 se houver gravação
+            let audioConvertido = null;
+            if (audioBlobFinal) {
+                audioConvertido = await audioParaBase64(audioBlobFinal);
+            }
+
             const denuncia = {
-                id: Math.floor(Math.random() * 100000),
                 descricao: (tipoSelecionado ? '[' + tipoSelecionado + '] ' : '') + descricao,
                 data: new Date().toISOString().split('T')[0],
                 anonima: true,
                 usuarioId: usuario.id,
-                empresaId: 0
+                empresaId: empresaId,
+                audio: audioConvertido 
             };
+
             try {
                 await cadastrarDenuncia(denuncia);
-                showToast('Denúncia enviada com sucesso! Obrigada por sua coragem.', 'success', 4500);
+                showToast('Denúncia enviada com sucesso! Obrigado por sua coragem.', 'success', 4500);
+                
+                // limpa o formulário e reseta
                 document.getElementById('formDenuncia').reset();
+                if (audioPlayback) {
+                    audioPlayback.style.display = 'none';
+                    audioPlayback.src = '';
+                }
+                audioBlobFinal = null;
+                if (btnGravar) {
+                    btnGravar.innerText = '🎤 Gravar Áudio';
+                }
                 document.querySelectorAll('.tipo-option').forEach(o => o.classList.remove('selected'));
                 tipoSelecionado = '';
                 document.getElementById('charCount').textContent = '0 / 2000';
+
             } catch (e) {
                 showToast('Erro ao enviar denúncia: ' + e.message, 'error');
             }
@@ -323,49 +378,96 @@
 
         const btnGravar = document.getElementById('btnGravar');
         const btnParar = document.getElementById('btnParar');
+        const btnConverter = document.getElementById('btnConverterAudio');
         const audioPlayback = document.getElementById('audioPlayback');
 
-        btnGravar.addEventListener('click', async () => {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                mediaRecorder = new MediaRecorder(stream);
-                audioChunks = [];
+        if (btnGravar && btnParar && audioPlayback && btnConverter) {
+            btnGravar.addEventListener('click', async () => {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorder = new MediaRecorder(stream);
+                    audioChunks = [];
 
-                mediaRecorder.ondataavailable = event => {
-                    if (event.data.size > 0) {
-                        audioChunks.push(event.data);
-                    }
-                };
+                    audioPlayback.style.display = 'none';
+                    btnConverter.style.display = 'none';
 
-                mediaRecorder.onstop = () => {
-                    audioBlobFinal = new Blob(audioChunks, { type: 'audio/webm' });
-                    const audioUrl = URL.createObjectURL(audioBlobFinal);
+                    mediaRecorder.ondataavailable = event => {
+                        if (event.data.size > 0) {
+                            audioChunks.push(event.data);
+                        }
+                    };
+
+                    mediaRecorder.onstop = () => {
+                        audioBlobFinal = new Blob(audioChunks, { type: 'audio/webm' });
+                        const audioUrl = URL.createObjectURL(audioBlobFinal);
+                        
+                        audioPlayback.src = audioUrl;
+                        audioPlayback.style.display = 'block';
+                        btnConverter.style.display = 'block';
+                    };
+
+                    mediaRecorder.start();
+                    btnGravar.style.display = 'none';
+                    btnParar.style.display = 'block';
+
+                } catch (err) {
+                    alert("Não foi possível acessar o microfone. Verifique as permissões do navegador.");
+                    console.error("Erro do MediaRecorder:", err);
+                }
+            });
+
+            btnParar.addEventListener('click', () => {
+                if (mediaRecorder && mediaRecorder.state === 'recording') {
+                    mediaRecorder.stop();
                     
-                    audioPlayback.src = audioUrl;
-                    audioPlayback.style.display = 'block';
-                };
+                    mediaRecorder.stream.getTracks().forEach(track => track.stop()); 
+                    
+                    btnGravar.style.display = 'block';
+                    btnGravar.innerText = '🎤 Gravar Novamente';
+                    btnParar.style.display = 'none';
+                }
+            });
 
-                mediaRecorder.start();
-                btnGravar.style.display = 'none';
-                btnParar.style.display = 'block';
+            btnConverter.addEventListener('click', transcreverEAnalisarAudio);
+        }
 
+        async function transcreverEAnalisarAudio() {
+            if (!audioBlobFinal) {
+                showToast('Por favor, grave um áudio primeiro.', 'error');
+                return;
+            }
+            
+            showToast('Enviando áudio para a Inteligência Artificial... Por favor, aguarde.', 'info');
+            
+            const formData = new FormData();
+            formData.append("audio", audioBlobFinal, "audio.wav");
+            
+            try {
+                const res = await fetch("http://localhost:8080/upload-audio", {
+                    method: "POST",
+                    body: formData
+                });
+                
+                if (!res.ok) {
+                    throw new Error("Erro na API de Áudio");
+                }
+                
+                const data = await res.json();
+                
+                if (data.erro) {
+                    throw new Error(data.erro);
+                }
+                
+                const relatoTextarea = document.getElementById('relato');
+                relatoTextarea.value = data.texto;
+                contarChars(relatoTextarea);
+                
+                showToast(`Áudio transcrito e analisado! Risco detectado pela IA: ${data.score}/5.`, 'success');
             } catch (err) {
-                alert("Não foi possível acessar o microfone. Verifique as permissões do navegador.");
-                console.error("Erro do MediaRecorder:", err);
+                showToast('Erro ao transcrever áudio: ' + err.message, 'error');
+                console.error(err);
             }
-        });
-
-        btnParar.addEventListener('click', () => {
-            if (mediaRecorder && mediaRecorder.state === 'recording') {
-                mediaRecorder.stop();
-                
-                mediaRecorder.stream.getTracks().forEach(track => track.stop()); 
-                
-                btnGravar.style.display = 'block';
-                btnGravar.innerText = '🎤 Gravar Novamente';
-                btnParar.style.display = 'none';
-            }
-        });
+        }
 
         // conversao e envio pro backend
         // transforma o arquivo de áudio em texto (Base64)
@@ -376,53 +478,6 @@
                 reader.onloadend = () => resolve(reader.result);
                 reader.onerror = error => reject(error);
             });
-        }
-
-        async function enviarDenuncia() {
-            const usuario = getSessao();
-            if (!usuario) {
-                alert('Você precisa estar logada para enviar uma denúncia.');
-                window.location.href = 'login.html';
-                return;
-            }
-            
-            const descricao = document.getElementById('relato').value;
-            
-            if (!descricao.trim() && !audioBlobFinal) {
-                alert('Por favor, descreva o que aconteceu no texto ou grave um áudio.');
-                return;
-            }
-
-            // converte o áudio para Base64 se houver gravação
-            let audioConvertido = null;
-            if (audioBlobFinal) {
-                audioConvertido = await audioParaBase64(audioBlobFinal);
-            }
-
-            // prepara a denúncia com a string de áudio (Base64)
-            const denuncia = {
-                descricao: descricao,
-                data: new Date().toISOString().split('T')[0],
-                anonima: true,
-                usuarioId: usuario.id,
-                empresaId: 1, // ajuste para capturar o ID real da empresa futuramente
-                audio: audioConvertido 
-            };
-
-            try {
-                await cadastrarDenuncia(denuncia);
-                alert('Denúncia enviada com sucesso!');
-                
-                // limpa o formulário e reseta o player
-                document.getElementById('formDenuncia').reset();
-                audioPlayback.style.display = 'none';
-                audioPlayback.src = '';
-                audioBlobFinal = null;
-                btnGravar.innerText = '🎤 Gravar Áudio';
-
-            } catch (e) {
-                alert('Erro ao enviar denúncia: ' + e.message);
-            }
         }
 
         // pre-preenche a empresa vinda da extensão de navegador (?empresa=...)

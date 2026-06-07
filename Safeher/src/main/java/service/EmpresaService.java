@@ -95,7 +95,7 @@ public class EmpresaService {
             double somaNotas = 0.0;
             int totalDenuncias = 0;
 
-            String sqlAval = "SELECT COUNT(*) as total, SUM(nota) as soma FROM Avaliacao WHERE empresa_id = ?";
+            String sqlAval = "SELECT COUNT(*) as total, SUM(nota) as soma FROM Avaliacao WHERE empresa_id = ? OR (nome_empresa ILIKE ? AND (empresa_id IS NULL OR empresa_id = 0))";
             String sqlDenuncia = "SELECT COUNT(*) as total FROM Denuncia WHERE Empresa_id = ?";
 
             java.sql.Connection conn = null;
@@ -105,6 +105,7 @@ public class EmpresaService {
 
                 PreparedStatement stmtA = conn.prepareStatement(sqlAval);
                 stmtA.setInt(1, empresa.getId());
+                stmtA.setString(2, empresa.getNome());
                 ResultSet rsA = stmtA.executeQuery();
                 if (rsA.next()) {
                     totalAvaliacoes = rsA.getInt("total");
@@ -154,6 +155,40 @@ public class EmpresaService {
 
             return gson.toJson(payload);
 
+        } catch (Exception e) {
+            res.status(500);
+            return "{\"erro\":\"" + e.getMessage().replace("\"", "\\\"") + "\"}";
+        }
+    }
+
+    public String atualizarAssinatura(Request req, Response res) {
+        res.type("application/json");
+        try {
+            java.util.Map<String, Object> body = gson.fromJson(req.body(), java.util.Map.class);
+            Object idObj = body.get("empresaId");
+            if (idObj == null) {
+                res.status(400);
+                return "{\"erro\":\"empresaId e plano são obrigatórios\"}";
+            }
+            int empresaId;
+            if (idObj instanceof Double) {
+                empresaId = ((Double) idObj).intValue();
+            } else if (idObj instanceof Integer) {
+                empresaId = (Integer) idObj;
+            } else {
+                empresaId = Integer.parseInt(idObj.toString().trim());
+            }
+            String plano = (String) body.get("plano");
+            
+            if (!plano.equals("Free") && !plano.equals("Premium") && !plano.equals("Plus")) {
+                res.status(400);
+                return "{\"erro\":\"Plano inválido\"}";
+            }
+            
+            empresaDAO.atualizarPlano(empresaId, plano);
+            
+            Empresa empresa = empresaDAO.get(empresaId);
+            return gson.toJson(empresa);
         } catch (Exception e) {
             res.status(500);
             return "{\"erro\":\"" + e.getMessage().replace("\"", "\\\"") + "\"}";

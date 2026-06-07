@@ -8,8 +8,44 @@ import java.util.List;
 
 public class EmpresaDAO extends ConexaoDAO {
 
+    public EmpresaDAO() {
+        executarMigracao();
+    }
+
+    private void executarMigracao() {
+        String sql1 = "ALTER TABLE Empresa ADD COLUMN IF NOT EXISTS plano VARCHAR(20) DEFAULT 'Free'";
+        String sql2 = "ALTER TABLE Empresa ADD COLUMN IF NOT EXISTS foto TEXT";
+        try {
+            abrirConexao();
+            Statement stmt = getConexao().createStatement();
+            stmt.executeUpdate(sql1);
+            stmt.executeUpdate(sql2);
+            stmt.close();
+        } catch (Exception e) {
+            System.err.println("Erro ao rodar migracao da tabela Empresa: " + e.getMessage());
+        } finally {
+            try {
+                fecharConexao();
+            } catch (Exception ex) {}
+        }
+    }
+
+    public void atualizarPlano(int id, String plano) throws SQLException {
+        String sql = "UPDATE Empresa SET plano=? WHERE id=?";
+        try {
+            abrirConexao();
+            PreparedStatement stmt = getConexao().prepareStatement(sql);
+            stmt.setString(1, plano);
+            stmt.setInt(2, id);
+            stmt.executeUpdate();
+            stmt.close();
+        } finally {
+            fecharConexao();
+        }
+    }
+
     public void insert(Empresa empresa) throws SQLException {
-        String sql = "INSERT INTO Empresa (id, nome, indice, cnpj, cep, endereco, email, telefone, senha) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Empresa (id, nome, indice, cnpj, cep, endereco, email, telefone, senha, plano, foto) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try {
             abrirConexao();
             PreparedStatement stmt = getConexao().prepareStatement(sql);
@@ -22,6 +58,8 @@ public class EmpresaDAO extends ConexaoDAO {
             stmt.setString(7, empresa.getEmail());
             stmt.setString(8, empresa.getTelefone());
             stmt.setString(9, empresa.getSenha());
+            stmt.setString(10, empresa.getPlano() != null ? empresa.getPlano() : "Free");
+            stmt.setString(11, empresa.getFoto());
             stmt.executeUpdate();
             stmt.close();
         } finally {
@@ -30,7 +68,7 @@ public class EmpresaDAO extends ConexaoDAO {
     }
 
     public void update(Empresa empresa) throws SQLException {
-        String sql = "UPDATE Empresa SET nome=?, indice=?, cnpj=?, cep=?, endereco=?, email=?, telefone=? WHERE id=?";
+        String sql = "UPDATE Empresa SET nome=?, indice=?, cnpj=?, cep=?, endereco=?, email=?, telefone=?, foto=? WHERE id=?";
         try {
             abrirConexao();
             PreparedStatement stmt = getConexao().prepareStatement(sql);
@@ -41,7 +79,8 @@ public class EmpresaDAO extends ConexaoDAO {
             stmt.setString(5, empresa.getEndereco());
             stmt.setString(6, empresa.getEmail());
             stmt.setString(7, empresa.getTelefone());
-            stmt.setInt(8, empresa.getId());
+            stmt.setString(8, empresa.getFoto());
+            stmt.setInt(9, empresa.getId());
             stmt.executeUpdate();
             stmt.close();
         } finally {
@@ -81,6 +120,8 @@ public class EmpresaDAO extends ConexaoDAO {
                 empresa.setEmail(rs.getString("email"));
                 empresa.setTelefone(rs.getString("telefone"));
                 empresa.setSenha(rs.getString("senha"));
+                empresa.setPlano(rs.getString("plano"));
+                empresa.setFoto(rs.getString("foto"));
             }
             rs.close();
             stmt.close();
@@ -108,6 +149,8 @@ public class EmpresaDAO extends ConexaoDAO {
                 empresa.setEmail(rs.getString("email"));
                 empresa.setTelefone(rs.getString("telefone"));
                 empresa.setSenha(rs.getString("senha"));
+                empresa.setPlano(rs.getString("plano"));
+                empresa.setFoto(rs.getString("foto"));
                 lista.add(empresa);
             }
             rs.close();

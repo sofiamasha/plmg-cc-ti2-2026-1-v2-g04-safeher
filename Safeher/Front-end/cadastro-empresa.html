@@ -3,176 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SafeHer</title>
+    <title>SafeHer - Cadastro de Empresa</title>
     <link rel="stylesheet" href="global.css">
-    <style>
-        .article-card {
-            background: var(--white);
-            border-radius: 20px;
-            padding: 0;
-            box-shadow: var(--shadow-sm);
-            transition: var(--transition);
-            cursor: pointer;
-            border: 2px solid transparent;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-        .article-card:hover {
-            border-color: var(--pink-primary);
-            transform: translateY(-6px);
-            box-shadow: var(--shadow-pink);
-        }
-        .article-img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-        .article-body { padding: 24px; display: flex; flex-direction: column; flex: 1; }
-        .badge-category {
-            background: var(--pink-light);
-            color: var(--pink-dark);
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 700;
-            display: inline-block;
-            margin-bottom: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .article-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--text-dark);
-            margin-bottom: 10px;
-            line-height: 1.4;
-        }
-        .article-excerpt {
-            font-size: 14px;
-            color: var(--text-gray);
-            margin-bottom: 20px;
-            flex-grow: 1;
-            line-height: 1.7;
-        }
-        .read-more {
-            color: var(--pink-primary);
-            font-weight: 700;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 13px;
-            transition: var(--transition);
-        }
-        .read-more:hover { gap: 10px; }
-        .acervo-card {
-            background: linear-gradient(135deg, var(--pink-lighter) 0%, var(--pink-light) 100%);
-            border: 2px dashed var(--pink-primary);
-            text-align: center;
-            align-items: center;
-            justify-content: center;
-        }
-        .acervo-card:hover { background: var(--pink-light); border-style: solid; }
-        .acervo-body {
-            padding: 48px 24px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            flex: 1;
-        }
-        .acervo-icon {
-            font-size: 48px;
-            color: var(--pink-primary);
-            margin-bottom: 18px;
-        }
-    </style>
 </head>
 <body>
     <div id="toast-container"></div>
-    <div class="container">
-        <header class="sh-header">
-            <a href="index.html" class="sh-logo">
-                <img src="resources/images/logo-escudo.png" alt="SafeHer Logo" class="sh-logo-img">
-            </a>
-            <div class="sh-nav">
-                <a href="index.html">Início</a>
-                <a href="denuncias.html">Denúncias</a>
-                <a href="avaliacoes.html">Avaliações</a>
-                <a href="conteudos.html" class="active">Conteúdos</a>
-                <a href="vagas.html">Vagas</a>
-                <a href="login.html" class="sh-btn">Entrar</a>
-                <a href="escolha-cadastro.html" class="sh-btn-outline">Criar conta</a>
+    <main>
+        <div class="auth-container">
+            <div>
+                <img src="resources/images/buildings_illustration.jpeg" class="auth-illustration" alt="Empresas parceiras" onerror="this.style.display='none'">
             </div>
-        </header>
-
-        <main>
-            <div style="margin-bottom:40px;">
-                <h2 class="sh-title">Conteúdos e Seus Direitos</h2>
-                <p class="sh-subtitle">Informação é a sua maior ferramenta de defesa. Leia artigos, conheça as leis e saiba como se proteger no ambiente corporativo.</p>
-            </div>
-
-            <div class="three-cols">
-                <div class="article-card">
-                    <img src="resources/images/rights_article_1.jpeg" class="article-img" alt="Direitos da Mulher" onerror="this.style.display='none'">
-                    <div class="article-body">
-                        <span class="badge-category"><i class="fa-solid fa-scale-balanced"></i> Guia Legal</span>
-                        <h3 class="article-title">Conheça os seus direitos na CLT</h3>
-                        <p class="article-excerpt">Entenda o que a lei garante sobre igualdade salarial, licença-maternidade e proteção contra demissão arbitrária e preconceito.</p>
-                        <a href="#" class="read-more">Ler artigo completo <i class="fa-solid fa-arrow-right"></i></a>
-                    </div>
-                </div>
-
-                <div class="article-card">
-                    <img src="resources/images/rights_article_2.jpeg" class="article-img" alt="Saúde Mental" onerror="this.style.display='none'">
-                    <div class="article-body">
-                        <span class="badge-category"><i class="fa-solid fa-heart"></i> Saúde Mental</span>
-                        <h3 class="article-title">Como identificar o Assédio Moral</h3>
-                        <p class="article-excerpt">O assédio nem sempre é óbvio. Aprenda a reconhecer microagressões, gaslighting e situações tóxicas recorrentes no dia a dia.</p>
-                        <a href="#" class="read-more">Ler artigo completo <i class="fa-solid fa-arrow-right"></i></a>
-                    </div>
-                </div>
-
-                <div class="article-card acervo-card">
-                    <div class="acervo-body">
-                        <i class="fa-solid fa-folder-open acervo-icon"></i>
-                        <h3 class="article-title" style="color:var(--pink-dark);">Acervo Completo</h3>
-                        <p class="article-excerpt" style="flex-grow:0;color:var(--pink-dark);opacity:0.8;">Mais de 150 artigos, cartilhas em PDF e vídeos com especialistas em direito do trabalho.</p>
-                        <button class="sh-btn">Explorar Biblioteca</button>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <footer class="sh-footer">
-        <div class="container footer-content">
-            <div class="footer-brand">
-                <a href="index.html">
-                    <img src="resources/images/logo-escudo.png" alt="SafeHer" class="sh-logo-img" style="filter:brightness(0) invert(1);">
+            <div class="auth-form-wrapper" style="position:relative; max-height: 95vh; overflow-y: auto;">
+                <a href="escolha-cadastro.html" style="position:absolute;top:28px;right:32px;color:var(--text-gray);font-size:22px;text-decoration:none;transition:0.2s;" title="Voltar">
+                    <i class="fa-solid fa-xmark"></i>
                 </a>
-                <p>Protegendo mulheres, denunciando abusos e transformando o ambiente corporativo com transparência e justiça.</p>
-            </div>
-            <div class="footer-links">
-                <h4>Nossas Redes Sociais</h4>
-                <div class="social-icons">
-                    <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-                    <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
-                    <a href="#" aria-label="Twitter/X"><i class="fa-brands fa-twitter"></i></a>
+
+                <div class="auth-card" style="margin-top: 40px; margin-bottom: 40px;">
+                    <div class="auth-shield">
+                        <img src="resources/images/logo-escudo.png" alt="Escudo SafeHer">
+                    </div>
+                    <h2>Criar conta de Empresa</h2>
+                    <p style="font-size:13.5px; color:var(--text-gray); margin-bottom: 20px; text-align: center;">Junte-se à SafeHer para promover um ambiente mais equitativo, inclusivo e seguro para todas as mulheres.</p>
+                    
+                    <form id="formCadastroEmpresa" onsubmit="return false;">
+                        <label for="nome" class="sh-label">Nome da Empresa</label>
+                        <input type="text" id="nome" class="sh-input" placeholder="Razão Social ou Nome Fantasia" autocomplete="name">
+
+                        <label for="cnpj" class="sh-label">CNPJ</label>
+                        <input type="text" id="cnpj" class="sh-input" placeholder="00.000.000/0001-00">
+
+                        <label for="cep" class="sh-label">CEP</label>
+                        <input type="text" id="cep" class="sh-input" placeholder="00000-000">
+
+                        <label for="endereco" class="sh-label">Endereço Completo</label>
+                        <input type="text" id="endereco" class="sh-input" placeholder="Av. Paulista, 1000 - Cj 12">
+
+                        <label for="email" class="sh-label">Email Corporativo</label>
+                        <input type="email" id="email" class="sh-input" placeholder="contato@empresa.com" autocomplete="email">
+
+                        <label for="telefone" class="sh-label">Telefone de Contato</label>
+                        <input type="tel" id="telefone" class="sh-input" placeholder="(11) 99999-9999" autocomplete="tel">
+
+                        <label for="senha" class="sh-label">Senha</label>
+                        <input type="password" id="senha" class="sh-input" placeholder="Mínimo 6 caracteres" autocomplete="new-password">
+
+                        <button type="submit" class="sh-btn" onclick="cadastrarEmpresaForm()" style="margin-top: 15px; width: 100%;">
+                            <i class="fa-solid fa-building-circle-plus"></i> Criar conta de Empresa
+                        </button>
+                        <a href="login.html" class="auth-link-bottom" style="display: block; text-align: center; margin-top: 15px;">Já tenho uma conta — Entrar</a>
+                    </form>
                 </div>
             </div>
-            <div class="footer-emergency">
-                <h4>Contatos de Emergência</h4>
-                <p><i class="fa-solid fa-phone"></i> <strong>180</strong> — Central de Atendimento à Mulher</p>
-                <p><i class="fa-solid fa-phone"></i> <strong>190</strong> — Polícia Militar</p>
-            </div>
         </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 SafeHer. Todos os direitos reservados.</p>
-        </div>
-    </footer>
+    </main>
 
     <script src="api.js"></script>
     <script src="usuario-session.js"></script>
+    <script>
+        async function cadastrarEmpresaForm() {
+            const nome     = document.getElementById('nome').value.trim();
+            const cnpj     = document.getElementById('cnpj').value.trim();
+            const cep      = document.getElementById('cep').value.trim();
+            const endereco = document.getElementById('endereco').value.trim();
+            const email    = document.getElementById('email').value.trim();
+            const telefone = document.getElementById('telefone').value.trim();
+            const senha    = document.getElementById('senha').value;
+
+            if (!nome || !email || !senha || !cnpj) {
+                showToast('Preencha ao menos Nome, CNPJ, Email e Senha.', 'error');
+                return;
+            }
+            if (senha.length < 6) {
+                showToast('A senha deve ter ao menos 6 caracteres.', 'error');
+                return;
+            }
+
+            const empresa = {
+                id: Math.floor(Math.random() * 100000),
+                nome: nome,
+                cnpj: cnpj,
+                cep: cep,
+                endereco: endereco,
+                email: email,
+                telefone: telefone,
+                senha: senha,
+                plano: 'Free',
+                indice: 5.0
+            };
+
+            try {
+                await cadastrarEmpresa(empresa);
+                showToast('Empresa cadastrada com sucesso! Redirecionando...', 'success');
+                setTimeout(() => window.location.href = 'login.html', 1500);
+            } catch (e) {
+                showToast('Erro ao cadastrar empresa: ' + e.message, 'error');
+            }
+        }
+    </script>
 </body>
 </html>

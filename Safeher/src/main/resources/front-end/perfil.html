@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeHer — Meu Perfil</title>
+    <link rel="stylesheet" href="global.css">
+    <style>
+        .profile-wrapper {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 40px;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        /* Ambient Blobs */
+        .ambient-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.05;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .blob-1 { width: 300px; height: 300px; background: var(--pink-primary); top: 10%; left: -5%; }
+        .blob-2 { width: 250px; height: 250px; background: #ffb800; bottom: 20%; right: -5%; }
+
+        /* Left Side: Avatar Card & Stats */
+        .left-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            z-index: 10;
+        }
+
+        .avatar-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 40px 24px;
+            text-align: center;
+            border: 1px solid var(--border-light);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+            transition: var(--transition);
+        }
+        
+        .avatar-card:hover {
+            border-color: rgba(227, 58, 127, 0.15);
+            box-shadow: 0 10px 30px rgba(227, 58, 127, 0.04);
+        }
+
+        .avatar-container {
+            position: relative;
+            width: 130px;
+            height: 130px;
+            margin: 0 auto 24px;
+            border-radius: 50%;
+            padding: 4px;
+            background: linear-gradient(135deg, var(--pink-primary) 0%, #ff8da1 50%, var(--pink-dark) 100%);
+            box-shadow: 0 8px 25px rgba(227, 58, 127, 0.2);
+            transition: var(--transition);
+        }
+
+        .avatar-container:hover {
+            transform: scale(1.03);
+            box-shadow: 0 12px 30px rgba(227, 58, 127, 0.3);
+        }
+
+        .avatar-circle {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: white;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            cursor: pointer;
+            border: 3px solid white;
+        }
+
+        .avatar-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar-letter-span {
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--pink-primary);
+            font-family: var(--font-body);
+        }
+
+        .avatar-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            opacity: 0;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .avatar-circle:hover .avatar-overlay {
+            opacity: 1;
+        }
+
+        /* Stats Cards */
+        .stats-section {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            border: 1px solid var(--border-light);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+        }
+
+        .stats-title {
+            font-size: 13px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-dark);
+            margin-bottom: 16px;
+            border-bottom: 1.5px solid var(--pink-lighter);
+            padding-bottom: 8px;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .stat-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: var(--text-gray);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stat-val {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        /* Right Side: Form Card */
+        .profile-form-card {
+            background: #ffffff;
+            border-radius: var(--radius-lg);
+            padding: 48px;
+            border: 1px solid var(--border-light);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+            z-index: 10;
+            transition: var(--transition);
+        }
+        
+        .profile-form-card:hover {
+            border-color: rgba(227, 58, 127, 0.12);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .form-group-full {
+            grid-column: span 2;
+        }
+
+        /* Custom Inputs styling */
+        .sh-input {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #f1f1f5;
+            border-radius: 12px;
+            font-size: 14px;
+            color: var(--text-dark);
+            background: #fafafc;
+            transition: all 0.25s ease;
+            box-sizing: border-box;
+            font-family: var(--font-body);
+        }
+
+        .sh-input:focus {
+            border-color: var(--pink-primary);
+            background: #ffffff;
+            box-shadow: 0 0 0 4px rgba(227, 58, 127, 0.08);
+            outline: none;
+        }
+
+        .sh-label {
+            font-weight: 700;
+            color: var(--text-dark);
+            font-size: 13px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .sh-btn {
+            background: linear-gradient(135deg, var(--pink-primary), var(--pink-dark));
+            border: none;
+            box-shadow: 0 5px 15px rgba(227, 58, 127, 0.25);
+            border-radius: 12px;
+            padding: 14px 24px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            font-size: 15px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: white;
+            transition: var(--transition);
+        }
+
+        .sh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(227, 58, 127, 0.4);
+        }
+
+        .sh-btn-outline {
+            border: 2px solid #e1e1eb;
+            color: var(--text-gray);
+            background: transparent;
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 13px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-decoration: none;
+        }
+
+        .sh-btn-outline:hover {
+            border-color: var(--pink-primary);
+            color: var(--pink-primary);
+            background: #fff5f8;
+        }
+
+        .badge-premium-partner {
+            box-shadow: 0 4px 12px rgba(255, 165, 0, 0.15);
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        @media (max-width: 992px) {
+            .profile-wrapper {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .form-group-full {
+                grid-column: span 1;
+            }
+            .profile-form-card {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-wrapper">
+        <div class="container">
+            <!-- Header -->
+            <header class="sh-header">
+                <a href="index.html" class="sh-logo">
+                    <img src="resources/images/logo-escudo.png" alt="SafeHer Logo" class="sh-logo-img">
+                </a>
+                <div class="sh-nav">
+                    <!-- Gerado dinamicamente -->
+                </div>
+            </header>
+
+            <main style="padding-bottom: 60px;">
+                <div class="page-header">
+                    <h2 class="sh-title">Editar Meu Perfil</h2>
+                    <p class="sh-subtitle">Mantenha seus dados e preferências de segurança atualizados na plataforma.</p>
+                </div>
+
+                <div class="profile-wrapper">
+                    <!-- Blobs Decorativos -->
+                    <div class="ambient-blob blob-1"></div>
+                    <div class="ambient-blob blob-2"></div>
+
+                    <!-- Left Column: Avatar & Stats Panel -->
+                    <div class="left-panel">
+                        <div class="avatar-card">
+                            <div class="avatar-container" onclick="document.getElementById('fotoInput').click()">
+                                <div class="avatar-circle">
+                                    <img id="profileAvatarImg" src="" alt="Foto de Perfil" style="display:none;">
+                                    <span id="profileAvatarLetterSpan" class="avatar-letter-span">U</span>
+                                    <div class="avatar-overlay">
+                                        <i class="fa-solid fa-camera"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <h3 id="profileHeaderName" style="font-size: 18px; font-weight:800; color:var(--text-dark); margin-bottom:4px; word-break: break-word;">Nome</h3>
+                            <p id="profileHeaderEmail" style="font-size: 13.5px; color:var(--text-gray); margin-bottom:20px; word-break: break-all;">email@safeher.com</p>
+                            
+                            <div style="display: flex; flex-direction: column; gap: 8px; align-items: center;">
+                                <input type="file" id="fotoInput" accept="image/*" style="display: none;" onchange="uploadFoto(event)">
+                                <button class="sh-btn-outline" style="width: 100%; box-sizing: border-box;" onclick="document.getElementById('fotoInput').click()">
+                                    <i class="fa-solid fa-upload"></i> Carregar Foto
+                                </button>
+                                <button id="btnRemoverFoto" class="sh-btn-outline" style="display: none; background: #fff1f2; color: #e11d48; border-color: #fecdd3; width: 100%; box-sizing: border-box;" onclick="removerFoto()">
+                                    <i class="fa-solid fa-trash-can"></i> Remover Foto
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Stats Panel (Resumos Importantes) -->
+                        <div class="stats-section">
+                            <h4 class="stats-title"><i class="fa-solid fa-chart-line" style="color: var(--pink-primary); margin-right: 6px;"></i> Resumo de Atividade</h4>
+                            
+                            <div class="stat-item" id="stat-plano-row" style="display: none;">
+                                <span class="stat-label"><i class="fa-solid fa-gem" style="color: #fbbf24;"></i> Plano Atual</span>
+                                <span class="stat-val"><span class="badge-premium-partner" id="planBadgeText" style="padding: 4px 10px; font-size: 11px; color: white;">Free</span></span>
+                            </div>
+
+                            <div class="stat-item">
+                                <span class="stat-label"><i class="fa-solid fa-graduation-cap" style="color: var(--pink-primary);"></i> Cursos Concluídos</span>
+                                <span class="stat-val" id="stat-cursos-concluidos">0 / 3</span>
+                            </div>
+
+                            <div class="stat-item" id="stat-extra-row">
+                                <span class="stat-label" id="stat-extra-label"><i class="fa-solid fa-file-invoice" style="color: var(--pink-primary);"></i> Denúncias Feitas</span>
+                                <span class="stat-val" id="stat-extra-val">Carregando...</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Registration Form -->
+                    <div class="profile-form-card">
+                        <h3 style="font-size:18px; font-weight:800; color:var(--text-dark); margin-bottom:24px; border-bottom: 1.5px solid var(--pink-lighter); padding-bottom:12px; display:flex; align-items:center; gap:8px;">
+                            <i class="fa-solid fa-user-gear" style="color: var(--pink-primary);"></i> Informações de Cadastro
+                        </h3>
+
+                        <form id="profileForm" onsubmit="atualizarPerfil(event)">
+                            <div class="form-grid">
+                                <div class="form-group form-group-full">
+                                    <label class="sh-label" for="profileName">Nome / Razão Social</label>
+                                    <input type="text" id="profileName" class="sh-input" placeholder="Seu nome completo ou razão social da empresa" required>
+                                </div>
+                                <div class="form-group form-group-full">
+                                    <label class="sh-label" for="profileEmail">E-mail de Acesso</label>
+                                    <input type="email" id="profileEmail" class="sh-input" placeholder="seu.email@exemplo.com" required>
+                                </div>
+
+                                <!-- Campos específicos de Empresa -->
+                                <div class="form-group div-empresa-only">
+                                    <label class="sh-label" for="profileCnpj">CNPJ</label>
+                                    <input type="text" id="profileCnpj" class="sh-input" placeholder="00.000.000/0000-00">
+                                </div>
+                                <div class="form-group div-empresa-only">
+                                    <label class="sh-label" for="profileTelefone">Telefone Comercial</label>
+                                    <input type="text" id="profileTelefone" class="sh-input" placeholder="(00) 00000-0000">
+                                </div>
+                                <div class="form-group div-empresa-only">
+                                    <label class="sh-label" for="profileCep">CEP</label>
+                                    <input type="text" id="profileCep" class="sh-input" placeholder="00000-000">
+                                </div>
+                                <div class="form-group div-empresa-only">
+                                    <label class="sh-label" for="profileEndereco">Endereço Comercial</label>
+                                    <input type="text" id="profileEndereco" class="sh-input" placeholder="Logradouro, número, bairro">
+                                </div>
+
+                                <!-- Senha -->
+                                <div class="form-group form-group-full" style="margin-top: 10px;">
+                                    <label class="sh-label" for="profileSenha">Nova Senha (deixe em branco se não desejar alterar)</label>
+                                    <input type="password" id="profileSenha" class="sh-input" placeholder="Digite uma nova senha segura">
+                                </div>
+                            </div>
+
+                            <button type="submit" class="sh-btn" style="margin-top: 30px;">
+                                <i class="fa-solid fa-circle-check"></i> Salvar Alterações do Perfil
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="sh-footer">
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <a href="index.html">
+                    <img src="resources/images/logo-escudo.png" alt="SafeHer" class="sh-logo-img" style="filter: brightness(0) invert(1);">
+                </a>
+                <p>Conectando mulheres e empresas por um mercado de trabalho mais justo, transparente e seguro.</p>
+            </div>
+            <div class="footer-emergency">
+                <h4>Contatos de Emergência</h4>
+                <p><i class="fa-solid fa-phone"></i> <strong>180</strong> - Central de Atendimento à Mulher</p>
+                <p><i class="fa-solid fa-phone"></i> <strong>190</strong> - Polícia Militar</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 SafeHer. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="api.js"></script>
+    <script src="usuario-session.js"></script>
+    <script>
+        const usuario = getSessao();
+        const tipo = getTipoSessao();
+
+        window.addEventListener('DOMContentLoaded', () => {
+            if (!usuario) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Preencher cabeçalho lateral
+            const inicial = usuario.nome ? usuario.nome.charAt(0).toUpperCase() : 'U';
+            const img = document.getElementById('profileAvatarImg');
+            const span = document.getElementById('profileAvatarLetterSpan');
+            const btnRemover = document.getElementById('btnRemoverFoto');
+            
+            if (usuario.foto) {
+                img.src = usuario.foto;
+                img.style.display = 'block';
+                span.style.display = 'none';
+                btnRemover.style.display = 'inline-block';
+            } else {
+                img.src = '';
+                img.style.display = 'none';
+                span.style.display = 'block';
+                span.textContent = inicial;
+                btnRemover.style.display = 'none';
+            }
+
+            document.getElementById('profileHeaderName').textContent = usuario.nome;
+            document.getElementById('profileHeaderEmail').textContent = usuario.email;
+
+            // Preencher campos comuns
+            document.getElementById('profileName').value = usuario.nome || '';
+            document.getElementById('profileEmail').value = usuario.email || '';
+
+            // Calcular Estatísticas
+            carregarEstatisticas();
+
+            // Lógica baseada no tipo
+            if (tipo === 'empresa') {
+                document.querySelectorAll('.div-empresa-only').forEach(el => el.style.display = 'block');
+                
+                document.getElementById('profileCnpj').value = usuario.cnpj || '';
+                document.getElementById('profileTelefone').value = usuario.telefone || '';
+                document.getElementById('profileCep').value = usuario.cep || '';
+                document.getElementById('profileEndereco').value = usuario.endereco || '';
+
+                // Exibir plano
+                const plano = usuario.plano || 'Free';
+                document.getElementById('stat-plano-row').style.display = 'flex';
+                const badgeText = document.getElementById('planBadgeText');
+                badgeText.textContent = plano;
+                if (plano === 'Premium') {
+                    badgeText.style.background = 'linear-gradient(135deg, #FFD700, #FFA500)';
+                } else if (plano === 'Plus') {
+                    badgeText.style.background = 'var(--pink-primary)';
+                } else {
+                    badgeText.style.background = '#6E6E6E';
+                }
+            } else {
+                document.querySelectorAll('.div-empresa-only').forEach(el => el.style.display = 'none');
+                document.getElementById('stat-plano-row').style.display = 'none';
+            }
+        });
+
+        async function carregarEstatisticas() {
+            // 1. Cursos Concluídos
+            const cursoKey = tipo === 'empresa' ? `safeher_treinamentos_${usuario.id}` : `safeher_conteudos_${usuario.id}`;
+            const localData = localStorage.getItem(cursoKey);
+            let concluidos = 0;
+            if (localData) {
+                const progresso = JSON.parse(localData);
+                for (let key in progresso) {
+                    if (progresso[key] === 100) concluidos++;
+                }
+            }
+            document.getElementById('stat-cursos-concluidos').textContent = `${concluidos} / 3`;
+
+            // 2. Estatística Extra baseada no tipo
+            const extraLabel = document.getElementById('stat-extra-label');
+            const extraVal = document.getElementById('stat-extra-val');
+            
+            if (tipo === 'empresa') {
+                extraLabel.innerHTML = `<i class="fa-solid fa-star" style="color: #fbbf24;"></i> Índice SafeHer`;
+                // Média / Índice
+                extraVal.textContent = usuario.indice ? `${usuario.indice.toFixed(1)} / 5.0` : '5.0 / 5.0';
+            } else {
+                extraLabel.innerHTML = `<i class="fa-solid fa-flag" style="color: var(--pink-primary);"></i> Denúncias Feitas`;
+                try {
+                    const denuncias = await listarDenunciasPorUsuario(usuario.id);
+                    extraVal.textContent = denuncias ? denuncias.length : '0';
+                } catch(e) {
+                    extraVal.textContent = '0';
+                }
+            }
+        }
+
+        function uploadFoto(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            if (file.size > 2 * 1024 * 1024) { // limite de 2MB
+                showToast('A imagem deve ter no máximo 2MB.', 'error');
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                const base64 = evt.target.result;
+                const img = document.getElementById('profileAvatarImg');
+                const span = document.getElementById('profileAvatarLetterSpan');
+                img.src = base64;
+                img.style.display = 'block';
+                span.style.display = 'none';
+                document.getElementById('btnRemoverFoto').style.display = 'inline-block';
+                
+                usuario.foto = base64;
+                showToast('Foto de perfil carregada! Salve para persistir.', 'info');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function removerFoto() {
+            const img = document.getElementById('profileAvatarImg');
+            const span = document.getElementById('profileAvatarLetterSpan');
+            img.src = '';
+            img.style.display = 'none';
+            span.style.display = 'block';
+            const inicial = usuario.nome ? usuario.nome.charAt(0).toUpperCase() : 'U';
+            span.textContent = inicial;
+            document.getElementById('btnRemoverFoto').style.display = 'none';
+            
+            delete usuario.foto;
+            showToast('Foto de perfil removida. Salve para persistir.', 'info');
+        }
+
+        async function atualizarPerfil(e) {
+            e.preventDefault();
+
+            const nome = document.getElementById('profileName').value.trim();
+            const email = document.getElementById('profileEmail').value.trim();
+            const novaSenha = document.getElementById('profileSenha').value.trim();
+
+            if (!nome || !email) {
+                showToast('Preencha os campos obrigatórios.', 'error');
+                return;
+            }
+
+            // Preparar payload
+            const payload = {
+                id: usuario.id,
+                nome: nome,
+                email: email,
+                senha: novaSenha ? novaSenha : usuario.senha
+            };
+            if (usuario.foto) {
+                payload.foto = usuario.foto;
+            }
+
+            try {
+                let response;
+                if (tipo === 'empresa') {
+                    payload.cnpj = document.getElementById('profileCnpj').value.trim();
+                    payload.telefone = document.getElementById('profileTelefone').value.trim();
+                    payload.cep = document.getElementById('profileCep').value.trim();
+                    payload.endereco = document.getElementById('profileEndereco').value.trim();
+                    payload.plano = usuario.plano || 'Free';
+                    payload.indice = usuario.indice || 5.0;
+
+                    response = await atualizarEmpresa(usuario.id, payload);
+                } else {
+                    payload.data = usuario.data;
+                    response = await atualizarUsuario(usuario.id, payload);
+                }
+
+                if (response && response.erro) {
+                    showToast('Erro ao atualizar: ' + response.erro, 'error');
+                } else {
+                    showToast('Perfil atualizado com sucesso!', 'success');
+                    
+                    // Salvar nova sessão local
+                    salvarSessao(payload);
+                    
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1500);
+                }
+
+            } catch (err) {
+                showToast('Erro ao conectar com o servidor: ' + err.message, 'error');
+            }
+        }
+    </script>
+</body>
+</html>

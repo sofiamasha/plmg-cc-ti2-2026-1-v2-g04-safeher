@@ -144,6 +144,27 @@
             </div>
 
             <div class="form-group">
+                <label>Como deseja se identificar?</label>
+                <div style="display: flex; gap: 12px; margin-top: 8px;">
+                    <label id="label-anonima-opt" style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 12px; border: 2px solid var(--pink-primary); background: var(--pink-lighter); border-radius: 12px; cursor: pointer; text-align: center; transition: 0.2s;">
+                        <input type="radio" name="identificacao" id="radio-anonima" value="anonima" checked style="display:none;" onchange="atualizarOpcaoIdentidade()">
+                        <i class="fa-solid fa-user-secret" style="font-size: 20px; color: var(--pink-primary); margin-bottom: 6px;"></i>
+                        <span style="font-size: 13px; font-weight: 700; color: var(--pink-dark);">Anônima</span>
+                        <span style="font-size: 10px; color: var(--text-gray); margin-top: 2px;">Totalmente segura e sigilosa</span>
+                    </label>
+                    <label id="label-real-opt" style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 12px; border: 2px solid #eee; background: white; border-radius: 12px; cursor: pointer; text-align: center; transition: 0.2s;">
+                        <input type="radio" name="identificacao" id="radio-real" value="real" style="display:none;" onchange="atualizarOpcaoIdentidade()">
+                        <i class="fa-solid fa-user-check" style="font-size: 20px; color: var(--text-gray); margin-bottom: 6px;"></i>
+                        <span style="font-size: 13px; font-weight: 700; color: var(--text-dark);">Nome Real</span>
+                        <span style="font-size: 10px; color: var(--text-gray); margin-top: 2px;">Usar minhas informações públicas</span>
+                    </label>
+                </div>
+                <!-- checkbox input-anonimo e input-mostrar-foto ocultos para compatibilidade com o envio da api -->
+                <input type="checkbox" id="input-anonimo" checked style="display: none;">
+                <input type="checkbox" id="input-mostrar-foto" style="display: none;">
+            </div>
+
+            <div class="form-group">
                 <label>Comentário</label>
                 <textarea id="input-comentario" placeholder="Conte sua experiência nessa empresa..."></textarea>
             </div>
@@ -186,6 +207,8 @@
     <script>
         let notaSelecionada = 0;
         let empresasCache = [];
+        let avaliacoesCache = [];
+        let editandoId = null;
         const sessao = getSessao();
         const tipo = getTipoSessao();
 
@@ -221,12 +244,51 @@
             document.getElementById('nota-display').textContent = `Nota: ${n}/5`;
         }
 
+        function atualizarOpcaoIdentidade() {
+            const isAnonimo = document.getElementById('radio-anonima').checked;
+            const labelAnonima = document.getElementById('label-anonima-opt');
+            const labelReal = document.getElementById('label-real-opt');
+            const iconAnonima = labelAnonima.querySelector('i');
+            const titleAnonima = labelAnonima.querySelector('span');
+            const iconReal = labelReal.querySelector('i');
+            const titleReal = labelReal.querySelector('span');
+
+            // Sincronizar com os inputs originais que a api/função de salvar usa:
+            document.getElementById('input-anonimo').checked = isAnonimo;
+            document.getElementById('input-mostrar-foto').checked = !isAnonimo; // se for real, mostra com foto
+
+            if (isAnonimo) {
+                labelAnonima.style.borderColor = 'var(--pink-primary)';
+                labelAnonima.style.background = 'var(--pink-lighter)';
+                iconAnonima.style.color = 'var(--pink-primary)';
+                titleAnonima.style.color = 'var(--pink-dark)';
+
+                labelReal.style.borderColor = '#eee';
+                labelReal.style.background = 'white';
+                iconReal.style.color = 'var(--text-gray)';
+                titleReal.style.color = 'var(--text-dark)';
+            } else {
+                labelAnonima.style.borderColor = '#eee';
+                labelAnonima.style.background = 'white';
+                iconAnonima.style.color = 'var(--text-gray)';
+                titleAnonima.style.color = 'var(--text-dark)';
+
+                labelReal.style.borderColor = 'var(--pink-primary)';
+                labelReal.style.background = 'var(--pink-lighter)';
+                iconReal.style.color = 'var(--pink-primary)';
+                titleReal.style.color = 'var(--pink-dark)';
+            }
+        }
+
         function abrirModal(nomeEmpresa, empresaId) {
             if (!sessao || tipo !== 'mulher') {
                 showToast('Você precisa estar logada como mulher para avaliar.', 'error');
                 setTimeout(() => window.location.href = 'login.html', 1800);
                 return;
             }
+            editandoId = null;
+            document.querySelector('#modal-avaliacao h2').innerHTML = '<i class="fa-solid fa-star" style="color: #FFB800;"></i> Fazer Avaliação';
+            document.getElementById('input-empresa').disabled = false;
             document.getElementById('modal-avaliacao').classList.add('active');
             if (nomeEmpresa) {
                 document.getElementById('input-empresa').value = nomeEmpresa;
@@ -241,10 +303,43 @@
             document.querySelectorAll('#star-rating i').forEach(s => s.classList.remove('active'));
             document.getElementById('nota-display').textContent = 'Selecione uma nota';
             document.getElementById('input-comentario').value = '';
+            
+            document.getElementById('radio-anonima').checked = true;
+            document.getElementById('radio-real').checked = false;
+            atualizarOpcaoIdentidade();
+        }
+
+        function abrirEdicaoAvaliacao(id) {
+            const a = avaliacoesCache.find(item => item.id === id);
+            if (!a) return;
+            editandoId = id;
+            document.querySelector('#modal-avaliacao h2').innerHTML = '<i class="fa-solid fa-edit" style="color: #FFB800;"></i> Editar Avaliação';
+            document.getElementById('input-empresa').disabled = true;
+            document.getElementById('modal-avaliacao').classList.add('active');
+            document.getElementById('input-empresa').value = a.nomeEmpresa || '';
+            document.getElementById('input-empresa-id').value = a.empresaId || 0;
+            document.getElementById('empresa-match-info').innerHTML = '<i class="fa-solid fa-check-circle" style="color: #4CAF50;"></i> Editando avaliação anterior';
+            setNota(a.nota);
+            
+            const isAnonimo = !a.comentario.startsWith("[Identificada]") && !a.comentario.startsWith("[IdentificadaComFoto]");
+            
+            document.getElementById('radio-anonima').checked = isAnonimo;
+            document.getElementById('radio-real').checked = !isAnonimo;
+            atualizarOpcaoIdentidade();
+            
+            let comentarioLimpo = a.comentario;
+            if (a.comentario.startsWith("[IdentificadaComFoto] ")) {
+                comentarioLimpo = a.comentario.replace("[IdentificadaComFoto] ", "");
+            } else if (a.comentario.startsWith("[Identificada] ")) {
+                comentarioLimpo = a.comentario.replace("[Identificada] ", "");
+            }
+            
+            document.getElementById('input-comentario').value = comentarioLimpo;
         }
 
         function fecharModal() {
             document.getElementById('modal-avaliacao').classList.remove('active');
+            editandoId = null;
         }
 
         function autocompletar() {
@@ -293,14 +388,25 @@
             const nomeEmpresa = document.getElementById('input-empresa').value.trim();
             const empresaId = parseInt(document.getElementById('input-empresa-id').value);
             const comentario = document.getElementById('input-comentario').value.trim();
+            const anonima = document.getElementById('input-anonimo').checked;
+            const mostrarFoto = document.getElementById('input-mostrar-foto').checked;
 
             if (!nomeEmpresa) { showToast('Digite o nome da empresa.', 'error'); return; }
             if (notaSelecionada === 0) { showToast('Selecione uma nota de 1 a 5.', 'error'); return; }
             if (!comentario) { showToast('Escreva um comentário sobre a empresa.', 'error'); return; }
 
+            let comentarioFinal = comentario;
+            if (!anonima) {
+                if (mostrarFoto) {
+                    comentarioFinal = "[IdentificadaComFoto] " + comentario;
+                } else {
+                    comentarioFinal = "[Identificada] " + comentario;
+                }
+            }
+
             const avaliacao = {
-                id: 0,
-                comentario: comentario,
+                id: editandoId || 0,
+                comentario: comentarioFinal,
                 nota: notaSelecionada,
                 usuarioId: sessao.id,
                 empresaId: empresaId,
@@ -308,10 +414,16 @@
             };
 
             try {
-                await cadastrarAvaliacao(avaliacao);
-                showToast('Avaliação enviada com sucesso! Obrigada!', 'success');
+                if (editandoId) {
+                    await atualizarAvaliacao(editandoId, avaliacao);
+                    showToast('Avaliação atualizada com sucesso!', 'success');
+                } else {
+                    await cadastrarAvaliacao(avaliacao);
+                    showToast('Avaliação enviada com sucesso! Obrigada!', 'success');
+                }
                 fecharModal();
                 carregarAvaliacoes();
+                carregarEmpresas();
             } catch (err) {
                 showToast('Erro ao enviar: ' + err.message, 'error');
             }
@@ -333,28 +445,57 @@
                 container.innerHTML = '';
                 empresasCache.forEach(e => {
                     const nota = e.indice ? parseFloat(e.indice) : 0;
-                    const corNota = nota >= 3.5 ? 'var(--pink-dark)' : '#D32F2F';
-                    const badge = nota >= 3.5
-                        ? '<div class="badge"><i class="fa-solid fa-shield-heart"></i> Selo Empresa Segura</div>'
-                        : '<div class="badge" style="background: #FCE8E8; color: #D32F2F;"><i class="fa-solid fa-triangle-exclamation"></i> Empresa em Alerta</div>';
                     
+                    let corNota = 'var(--text-gray)';
+                    let badge = '';
+                    let notaTexto = 'Sem avaliações';
+                    let cardStyle = '';
+
+                    if (nota === 0) {
+                        badge = '<div class="badge" style="background: #f1f3f5; color: #6c757d; border: 1px solid #dee2e6;"><i class="fa-solid fa-star-half-stroke"></i> Sem Avaliações</div>';
+                        notaTexto = 'Sem avaliações';
+                        corNota = 'var(--text-gray)';
+                    } else if (nota >= 3.5) {
+                        badge = '<div class="badge"><i class="fa-solid fa-shield-heart"></i> Selo Empresa Segura</div>';
+                        notaTexto = `Nota: ${nota.toFixed(1)}/5.0`;
+                        corNota = 'var(--pink-dark)';
+                    } else {
+                        badge = '<div class="badge" style="background: #FCE8E8; color: #D32F2F;"><i class="fa-solid fa-triangle-exclamation"></i> Empresa em Alerta</div>';
+                        notaTexto = `Nota: ${nota.toFixed(1)}/5.0`;
+                        corNota = '#D32F2F';
+                        cardStyle = ' style="opacity: 0.85;"';
+                    }
+                    
+                    let parceiraBadge = '';
+                    if (e.plano === 'Premium') {
+                        parceiraBadge = '<div class="badge-parceira" style="background: #FCE4EC; color: #E33A7F; border: 1px solid #F8BBD0; padding: 4px 10px; border-radius: 12px; font-size: 11.5px; font-weight: 700; display: inline-block; margin: 4px auto 8px; width: fit-content; text-align: center;"><i class="fa-solid fa-crown" style="color: #E33A7F; margin-right: 4px;"></i>Empresa Parceira</div>';
+                    }
+
                     const botoes = (sessao && tipo === 'mulher') ? `
                         <div class="empresa-actions">
                             <button class="btn-avaliar-empresa" onclick="abrirModal('${e.nome.replace(/'/g, "\\'")}', ${e.id})"><i class="fa-solid fa-star"></i> Avaliar</button>
                             <button class="btn-denunciar-empresa" onclick="window.location.href='denuncias.html'"><i class="fa-solid fa-flag"></i> Denunciar</button>
                         </div>` : '';
 
+                    const verPerfilBotao = `<a href="detalhe-empresa.html?id=${e.id}" class="sh-btn-outline" style="display: block; margin: 8px auto 0; text-decoration: none; padding: 6px 12px; font-size: 11px; width: fit-content;"><i class="fa-solid fa-eye"></i> Perfil Completo</a>`;
+
+                    const logoHtml = e.foto
+                        ? `<img src="${e.foto}" alt="Logo" style="width: 55px; height: 55px; border-radius: 50%; object-fit: cover;">`
+                        : `<img src="resources/images/logo-escudo.png" alt="Escudo" style="width: 55px; height: auto;">`;
+
                     container.innerHTML += `
-                        <div class="company-card" data-nome="${e.nome.toLowerCase()}"${nota < 3.5 ? ' style="opacity: 0.85;"' : ''}>
+                        <div class="company-card" data-nome="${e.nome.toLowerCase()}"${cardStyle}>
                             ${badge}
-                            <div class="company-logo">
-                                <img src="resources/images/logo-escudo.png" alt="Escudo" style="width: 55px; height: auto;">
+                            <div class="company-logo" onclick="window.location.href='detalhe-empresa.html?id=${e.id}'" style="cursor:pointer; display: flex; align-items: center; justify-content: center; width: 60px; height: 60px; margin: 0 auto 12px; overflow: hidden; border-radius: 50%;">
+                                ${logoHtml}
                             </div>
-                            <h3 class="company-name">${e.nome}</h3>
+                            <h3 class="company-name" onclick="window.location.href='detalhe-empresa.html?id=${e.id}'" style="cursor:pointer; margin-bottom: 2px;">${e.nome}</h3>
+                            ${parceiraBadge}
                             <div class="stars">${gerarEstrelas(nota)}</div>
-                            <p style="font-weight: 700; color: ${corNota};">Nota: ${nota.toFixed(1)}/5.0</p>
+                            <p style="font-weight: 700; color: ${corNota};">${notaTexto}</p>
                             ${botoes}
-                            <p class="info-cadastrada"><i class="fa-solid fa-circle-check" style="color: #4CAF50;"></i> Cadastrada na SafeHer</p>
+                            ${verPerfilBotao}
+                            <p class="info-cadastrada" style="margin-top:8px;"><i class="fa-solid fa-circle-check" style="color: #4CAF50;"></i> Cadastrada na SafeHer</p>
                         </div>`;
                 });
             } catch (err) {
@@ -368,8 +509,15 @@
         async function carregarAvaliacoes() {
             const container = document.getElementById('avaliacoes-container');
             try {
-                const avaliacoes = await listarAvaliacoes();
-                if (avaliacoes.length === 0) {
+                const [avaliacoes, usuarios] = await Promise.all([
+                    listarAvaliacoes(),
+                    listarUsuarios()
+                ]);
+                
+                avaliacoesCache = avaliacoes || [];
+                const usuarioMap = new Map((usuarios || []).map(u => [u.id, u]));
+                
+                if (avaliacoesCache.length === 0) {
                     container.innerHTML = `
                         <div style="text-align: center; padding: 40px;">
                             <i class="fa-regular fa-comment-dots" style="font-size: 48px; color: #ddd; margin-bottom: 12px;"></i>
@@ -377,24 +525,86 @@
                         </div>`;
                     return;
                 }
+
                 container.innerHTML = '';
-                avaliacoes.forEach(a => {
+                // Restringir feed geral público às 3 contribuições mais recentes
+                const recentes = avaliacoesCache.slice(0, 3);
+
+                recentes.forEach(a => {
                     const empresa = a.nomeEmpresa || 'Empresa #' + a.empresaId;
                     const cadastrada = empresasCache.some(e => e.id === a.empresaId);
                     const tagCadastrada = cadastrada
-                        ? '<span style="font-size:11px; background:#E8F5E9; color:#4CAF50; padding:2px 8px; border-radius:10px;"><i class="fa-solid fa-check"></i> Cadastrada</span>'
+                        ? `<span style="font-size:11px; background:#E8F5E9; color:#4CAF50; padding:2px 8px; border-radius:10px; cursor:pointer;" onclick="window.location.href='detalhe-empresa.html?id=${a.empresaId}'"><i class="fa-solid fa-check"></i> Cadastrada</span>`
                         : '<span style="font-size:11px; background:#FFF3E0; color:#FF9800; padding:2px 8px; border-radius:10px;"><i class="fa-solid fa-arrow-up-right-from-square"></i> Externa</span>';
+                    
+                    const respostaHtml = a.resposta ? `
+                        <div style="background: #fdf2f6; border-left: 3px solid var(--pink-primary); border-radius: 8px; padding: 14px; margin-top: 14px; font-size: 13px;">
+                            <strong style="color: var(--pink-primary); display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+                                <i class="fa-solid fa-reply"></i> Resposta Oficial da Empresa:
+                            </strong>
+                            <span style="color: var(--text-dark); font-style: normal;">"${a.resposta}"</span>
+                        </div>` : '';
+
+                    // Mostrar botões de edição/exclusão apenas para a usuária mulher que escreveu a avaliação
+                    const isOwner = (sessao && (tipo === 'mulher' || tipo === 'usuario') && Number(sessao.id) === Number(a.usuarioId));
+                    const ownerBotoes = isOwner ? `
+                        <div style="display:flex; justify-content: flex-end; gap: 12px; margin-top: 14px;">
+                            <button onclick="abrirEdicaoAvaliacao(${a.id})" class="sh-btn-outline" style="padding: 5px 12px; font-size: 11px; cursor:pointer;"><i class="fa-solid fa-edit"></i> Editar</button>
+                            <button onclick="excluirAvaliacao(${a.id})" class="sh-btn" style="padding: 5px 12px; font-size: 11px; background: #D32F2F; border: none; color: white; cursor:pointer;"><i class="fa-solid fa-trash"></i> Excluir</button>
+                        </div>` : '';
+
+                    const hasFoto = a.comentario.startsWith("[IdentificadaComFoto]");
+                    const isIdentified = a.comentario.startsWith("[Identificada]") || hasFoto;
+                    const isAnonimo = !isIdentified;
+
+                    let comentarioLimpo = a.comentario;
+                    if (a.comentario.startsWith("[IdentificadaComFoto] ")) {
+                        comentarioLimpo = a.comentario.replace("[IdentificadaComFoto] ", "");
+                    } else if (a.comentario.startsWith("[Identificada] ")) {
+                        comentarioLimpo = a.comentario.replace("[Identificada] ", "");
+                    }
+
+                    const autorObj = usuarioMap.get(a.usuarioId);
+                    const autorNome = isAnonimo ? "Colaboradora Anônima" : (autorObj ? autorObj.nome : "Usuária SafeHer");
+
+                    let autorFotoHtml = '';
+                    if (isIdentified && hasFoto && autorObj && autorObj.foto) {
+                        autorFotoHtml = `<img src="${autorObj.foto}" alt="${autorNome}" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--pink-primary); margin-right: 4px; vertical-align: middle;">`;
+                    } else if (isIdentified && hasFoto) {
+                        // Fallback default avatar icon
+                        autorFotoHtml = `<img src="https://cdn-icons-png.flaticon.com/512/147/147144.png" alt="${autorNome}" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--pink-primary); margin-right: 4px; vertical-align: middle;">`;
+                    } else {
+                        autorFotoHtml = '<i class="fa-solid fa-user-shield"></i>';
+                    }
+
                     container.innerHTML += `
                         <div class="avaliacao-card">
                             <div class="av-header">
                                 <span class="av-empresa"><i class="fa-solid fa-building"></i> ${empresa} ${tagCadastrada}</span>
                                 <span class="av-nota"><span class="stars">${gerarEstrelas(a.nota)}</span> ${a.nota}/5</span>
                             </div>
-                            <p class="av-comentario">"${a.comentario || 'Sem comentário'}"</p>
+                            <p style="font-size:12.5px; color:var(--text-gray); margin-bottom:8px; font-weight:600; display:flex; align-items:center; gap:6px;">
+                                ${autorFotoHtml} Escrito por: ${autorNome}
+                            </p>
+                            <p class="av-comentario">"${comentarioLimpo || 'Sem comentário'}"</p>
+                            ${respostaHtml}
+                            ${ownerBotoes}
                         </div>`;
                 });
             } catch (e) {
                 container.innerHTML = `<p style="text-align:center; color:#D32F2F;">Erro ao carregar avaliações.</p>`;
+            }
+        }
+
+        async function excluirAvaliacao(id) {
+            if (!confirm('Deseja realmente excluir esta avaliação permanentemente?')) return;
+            try {
+                await removerAvaliacao(id);
+                showToast('Avaliação excluída com sucesso!', 'success');
+                carregarAvaliacoes();
+                carregarEmpresas();
+            } catch (e) {
+                showToast('Erro ao excluir avaliação: ' + e.message, 'error');
             }
         }
 
@@ -464,6 +674,14 @@
                 if (avaliacoes.length > 0) {
                     html += '<h3 class="section-title" style="margin-top: 16px;"><i class="fa-solid fa-comments"></i> Avaliações sobre sua empresa</h3>';
                     avaliacoes.forEach(a => {
+                        const respostaHtml = a.resposta ? `
+                            <div style="background: #fdf2f6; border-left: 3px solid var(--pink-primary); border-radius: 8px; padding: 14px; margin-top: 14px; font-size: 13px;">
+                                <strong style="color: var(--pink-primary); display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+                                    <i class="fa-solid fa-reply"></i> Sua Resposta Oficial:
+                                </strong>
+                                <span style="color: var(--text-dark); font-style: normal;">"${a.resposta}"</span>
+                            </div>` : '';
+
                         html += `
                             <div class="avaliacao-card">
                                 <div class="av-header">
@@ -471,6 +689,7 @@
                                     <span class="av-nota"><span class="stars">${gerarEstrelas(a.nota)}</span> ${a.nota}/5</span>
                                 </div>
                                 <p class="av-comentario">"${a.comentario || 'Sem comentário'}"</p>
+                                ${respostaHtml}
                             </div>`;
                     });
                 } else {

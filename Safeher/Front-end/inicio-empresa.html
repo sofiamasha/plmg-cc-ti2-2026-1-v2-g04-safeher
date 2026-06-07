@@ -317,58 +317,123 @@
                 </div>
             </section>
 
-            <!-- Painel de Recursos Corporativos -->
-            <h3 class="module-section-title"><i class="fa-solid fa-cubes"></i> Recursos Corporativos</h3>
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; margin-bottom: 50px;">
+            <!-- MÓDULO 1: Dashboard Analítico (Premium e Plus) -->
+            <h3 class="module-section-title"><i class="fa-solid fa-chart-pie"></i> Dashboard e Gestão Analítica</h3>
+            <div class="module-container" id="dashContainer">
+                <div class="lock-overlay" id="dashLockOverlay">
+                    <i class="fa-solid fa-lock lock-icon"></i>
+                    <h4 class="lock-title">Dashboard Analítico Bloqueado</h4>
+                    <p class="lock-desc">Tenha acesso a estatísticas detalhadas de incidentes, tendências corporativas e relatórios mensais exclusivos para melhorar o ambiente de trabalho.</p>
+                    <a href="planos.html" class="sh-btn"><i class="fa-solid fa-gem"></i> Assinar Plano Plus</a>
+                </div>
                 
-                <!-- Card Dashboard -->
-                <div style="background: white; border-radius: 20px; padding: 30px; border: 1px solid var(--border-light); box-shadow: 0 4px 15px rgba(0,0,0,0.03); display: flex; flex-direction: column; justify-content: space-between; transition: 0.3s;" onmouseover="this.style.transform='translateY(-5px)'; this.style.borderColor='var(--pink-light)';" onmouseout="this.style.transform='none'; this.style.borderColor='var(--border-light)';">
-                    <div>
-                        <div style="background: var(--pink-light); color: var(--pink-primary); width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 20px;">
-                            <i class="fa-solid fa-chart-pie"></i>
+                <div class="locked-content" id="dashContent">
+                    <div class="dash-stats-grid">
+                        <div class="dash-stat-card">
+                            <div class="dash-stat-val">4.6</div>
+                            <div class="dash-stat-label">Nota de Respeito</div>
                         </div>
-                        <h4 style="font-size: 20px; font-weight: 700; color: var(--text-dark); margin-bottom: 10px;">Dashboard Analítico</h4>
-                        <p style="font-size: 14px; color: var(--text-gray); line-height: 1.6; margin-bottom: 20px;">Acompanhe métricas detalhadas sobre o clima organizacional, tendências corporativas de segurança e baixe relatórios mensais consolidados em PDF.</p>
-                    </div>
-                    <a href="empresa-dashboard.html" class="sh-btn" style="width: 100%; text-align: center; color: white;">Acessar Dashboard</a>
-                </div>
-
-                <!-- Card Ouvidoria -->
-                <div style="background: white; border-radius: 20px; padding: 30px; border: 1px solid var(--border-light); box-shadow: 0 4px 15px rgba(0,0,0,0.03); display: flex; flex-direction: column; justify-content: space-between; transition: 0.3s;" onmouseover="this.style.transform='translateY(-5px)'; this.style.borderColor='var(--pink-light)';" onmouseout="this.style.transform='none'; this.style.borderColor='var(--border-light)';">
-                    <div>
-                        <div style="background: var(--pink-light); color: var(--pink-primary); width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 20px;">
-                            <i class="fa-solid fa-comments"></i>
+                        <div class="dash-stat-card">
+                            <div class="dash-stat-val">12</div>
+                            <div class="dash-stat-label">Avaliações Totais</div>
                         </div>
-                        <h4 style="font-size: 20px; font-weight: 700; color: var(--text-dark); margin-bottom: 10px;">Ouvidoria & Avaliações</h4>
-                        <p style="font-size: 14px; color: var(--text-gray); line-height: 1.6; margin-bottom: 20px;">Veja as avaliações feitas por funcionárias. Responda oficialmente para construir um ambiente seguro e uma marca empregadora forte.</p>
-                    </div>
-                    <a href="empresa-ouvidoria.html" class="sh-btn" style="width: 100%; text-align: center; color: white;">Gerenciar Ouvidoria</a>
-                </div>
-
-                <!-- Card Vagas -->
-                <div style="background: white; border-radius: 20px; padding: 30px; border: 1px solid var(--border-light); box-shadow: 0 4px 15px rgba(0,0,0,0.03); display: flex; flex-direction: column; justify-content: space-between; transition: 0.3s;" onmouseover="this.style.transform='translateY(-5px)'; this.style.borderColor='var(--pink-light)';" onmouseout="this.style.transform='none'; this.style.borderColor='var(--border-light)';">
-                    <div>
-                        <div style="background: var(--pink-light); color: var(--pink-primary); width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 20px;">
-                            <i class="fa-solid fa-briefcase"></i>
+                        <div class="dash-stat-card">
+                            <div class="dash-stat-val">0</div>
+                            <div class="dash-stat-label">Denúncias Críticas</div>
                         </div>
-                        <h4 style="font-size: 20px; font-weight: 700; color: var(--text-dark); margin-bottom: 10px;">Divulgação de Vagas</h4>
-                        <p style="font-size: 14px; color: var(--text-gray); line-height: 1.6; margin-bottom: 20px;">Anuncie e gerencie oportunidades profissionais. Vagas de empresas Premium ganham destaque de prioridade e o Selo de Empresa Segura.</p>
-                    </div>
-                    <a href="empresa-vagas.html" class="sh-btn" style="width: 100%; text-align: center; color: white;">Anunciar Vagas</a>
-                </div>
-
-                <!-- Card Treinamentos -->
-                <div style="background: white; border-radius: 20px; padding: 30px; border: 1px solid var(--border-light); box-shadow: 0 4px 15px rgba(0,0,0,0.03); display: flex; flex-direction: column; justify-content: space-between; transition: 0.3s;" onmouseover="this.style.transform='translateY(-5px)'; this.style.borderColor='var(--pink-light)';" onmouseout="this.style.transform='none'; this.style.borderColor='var(--border-light)';">
-                    <div>
-                        <div style="background: var(--pink-light); color: var(--pink-primary); width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 20px;">
-                            <i class="fa-solid fa-graduation-cap"></i>
+                        <div class="dash-stat-card">
+                            <div class="dash-stat-val">96%</div>
+                            <div class="dash-stat-label">Taxa de Segurança</div>
                         </div>
-                        <h4 style="font-size: 20px; font-weight: 700; color: var(--text-dark); margin-bottom: 10px;">Treinamentos Preventivos</h4>
-                        <p style="font-size: 14px; color: var(--text-gray); line-height: 1.6; margin-bottom: 20px;">Capacite suas equipes e lideranças com cursos interativos EAD de combate ao assédio e promoção da equidade de gênero.</p>
                     </div>
-                    <a href="empresa-treinamentos.html" class="sh-btn" style="width: 100%; text-align: center; color: white;">Acessar Treinamentos</a>
+                    <div class="dash-chart-row">
+                        <div class="dash-chart-card" style="display:flex; flex-direction:column; justify-content:space-between;">
+                            <strong>Evolução do Clima Corporativo</strong>
+                            <div style="height:120px; background:#e9ecef; border-radius:10px; display:flex; align-items:flex-end; justify-content:space-around; padding:10px;">
+                                <div style="width:30px; height:60%; background:var(--pink-light); border-radius:5px 5px 0 0;"></div>
+                                <div style="width:30px; height:75%; background:var(--pink-light); border-radius:5px 5px 0 0;"></div>
+                                <div style="width:30px; height:85%; background:var(--pink-primary); border-radius:5px 5px 0 0;"></div>
+                            </div>
+                        </div>
+                        <div class="dash-chart-card" style="display:flex; flex-direction:column; justify-content:space-between; align-items:center; text-align:center;">
+                            <strong>Relatórios Mensais</strong>
+                            <button class="sh-btn" style="padding:10px 20px; font-size:12px;" onclick="showToast('Relatório de Maio gerado com sucesso!', 'success')"><i class="fa-solid fa-download"></i> Baixar Relatório (PDF)</button>
+                        </div>
+                    </div>
                 </div>
+            </div>
 
+            <!-- MÓDULO 2: Módulo de Treinamentos (Plus) -->
+            <h3 class="module-section-title"><i class="fa-solid fa-graduation-cap"></i> Módulo de Treinamentos</h3>
+            <div class="module-container" id="treContainer">
+                <div class="lock-overlay" id="treLockOverlay">
+                    <i class="fa-solid fa-lock lock-icon"></i>
+                    <h4 class="lock-title">Módulo de Treinamentos Corporativos</h4>
+                    <p class="lock-desc">Treine suas equipes, líderes e colaboradores com guias e trilhas EAD interativas de prevenção ao assédio e igualdade de gênero.</p>
+                    <a href="planos.html" class="sh-btn"><i class="fa-solid fa-gem"></i> Assinar Plano Premium</a>
+                </div>
+                
+                <div class="locked-content" id="treContent">
+                    <div class="trainings-grid">
+                        <div class="training-card">
+                            <div class="training-img-placeholder">
+                                <i class="fa-solid fa-shield-halved"></i>
+                            </div>
+                            <div class="training-body">
+                                <h4 class="training-title">Prevenção ao Assédio</h4>
+                                <p class="training-desc">Trilha fundamental para colaboradores sobre conformidade legal e ética.</p>
+                            </div>
+                        </div>
+                        <div class="training-card">
+                            <div class="training-img-placeholder">
+                                <i class="fa-solid fa-users-viewfinder"></i>
+                            </div>
+                            <div class="training-body">
+                                <h4 class="training-title">Liderança Inclusiva</h4>
+                                <p class="training-desc">Treinamento avançado para gestores em viés inconsciente e contratações justas.</p>
+                            </div>
+                        </div>
+                        <div class="training-card">
+                            <div class="training-img-placeholder">
+                                <i class="fa-solid fa-handshake-angle"></i>
+                            </div>
+                            <div class="training-body">
+                                <h4 class="training-title">Criação de Canais de Apoio</h4>
+                                <p class="training-desc">Como estruturar uma ouvidoria interna segura e eficiente.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MÓDULO 3: Vagas Prioritárias para Mulheres (Plus) -->
+            <h3 class="module-section-title"><i class="fa-solid fa-briefcase"></i> Divulgação de Vagas Prioritárias</h3>
+            <div class="module-container" id="vagContainer">
+                <div class="lock-overlay" id="vagLockOverlay">
+                    <i class="fa-solid fa-lock lock-icon"></i>
+                    <h4 class="lock-title">Vagas Prioritárias e Selo SafeHer</h4>
+                    <p class="lock-desc">Anuncie e priorize suas oportunidades profissionais para nossa comunidade de mulheres qualificadas com o selo de Empresa Parceira.</p>
+                    <a href="planos.html" class="sh-btn"><i class="fa-solid fa-gem"></i> Assinar Plano Premium</a>
+                </div>
+                
+                <div class="locked-content" id="vagContent">
+                    <div class="jobs-list-mock">
+                        <div class="job-mock-item">
+                            <div class="job-mock-details">
+                                <h4>Desenvolvedora Java Full Stack <span class="badge-partner-small">Selo Parceira</span></h4>
+                                <p>Publicada há 2 dias — 18 candidatas inscritas</p>
+                            </div>
+                            <button class="sh-btn-outline" style="padding: 8px 16px; font-size:12px;" onclick="showToast('Abrindo candidatas...', 'info')">Gerenciar Candidaturas</button>
+                        </div>
+                        <div class="job-mock-item">
+                            <div class="job-mock-details">
+                                <h4>Analista de Dados Pleno <span class="badge-partner-small">Selo Parceira</span></h4>
+                                <p>Publicada há 5 dias — 11 candidatas inscritas</p>
+                            </div>
+                            <button class="sh-btn-outline" style="padding: 8px 16px; font-size:12px;" onclick="showToast('Abrindo candidatas...', 'info')">Gerenciar Candidaturas</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </main>
     </div>
@@ -405,20 +470,43 @@
             // preenche o nome
             document.getElementById('empresa-nome').textContent = usuario.nome || 'Empresa';
             
-            // Ajustar badge de plano e parceira
+            // LÓGICA DE FRONTEND: Liberar áreas bloqueadas baseado no plano
             const plano = usuario.plano || 'Free';
-            const badge = document.getElementById('badgePlano');
             
-            if (plano === 'Plus') {
+            if (plano === 'Plus' || plano === 'Premium') {
+                // Desbloqueia Dashboard
+                document.getElementById('dashLockOverlay').style.display = 'none';
+                document.getElementById('dashContent').classList.remove('locked-content');
+                document.getElementById('dashContent').style.filter = 'none';
+                document.getElementById('dashContent').style.pointerEvents = 'all';
+                document.getElementById('dashContent').style.userSelect = 'auto';
+                
+                const badge = document.getElementById('badgePlano');
                 badge.textContent = 'Plano Plus';
                 badge.className = 'hero-badge plus';
-            } else if (plano === 'Premium') {
+            }
+            
+            if (plano === 'Premium') {
+                // Desbloqueia Treinamento
+                document.getElementById('treLockOverlay').style.display = 'none';
+                document.getElementById('treContent').classList.remove('locked-content');
+                document.getElementById('treContent').style.filter = 'none';
+                document.getElementById('treContent').style.pointerEvents = 'all';
+                document.getElementById('treContent').style.userSelect = 'auto';
+                
+                // Desbloqueia Vagas
+                document.getElementById('vagLockOverlay').style.display = 'none';
+                document.getElementById('vagContent').classList.remove('locked-content');
+                document.getElementById('vagContent').style.filter = 'none';
+                document.getElementById('vagContent').style.pointerEvents = 'all';
+                document.getElementById('vagContent').style.userSelect = 'auto';
+                
+                const badge = document.getElementById('badgePlano');
                 badge.textContent = 'Plano Premium';
                 badge.className = 'hero-badge premium';
+                
+                // Exibe o Badge de Empresa Parceira
                 document.getElementById('badgeParceira').style.display = 'inline-flex';
-            } else {
-                badge.textContent = 'Plano Free';
-                badge.className = 'hero-badge';
             }
         });
     </script>
