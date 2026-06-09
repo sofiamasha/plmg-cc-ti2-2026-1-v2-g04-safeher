@@ -7,12 +7,11 @@ import com.google.gson.JsonSerializer;
 import com.google.gson.JsonPrimitive;
 import dao.UsuarioDAO;
 import model.Usuario;
+import org.mindrot.jbcrypt.BCrypt;
 import spark.Request;
 import spark.Response;
 
-import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.List;
 
 public class UsuarioService {
 
@@ -35,6 +34,8 @@ public class UsuarioService {
         res.type("application/json");
         try {
             Usuario usuario = gson.fromJson(req.body(), Usuario.class);
+            // nunca salva senha em texto puro
+            usuario.setSenha(BCrypt.hashpw(usuario.getSenha(), BCrypt.gensalt()));
             usuarioDAO.insert(usuario);
             return gson.toJson("{\"msg\":\"Usuario inserido com sucesso\"}");
         } catch (Exception e) {
@@ -48,8 +49,45 @@ public class UsuarioService {
         try {
             Usuario usuario = gson.fromJson(req.body(), Usuario.class);
             usuario.setId(Integer.parseInt(req.params(":id")));
+
+            // se a senha nao veio no corpo, mantem a atual (ja com hash);
+            // se veio, gera um novo hash.
+            if (usuario.getSenha() == null || usuario.getSenha().isBlank()) {
+                usuario.setSenha(usuarioDAO.buscarSenhaAtual(usuario.getId()));
+            } else {
+                usuario.setSenha(BCrypt.hashpw(usuario.getSenha(), BCrypt.gensalt()));
+            }
+
             usuarioDAO.update(usuario);
             return gson.toJson("{\"msg\":\"Usuario atualizado com sucesso\"}");
+        } catch (Exception e) {
+            res.status(500);
+            return gson.toJson("{\"erro\":\"" + e.getMessage() + "\"}");
+        }
+    }
+
+    public String login(Request req, Response res) {
+        res.type("application/json");
+        try {
+            Usuario dados = gson.fromJson(req.body(), Usuario.class);
+            Usuario usuario = usuarioDAO.buscarPorEmail(dados.getEmail());
+
+            boolean ok = false;
+            if (usuario != null && usuario.getSenha() != null) {
+                try {
+                    ok = BCrypt.checkpw(dados.getSenha(), usuario.getSenha());
+                } catch (IllegalArgumentException ex) {
+                    ok = false; // hash invalido (ex.: usuario antigo em texto puro)
+                }
+            }
+
+            if (ok) {
+                usuario.setSenha(null); // nunca devolve a senha
+                return gson.toJson(usuario);
+            }
+
+            res.status(401);
+            return gson.toJson("{\"erro\":\"Email ou senha invalidos\"}");
         } catch (Exception e) {
             res.status(500);
             return gson.toJson("{\"erro\":\"" + e.getMessage() + "\"}");
