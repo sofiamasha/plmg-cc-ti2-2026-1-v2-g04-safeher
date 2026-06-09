@@ -40,6 +40,16 @@ async function listarUsuarios() {
     return res.json();
 }
 
+/* login de usuario */
+async function loginUsuario(email, senha) {
+    const res = await fetch(`${API}/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, senha })
+    });
+    return res.json();
+}
+
 // empresa
 
 async function cadastrarEmpresa(empresa) {
