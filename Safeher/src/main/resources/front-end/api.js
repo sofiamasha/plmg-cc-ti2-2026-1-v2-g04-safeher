@@ -52,6 +52,16 @@ async function loginUsuario(email, senha) {
 
 // empresa
 
+/* login de empresa */
+async function loginEmpresa(nome, senha) {
+    const res = await fetch(`${API}/login-empresa`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nome, senha })
+    });
+    return res.json();
+}
+
 async function cadastrarEmpresa(empresa) {
     const res = await fetch(`${API}/empresas`, {
         method: "POST",
