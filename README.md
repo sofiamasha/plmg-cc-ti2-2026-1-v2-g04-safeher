@@ -4,13 +4,13 @@
 
 ## Visão Geral do Projeto
 
-O **SafeHer** é uma plataforma digital desenvolvida com o objetivo de promover ambientes corporativos mais seguros, transparentes e inclusivos para as mulheres. A solução atua como uma rede de apoio, informação e monitoramento, permitindo que usuárias registrem avaliações e relatem situações de assédio, discriminação ou outras experiências negativas vivenciadas no contexto profissional.
+O **SafeHer** é uma plataforma digital desenvolvida com o propósito de promover ambientes corporativos mais seguros, transparentes e inclusivos para as mulheres. A solução foi concebida para atuar como uma rede de apoio, informação e conscientização, permitindo que usuárias compartilhem experiências, registrem avaliações e relatem situações de assédio, discriminação ou outras ocorrências relacionadas ao ambiente de trabalho.
 
-A proposta da plataforma é ampliar o acesso a informações confiáveis sobre organizações, fornecendo indicadores que auxiliem mulheres na tomada de decisões relacionadas ao mercado de trabalho e incentivem empresas a adotarem práticas mais responsáveis e alinhadas aos princípios de equidade e respeito.
+A plataforma busca reduzir a assimetria de informações existente no mercado de trabalho, oferecendo indicadores que auxiliam mulheres na avaliação de organizações antes de processos seletivos ou oportunidades profissionais. Ao mesmo tempo, incentiva empresas a adotarem práticas mais responsáveis, fortalecendo uma cultura organizacional baseada em respeito, equidade e segurança.
 
-Por meio da integração entre banco de dados estruturado, serviços inteligentes e mecanismos de análise de informações, o sistema consolida um **índice de segurança corporativa**, permitindo avaliar o comprometimento das organizações com a proteção e valorização das mulheres no ambiente profissional.
+Por meio da integração entre banco de dados estruturado, recursos de computação em nuvem e serviços de Inteligência Artificial, o sistema consolida informações relevantes para a geração de um **Índice de Segurança Corporativa**, promovendo maior transparência sobre as condições oferecidas pelas organizações às mulheres.
 
-Além de oferecer canais de denúncia e avaliação, a plataforma disponibiliza dados por meio de uma API pública, contribuindo para a transparência e para a construção de um ecossistema corporativo mais seguro.
+Além disso, a aplicação disponibiliza dados por meio de uma API pública, contribuindo para futuras integrações, análises estatísticas e iniciativas voltadas à promoção da igualdade de gênero no ambiente profissional.
 
 ---
 
@@ -23,6 +23,7 @@ Além de oferecer canais de denúncia e avaliação, a plataforma disponibiliza 
 * [Fluxo de Rotas](#fluxo-de-rotas-exemplo-avaliações)
 * [Histórico de Versões](#histórico-de-versões)
 * [Autores e Orientação](#autores-e-orientação)
+* [Considerações Finais](#considerações-finais)
 
 ---
 
@@ -32,23 +33,24 @@ Além de oferecer canais de denúncia e avaliação, a plataforma disponibiliza 
 
 Apesar dos avanços relacionados à igualdade de gênero, milhares de mulheres ainda enfrentam situações de assédio moral, assédio sexual, discriminação e insegurança em seus ambientes de trabalho.
 
-Além disso, existe uma dificuldade significativa em obter informações confiáveis sobre a cultura organizacional das empresas antes de ingressar em processos seletivos ou assumir novas oportunidades profissionais.
+Além dos desafios cotidianos enfrentados dentro das organizações, existe uma dificuldade significativa em obter informações confiáveis sobre a cultura corporativa de empresas antes da participação em processos seletivos ou da aceitação de oportunidades profissionais.
 
-Outro desafio relevante é a ausência de canais externos independentes que permitam o relato seguro dessas situações, preservando o anonimato e a proteção das vítimas.
+Outro problema recorrente está relacionado à ausência de canais independentes que permitam a realização de denúncias de forma segura, protegendo a identidade das vítimas e incentivando o registro de ocorrências.
 
 ### A Solução
 
-O SafeHer foi concebido para atuar como uma plataforma centralizadora de informações, avaliações e denúncias relacionadas à experiência feminina no mercado de trabalho.
+O SafeHer foi desenvolvido para atuar como uma plataforma centralizadora de informações, avaliações e denúncias relacionadas à experiência feminina no mercado de trabalho.
 
 A solução oferece:
 
-* Registro seguro de denúncias e relatos;
-* Consulta pública de indicadores organizacionais;
+* Registro de denúncias e relatos;
 * Avaliação de empresas com base em experiências reais;
-* Disponibilização de métricas por meio de API pública;
-* Utilização de recursos inteligentes para processamento e análise de informações.
+* Consulta pública de indicadores organizacionais;
+* Disponibilização de dados por meio de API pública;
+* Recursos inteligentes para análise e processamento de informações;
+* Acesso facilitado a conteúdos informativos relacionados aos direitos das mulheres.
 
-Dessa forma, o sistema busca fortalecer a transparência corporativa e contribuir para a construção de ambientes profissionais mais seguros e inclusivos.
+Dessa forma, o sistema busca fortalecer a transparência corporativa, ampliar o acesso à informação e contribuir para a construção de ambientes profissionais mais seguros e inclusivos.
 
 ---
 
@@ -56,33 +58,37 @@ Dessa forma, o sistema busca fortalecer a transparência corporativa e contribui
 
 ### Registro de Denúncias
 
-Permite o envio de relatos relacionados a assédio, discriminação ou outras situações inadequadas ocorridas no ambiente corporativo, preservando a segurança das usuárias e a integridade das informações registradas.
+Permite o cadastro de relatos relacionados a assédio, discriminação ou outras situações inadequadas ocorridas no ambiente corporativo, contribuindo para a geração de indicadores e para o monitoramento das organizações.
 
 ### Sistema de Avaliações
 
-Possibilita que usuárias compartilhem experiências relacionadas às empresas, contribuindo para a formação de indicadores coletivos de confiabilidade e segurança.
+Possibilita que usuárias compartilhem experiências relacionadas às empresas, criando uma base colaborativa de informações sobre segurança, respeito e qualidade do ambiente de trabalho.
 
 ### Índice de Segurança Corporativa
 
-Consolida informações provenientes de avaliações, denúncias e demais registros da plataforma para gerar métricas que auxiliem na análise do comprometimento das organizações com boas práticas de inclusão e proteção às mulheres.
+Consolida informações provenientes das avaliações, denúncias e demais registros da plataforma para gerar indicadores que auxiliam na análise do comprometimento das organizações com boas práticas de inclusão e proteção às mulheres.
 
 ### API Pública
 
-Disponibiliza dados e indicadores produzidos pelo sistema, permitindo futuras integrações e análises por aplicações externas.
+Disponibiliza dados e métricas produzidos pelo sistema para futuras integrações com aplicações externas, pesquisas acadêmicas e análises estatísticas.
 
 ### Processamento Inteligente
 
-Integra recursos de inteligência artificial para transcrição e análise de conteúdos em áudio, apoiando a classificação e interpretação de informações registradas na plataforma.
+Integra recursos de Inteligência Artificial para transcrição e análise de conteúdos em áudio, apoiando a classificação e interpretação das informações registradas na plataforma.
+
+### Conteúdos Informativos
+
+Disponibiliza materiais e informações voltados à conscientização sobre direitos, segurança e inclusão feminina no ambiente corporativo.
 
 ---
 
 ## Arquitetura e Tecnologias
 
-A arquitetura do SafeHer foi projetada com foco em organização, escalabilidade e separação adequada de responsabilidades entre as camadas da aplicação.
+A arquitetura do SafeHer foi projetada com foco em organização, escalabilidade, manutenção e separação adequada de responsabilidades entre as camadas da aplicação.
 
 ### Front-End
 
-Desenvolvido utilizando **React**, **JavaScript**, **HTML5** e **CSS3**, sendo responsável pela interface gráfica, experiência do usuário e interação com os serviços disponibilizados pelo backend.
+Desenvolvido utilizando **React**, **JavaScript**, **HTML5** e **CSS3**, sendo responsável pela interface gráfica, experiência do usuário e comunicação com os serviços disponibilizados pelo backend.
 
 ### Back-End
 
@@ -90,31 +96,55 @@ Implementado em **Java** utilizando o **Spark Framework**, responsável pelo pro
 
 ### Inteligência Artificial
 
-Integração com o modelo **OpenAI Whisper v2**, utilizado para transcrição de áudios e apoio aos processos de análise das informações recebidas pela plataforma.
+Integração com **OpenAI Whisper v2**, utilizada para transcrição de áudios e apoio aos processos de análise das informações recebidas pela plataforma.
 
 ### Banco de Dados
 
-Utilização do **PostgreSQL** para persistência de dados, hospedado em infraestrutura de nuvem da **Microsoft Azure**, garantindo disponibilidade, confiabilidade e escalabilidade para a aplicação.
+Utilização do **PostgreSQL** para persistência dos dados da aplicação, garantindo integridade, organização e confiabilidade das informações armazenadas.
+
+### Computação em Nuvem
+
+Hospedagem e gerenciamento dos serviços em ambiente de nuvem **Microsoft Azure**, proporcionando disponibilidade, escalabilidade e suporte à infraestrutura da solução.
 
 ---
 
 ## Fluxo de Rotas (Exemplo: Avaliações)
 
-Os serviços disponibilizados pela aplicação são organizados por meio de endpoints REST responsáveis pela comunicação entre frontend, backend e banco de dados.
+Os serviços disponibilizados pela aplicação seguem uma arquitetura baseada em APIs REST, responsáveis pela comunicação entre frontend, backend e banco de dados.
 
 ### Endpoints Disponíveis
 
-* `POST /avaliacoes`
-  Responsável pelo cadastro de uma nova avaliação.
+#### Cadastro de Avaliação
 
-* `GET /avaliacoes/:id`
-  Retorna os dados de uma avaliação específica.
+```http
+POST /avaliacoes
+```
 
-* `GET /avaliacoes`
-  Lista todas as avaliações registradas no sistema.
+Responsável pelo registro de uma nova avaliação no sistema.
 
-* `GET /avaliacoes/empresa/:empresaId`
-  Retorna avaliações e indicadores associados a uma empresa específica.
+#### Consulta de Avaliação por Identificador
+
+```http
+GET /avaliacoes/:id
+```
+
+Retorna os dados completos de uma avaliação específica.
+
+#### Listagem de Avaliações
+
+```http
+GET /avaliacoes
+```
+
+Retorna todas as avaliações cadastradas na plataforma.
+
+#### Consulta por Empresa
+
+```http
+GET /avaliacoes/empresa/:empresaId
+```
+
+Retorna avaliações e indicadores relacionados a uma empresa específica.
 
 ---
 
@@ -124,30 +154,74 @@ Os serviços disponibilizados pela aplicação são organizados por meio de endp
 
 Principais entregas realizadas:
 
-* Definição da arquitetura geral do sistema;
+* Definição da proposta de solução;
+* Levantamento dos requisitos do sistema;
 * Estruturação das entidades de negócio;
-* Implementação do banco de dados PostgreSQL;
-* Configuração da infraestrutura em nuvem Azure;
-* Desenvolvimento das rotas da API utilizando Spark Framework;
-* Integração inicial dos serviços de Inteligência Artificial;
-* Organização dos módulos de frontend e backend da aplicação.
+* Planejamento da arquitetura geral da aplicação;
+* Modelagem inicial do banco de dados;
+* Definição dos recursos inteligentes e serviços externos.
+
+### Versão 1.5.0 (30/05/2026)
+
+Principais evoluções:
+
+* Desenvolvimento das interfaces do usuário;
+* Estruturação da navegação da aplicação;
+* Refinamento das regras de negócio;
+* Evolução da modelagem de dados;
+* Construção dos primeiros fluxos operacionais do sistema.
+
+### Versão 2.0.0 (09/06/2026)
+
+Principais entregas realizadas:
+
+* Integração entre frontend, backend e banco de dados;
+* Implementação das funcionalidades previstas para a plataforma;
+* Consolidação da arquitetura da aplicação;
+* Integração dos recursos de Inteligência Artificial;
+* Utilização de serviços em nuvem para suporte à solução;
+* Refinamento das interfaces e da experiência do usuário;
+* Melhorias estruturais na persistência e tratamento dos dados;
+* Preparação da aplicação para demonstração e entrega final.
 
 ---
 
 ## Autores e Orientação
 
-### Integrantes e Professores Orientadores
+### Equipe de Desenvolvimento
 
-As informações referentes às integrantes responsáveis pelo desenvolvimento do projeto, bem como aos docentes orientadores, encontram-se documentadas oficialmente nos metadados do repositório.
+O projeto **SafeHer** foi desenvolvido por alunas do curso de Ciência da Computação da Pontifícia Universidade Católica de Minas Gerais (PUC Minas), por meio de uma abordagem colaborativa envolvendo atividades de análise, modelagem, implementação, testes e documentação.
 
-Para consultar a composição completa da equipe, atribuições acadêmicas e informações de citação, utilize a seção **"Cite this repository"** disponível na lateral do repositório ou acesse diretamente o arquivo:
+#### Integrantes da Equipe (ordem alfabética)
 
-📄 **[CITATION.cff](CITATION.cff)**
+* Kamilly Oliveira
+* Lanna da Silva
+* Maria Fernanda
+* Sofia
+
+### Professores Orientadores
+
+O desenvolvimento do projeto contou com a orientação acadêmica dos professores:
+
+* Humberto
+* Ilyo
+
+### Instituição
+
+**Pontifícia Universidade Católica de Minas Gerais (PUC Minas)**
+
+Projeto desenvolvido no contexto da disciplina de Trabalho Interdisciplinar, contemplando atividades relacionadas a engenharia de software, banco de dados, desenvolvimento web, computação em nuvem e Inteligência Artificial.
 
 ---
 
 ## Considerações Finais
 
-O SafeHer representa a aplicação prática de conceitos de desenvolvimento de software, banco de dados, computação em nuvem e inteligência artificial para a resolução de um problema social relevante.
+O SafeHer representa a aplicação prática de conhecimentos adquiridos ao longo da formação acadêmica, reunindo conceitos de desenvolvimento de software, banco de dados, computação em nuvem e Inteligência Artificial para abordar um problema social relevante.
 
-A plataforma busca combinar tecnologia, transparência e acessibilidade para contribuir com a construção de ambientes corporativos mais seguros, promovendo informação confiável e apoio às mulheres em sua trajetória profissional.
+A plataforma foi concebida com o objetivo de promover maior transparência no ambiente corporativo, fortalecer o acesso à informação e contribuir para a construção de espaços profissionais mais seguros para as mulheres.
+
+Ao integrar tecnologia, análise de dados e participação colaborativa dos usuários, o projeto busca gerar impacto positivo tanto para profissionais quanto para organizações comprometidas com a promoção da igualdade e do respeito no ambiente de trabalho.
+
+---
+
+**Última atualização:** 09 de junho de 2026.
