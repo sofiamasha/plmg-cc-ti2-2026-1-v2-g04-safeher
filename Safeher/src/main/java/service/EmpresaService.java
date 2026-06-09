@@ -7,7 +7,8 @@ import spark.Request;
 import spark.Response;
 
 import java.sql.*;
-import java.util.List;
+
+import org.mindrot.jbcrypt.BCrypt;
 
 public class EmpresaService {
 
@@ -23,6 +24,8 @@ public class EmpresaService {
         res.type("application/json");
         try {
             Empresa empresa = gson.fromJson(req.body(), Empresa.class);
+            // nunca salva senha em texto puro
+            empresa.setSenha(BCrypt.hashpw(empresa.getSenha(), BCrypt.gensalt()));
             empresaDAO.insert(empresa);
             return gson.toJson("{\"msg\":\"Empresa inserida com sucesso\"}");
         } catch (Exception e) {
