@@ -87,6 +87,7 @@ public class Aplicacao {
         get("/usuarios", (req, res) -> usuarioService.listar(req, res));
         post("/login", (req, res) -> usuarioService.login(req, res));
 
+        post("/login-empresa", (req, res) -> empresaService.login(req, res));
         post("/empresas", (req, res) -> empresaService.insert(req, res));
         put("/empresas/:id", (req, res) -> empresaService.update(req, res));
         delete("/empresas/:id", (req, res) -> empresaService.remove(req, res));
