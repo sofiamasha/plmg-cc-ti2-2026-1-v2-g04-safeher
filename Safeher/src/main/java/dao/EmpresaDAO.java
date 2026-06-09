@@ -119,7 +119,6 @@ public class EmpresaDAO extends ConexaoDAO {
                 empresa.setEndereco(rs.getString("endereco"));
                 empresa.setEmail(rs.getString("email"));
                 empresa.setTelefone(rs.getString("telefone"));
-                empresa.setSenha(rs.getString("senha"));
                 empresa.setPlano(rs.getString("plano"));
                 empresa.setFoto(rs.getString("foto"));
             }
@@ -148,7 +147,6 @@ public class EmpresaDAO extends ConexaoDAO {
                 empresa.setEndereco(rs.getString("endereco"));
                 empresa.setEmail(rs.getString("email"));
                 empresa.setTelefone(rs.getString("telefone"));
-                empresa.setSenha(rs.getString("senha"));
                 empresa.setPlano(rs.getString("plano"));
                 empresa.setFoto(rs.getString("foto"));
                 lista.add(empresa);
@@ -173,6 +171,37 @@ public class EmpresaDAO extends ConexaoDAO {
                 empresa = new Empresa();
                 empresa.setId(rs.getInt("id"));
                 empresa.setNome(rs.getString("nome"));
+            }
+            rs.close();
+            stmt.close();
+        } finally {
+            fecharConexao();
+        }
+        return empresa;
+    }
+
+    // Uso interno do login da empresa: traz a senha (hash) para comparar com BCrypt.
+    public Empresa buscarPorNomeLogin(String nome) throws SQLException {
+        String sql = "SELECT * FROM Empresa WHERE nome = ?";
+        Empresa empresa = null;
+        try {
+            abrirConexao();
+            PreparedStatement stmt = getConexao().prepareStatement(sql);
+            stmt.setString(1, nome);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                empresa = new Empresa();
+                empresa.setId(rs.getInt("id"));
+                empresa.setNome(rs.getString("nome"));
+                empresa.setIndice(rs.getBigDecimal("indice"));
+                empresa.setCnpj(rs.getString("cnpj"));
+                empresa.setCep(rs.getString("cep"));
+                empresa.setEndereco(rs.getString("endereco"));
+                empresa.setEmail(rs.getString("email"));
+                empresa.setTelefone(rs.getString("telefone"));
+                empresa.setSenha(rs.getString("senha"));
+                empresa.setPlano(rs.getString("plano"));
+                empresa.setFoto(rs.getString("foto"));
             }
             rs.close();
             stmt.close();
