@@ -5,12 +5,6 @@
     document.body.appendChild(el);
 })();
 
-(function redirectLogin() {
-    if (window.location.pathname.endsWith('/login.html') && window.location.port === '8080') {
-        window.location.href = 'http://127.0.0.1:5500/Safeher/src/main/resources/front-end/login.html';
-    }
-})();
-
 /**
  * exibe uma notificação toast.
  * @param {string} mensagem - Texto da mensagem
@@ -95,7 +89,7 @@ function atualizarHeader() {
     const nav = document.querySelector('.sh-nav');
     if (!nav) return;
 
-    const btnEntrar = nav.querySelector('a[href="login.html"]') || nav.querySelector('a[href="http://127.0.0.1:5500/Safeher/src/main/resources/front-end/login.html"]');
+    const btnEntrar = nav.querySelector('a[href="login.html"]');
     const btnCriar  = nav.querySelector('a[href="escolha-cadastro.html"]');
 
     if (usuario) {
@@ -172,9 +166,7 @@ function atualizarHeader() {
         const page = window.location.pathname.split('/').pop() || 'index.html';
         const isParceirosActive = page === 'parceiros.html';
         const isInicioActive = page === 'index.html' || page === '';
-        const loginUrl = (window.location.port === '8080')
-            ? 'http://127.0.0.1:5500/Safeher/src/main/resources/front-end/login.html'
-            : 'login.html';
+        const loginUrl = 'login.html';
         const links = `
             <a href="index.html" class="${isInicioActive ? 'active' : ''}">Início</a>
             <a href="parceiros.html" class="${isParceirosActive ? 'active' : ''}">Para Parceiros</a>

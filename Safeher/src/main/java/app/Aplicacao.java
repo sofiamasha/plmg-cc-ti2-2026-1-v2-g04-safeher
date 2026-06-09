@@ -92,6 +92,9 @@ public class Aplicacao {
         get("/empresas/:id", (req, res) -> empresaService.get(req, res));
         get("/empresas", (req, res) -> empresaService.listar(req, res));
         get("/empresa/score", (req, res) -> empresaService.obterScorePublico(req, res));
+        get("/api/public/empresas/score-por-nome", (req, res) -> empresaService.obterScorePublicoPorNome(req, res));
+        get("/api/public/empresas/buscar", (req, res) -> empresaService.buscarEmpresasPublico(req, res));
+        get("/api/public/empresas/:id/score", (req, res) -> empresaService.obterScorePublicoPorId(req, res));
         post("/api/assinatura", (req, res) -> empresaService.atualizarAssinatura(req, res));
 
         post("/avaliacoes", (req, res) -> avaliacaoService.insert(req, res));

@@ -11,6 +11,8 @@ public class Denuncia {
     private int usuarioId;
     private int empresaId;
     private int score;
+    private String status;
+    private String planoAcao;
 
     public Denuncia() {
     }
@@ -69,5 +71,21 @@ public class Denuncia {
 
     public void setScore(int score) {
         this.score = score;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getPlanoAcao() {
+        return planoAcao;
+    }
+
+    public void setPlanoAcao(String planoAcao) {
+        this.planoAcao = planoAcao;
     }
 }

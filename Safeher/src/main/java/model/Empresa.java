@@ -13,6 +13,8 @@ public class Empresa {
     private String email;
     private String telefone;
     private String senha;
+    private String plano;
+    private String foto;
 
     public Empresa() {
     }
@@ -43,4 +45,10 @@ public class Empresa {
 
     public String getSenha() { return senha; }
     public void setSenha(String senha) { this.senha = senha; }
+
+    public String getPlano() { return plano; }
+    public void setPlano(String plano) { this.plano = plano; }
+
+    public String getFoto() { return foto; }
+    public void setFoto(String foto) { this.foto = foto; }
 }

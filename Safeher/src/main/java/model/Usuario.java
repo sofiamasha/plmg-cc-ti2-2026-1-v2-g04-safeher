@@ -9,6 +9,7 @@ public class Usuario {
     private String email;
     private String senha;
     private LocalDate data;
+    private String foto;
 
     public Usuario() {
     }
@@ -51,5 +52,13 @@ public class Usuario {
 
     public void setData(LocalDate data) {
         this.data = data;
+    }
+
+    public String getFoto() {
+        return foto;
+    }
+
+    public void setFoto(String foto) {
+        this.foto = foto;
     }
 }
