@@ -144,9 +144,8 @@
                         showToast('Email ou senha inválidos.', 'error');
                     }
                 } else {
-                    const empresas = await listarEmpresas();
-                    const empresa  = empresas.find(e => e.nome === email && e.senha === senha);
-                    if (empresa) {
+                    const empresa = await loginEmpresa(email, senha);
+                    if (empresa && empresa.id) {
                         localStorage.setItem('safeher_usuario', JSON.stringify(empresa));
                         localStorage.setItem('safeher_tipo', 'empresa');
                         showToast('Bem-vinda, ' + empresa.nome + '!', 'success');
