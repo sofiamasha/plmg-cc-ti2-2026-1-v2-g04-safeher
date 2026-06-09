@@ -34,6 +34,34 @@ public class EmpresaService {
         }
     }
 
+        public String login(Request req, Response res) {
+        res.type("application/json");
+        try {
+            Empresa dados = gson.fromJson(req.body(), Empresa.class);
+            Empresa empresa = empresaDAO.buscarPorNomeLogin(dados.getNome());
+
+            boolean ok = false;
+            if (empresa != null && empresa.getSenha() != null) {
+                try {
+                    ok = BCrypt.checkpw(dados.getSenha(), empresa.getSenha());
+                } catch (IllegalArgumentException ex) {
+                    ok = false; // hash invalido (empresa antiga em texto puro)
+                }
+            }
+
+            if (ok) {
+                empresa.setSenha(null); // nunca devolve a senha
+                return gson.toJson(empresa);
+            }
+
+            res.status(401);
+            return gson.toJson("{\"erro\":\"Nome ou senha invalidos\"}");
+        } catch (Exception e) {
+            res.status(500);
+            return gson.toJson("{\"erro\":\"" + e.getMessage() + "\"}");
+        }
+    }
+
     public String update(Request req, Response res) {
         res.type("application/json");
         try {
