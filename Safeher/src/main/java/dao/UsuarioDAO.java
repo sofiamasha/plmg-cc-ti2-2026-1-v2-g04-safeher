@@ -90,7 +90,7 @@ public class UsuarioDAO extends ConexaoDAO {
                 usuario.setId(rs.getInt("id"));
                 usuario.setNome(rs.getString("nome"));
                 usuario.setEmail(rs.getString("email"));
-                usuario.setSenha(rs.getString("senha"));
+                // senha NAO e exposta nas leituras (seguranca)
                 usuario.setData(rs.getDate("data").toLocalDate());
                 usuario.setFoto(rs.getString("foto"));
             }
@@ -114,7 +114,7 @@ public class UsuarioDAO extends ConexaoDAO {
                 usuario.setId(rs.getInt("id"));
                 usuario.setNome(rs.getString("nome"));
                 usuario.setEmail(rs.getString("email"));
-                usuario.setSenha(rs.getString("senha"));
+                // senha NAO e exposta nas leituras (seguranca)
                 usuario.setData(rs.getDate("data").toLocalDate());
                 usuario.setFoto(rs.getString("foto"));
                 lista.add(usuario);
@@ -125,5 +125,51 @@ public class UsuarioDAO extends ConexaoDAO {
             fecharConexao();
         }
         return lista;
+    }
+
+    // Uso interno do login: traz a senha (hash) para comparar com BCrypt.
+    public Usuario buscarPorEmail(String email) throws SQLException {
+        String sql = "SELECT * FROM Usuario WHERE email=?";
+        Usuario usuario = null;
+        try {
+            abrirConexao();
+            PreparedStatement stmt = getConexao().prepareStatement(sql);
+            stmt.setString(1, email);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                usuario = new Usuario();
+                usuario.setId(rs.getInt("id"));
+                usuario.setNome(rs.getString("nome"));
+                usuario.setEmail(rs.getString("email"));
+                usuario.setSenha(rs.getString("senha"));
+                usuario.setData(rs.getDate("data").toLocalDate());
+                usuario.setFoto(rs.getString("foto"));
+            }
+            rs.close();
+            stmt.close();
+        } finally {
+            fecharConexao();
+        }
+        return usuario;
+    }
+
+    // Usado no update para preservar a senha atual quando ela nao e reenviada.
+    public String buscarSenhaAtual(int id) throws SQLException {
+        String sql = "SELECT senha FROM Usuario WHERE id=?";
+        String senha = null;
+        try {
+            abrirConexao();
+            PreparedStatement stmt = getConexao().prepareStatement(sql);
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                senha = rs.getString("senha");
+            }
+            rs.close();
+            stmt.close();
+        } finally {
+            fecharConexao();
+        }
+        return senha;
     }
 }
