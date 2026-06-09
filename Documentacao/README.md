@@ -1,80 +1,225 @@
-# 📄 Relatório de Documentação — SafeHer
+# Documentação Técnica - SafeHer
 
-## 1. Identificação do Projeto
+## 1. Introdução
 
-- **Projeto:** SafeHer — Plataforma de Segurança para Mulheres no Ambiente de Trabalho  
-- **Equipe:** Kamilly Santos, Lanna Silva, Maria Fernanda Maro e Sofia de Abreu  
-- **Área:** Tecnologia com impacto social (ODS 5 — Igualdade de Gênero)
+O SafeHer é uma plataforma web desenvolvida para promover maior segurança, transparência e suporte às mulheres no ambiente de trabalho. O sistema permite o registro de denúncias anônimas, avaliações corporativas e consulta de informações relacionadas à segurança e reputação de empresas.
 
----
-
-## 2. Contextualização
-
-O ambiente de trabalho ainda apresenta altos índices de assédio, desigualdade e subnotificação de denúncias, principalmente pela falta de canais seguros e anônimos.
-
-O **SafeHer** surge como uma plataforma digital que busca centralizar relatos de forma segura, promovendo mais transparência sobre ambientes corporativos e contribuindo para decisões profissionais mais informadas.
+Esta documentação apresenta a arquitetura da solução, os componentes do sistema, as tecnologias utilizadas e os principais fluxos de funcionamento da aplicação.
 
 ---
 
-## 3. Objetivos
+# 2. Arquitetura do Sistema
 
-### Objetivo geral
-Criar uma plataforma de apoio, denúncia e avaliação de empresas com foco em segurança e anonimato.
+O SafeHer foi desenvolvido utilizando uma arquitetura em camadas, garantindo separação de responsabilidades, organização do código e facilidade de manutenção.
 
-### Objetivos específicos
-- Permitir denúncias anônimas de assédio no ambiente de trabalho  
-- Disponibilizar avaliações de empresas baseadas em experiências reais  
-- Oferecer conteúdo informativo sobre direitos e segurança no trabalho  
-- Apoiar a tomada de decisão de mulheres na escolha de ambientes profissionais  
+## 2.1 Camada de Apresentação
 
----
+Responsável pela interação com os usuários da plataforma.
 
-## 4. Público-alvo
+### Funcionalidades
 
-- Mulheres inseridas ou ingressando no mercado de trabalho  
-- Profissionais em transição de carreira  
-- Pessoas impactadas por situações de assédio ou ambientes inseguros  
+- Cadastro de usuárias
+- Login e autenticação
+- Registro de denúncias
+- Cadastro de avaliações
+- Consulta de empresas
+- Navegação geral do sistema
 
----
+### Tecnologias
 
-## 5. Arquitetura e funcionalidades
-
-A plataforma foi estruturada como uma aplicação web com foco em usabilidade, anonimato e organização de dados sensíveis.
-
-### Principais funcionalidades
-- Registro de denúncias anônimas  
-- Avaliação de empresas por usuárias  
-- Envio de evidências (imagens e arquivos)  
-- Organização e consulta de relatos  
-
-### Estrutura do front-end
-- Telas de cadastro, login e navegação principal  
-- Fluxo separado para empresa e usuária  
-- Interface focada em simplicidade e acessibilidade  
-
-### API
-- Estrutura preparada para integração com sistemas externos  
-- Foco em consulta de dados de empresas e avaliações  
+- React
+- JavaScript
+- HTML
+- CSS
 
 ---
 
-## 6. Modelagem de dados
+## 2.2 Camada de Negócio
 
-O banco de dados foi estruturado em modelo relacional para garantir organização e integridade das informações.
+Responsável pelo processamento das regras de negócio da aplicação.
 
-### Entidades principais
-- **Usuária:** dados de autenticação e vínculo com empresa  
-- **Empresa:** informações corporativas e índice de avaliação  
-- **Avaliação:** feedbacks sobre o ambiente de trabalho  
-- **Denúncia:** registros anônimos vinculados a relatos  
+### Responsabilidades
+
+- Gerenciamento de usuários
+- Gerenciamento de empresas
+- Processamento de avaliações
+- Processamento de denúncias
+- Controle de autenticação
+- Integração com serviços externos
+
+### Tecnologias
+
+- Java
 
 ---
 
-## 7. Conclusão e próximos passos
+## 2.3 Camada de Persistência
 
-Durante as primeiras sprints, foram desenvolvidos os principais artefatos do sistema, incluindo modelagem de dados, estrutura do front-end e definição dos fluxos principais da aplicação.
+Responsável pelo armazenamento e recuperação dos dados do sistema.
 
-### Próximas melhorias previstas
-- Aprimoramento do fluxo de denúncias e validação de dados  
-- Evolução da API para integração externa  
-- Expansão da experiência de usuário (UX) e acessibilidade  
+### Banco de Dados
+
+- PostgreSQL
+
+### Principais Entidades
+
+#### Usuária
+
+Armazena informações de autenticação e perfil.
+
+#### Empresa
+
+Armazena informações corporativas e indicadores de avaliação.
+
+#### Avaliação
+
+Armazena feedbacks e experiências compartilhadas pelas usuárias.
+
+#### Denúncia
+
+Armazena relatos anônimos e evidências associadas.
+
+---
+
+# 3. Funcionalidades do Sistema
+
+## 3.1 Gestão de Usuárias
+
+Permite o gerenciamento das informações das usuárias.
+
+### Operações
+
+- Cadastro
+- Login
+- Atualização de perfil
+- Recuperação de acesso
+
+## 3.2 Gestão de Empresas
+
+Permite o cadastro e consulta de informações corporativas.
+
+### Operações
+
+- Cadastro de empresa
+- Consulta de empresas
+- Visualização de avaliações
+
+## 3.3 Avaliações
+
+Permite que usuárias compartilhem experiências relacionadas ao ambiente de trabalho.
+
+### Operações
+
+- Cadastro de avaliação
+- Consulta de avaliações
+- Filtragem por empresa
+
+## 3.4 Denúncias
+
+Permite o registro seguro e anônimo de ocorrências.
+
+### Operações
+
+- Registro de denúncia
+- Anexação de evidências
+- Consulta de relatos
+
+---
+
+# 4. Integração com Inteligência Artificial
+
+A plataforma utiliza recursos de Inteligência Artificial para auxiliar no processamento e análise de denúncias.
+
+## 4.1 Transcrição de Áudio
+
+Utiliza o Azure Speech para converter arquivos de áudio em texto e capturar a emoção pela voz.
+
+### Fluxo
+
+1. Upload do arquivo de áudio.
+2. Envio para processamento.
+3. Transcrição automática.
+4. Armazenamento do texto gerado.
+
+## 4.2 Classificação de Denúncias
+
+Após o processamento do conteúdo, o sistema pode realizar análises para identificar padrões e classificar ocorrências.
+
+### Objetivos
+
+- Identificação de padrões de comportamento.
+- Classificação da gravidade dos relatos.
+- Apoio à análise de informações.
+
+---
+
+# 5. Segurança
+
+A aplicação foi projetada considerando privacidade e proteção de dados.
+
+## Medidas Implementadas
+
+- Autenticação de usuários.
+- Controle de acesso.
+- Validação de entradas.
+- Proteção de rotas.
+- Preservação do anonimato das denunciantes.
+- Armazenamento seguro de informações.
+
+---
+
+# 6. Fluxos Principais
+
+## Fluxo de Denúncias
+
+1. A usuária realiza login na plataforma.
+2. A denúncia é registrada.
+3. Evidências podem ser anexadas.
+4. Os dados são validados pelo backend.
+5. O conteúdo é processado pela camada de IA.
+6. A denúncia é armazenada no banco de dados.
+7. As informações ficam disponíveis para consulta.
+
+
+## Fluxo de Avaliações
+
+1. A usuária seleciona uma empresa.
+2. Uma avaliação é cadastrada.
+3. O sistema valida os dados enviados.
+4. As informações são armazenadas.
+5. Os indicadores da empresa são atualizados.
+
+---
+
+# 7. Tecnologias Utilizadas
+
+## Front-end
+
+- JavaScript
+- HTML
+- CSS
+
+## Back-end
+
+- Java
+
+## Banco de Dados
+
+- PostgreSQL
+
+## Inteligência Artificial
+
+- Azure Speech
+
+## Controle de Versão
+
+- Git
+- GitHub
+
+---
+
+# 8. Considerações Finais
+
+O SafeHer foi desenvolvido para oferecer uma plataforma segura e confiável para mulheres compartilharem experiências profissionais, registrarem denúncias e consultarem informações sobre empresas.
+
+A arquitetura adotada permite futuras expansões da aplicação, integração com novos serviços e evolução contínua dos mecanismos de segurança e análise de dados.

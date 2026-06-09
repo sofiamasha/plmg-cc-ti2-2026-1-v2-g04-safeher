@@ -8,6 +8,7 @@ public class Avaliacao {
     private int usuarioId;
     private int empresaId;
     private String nomeEmpresa;
+    private String resposta;
 
     public Avaliacao() {
     }
@@ -58,5 +59,13 @@ public class Avaliacao {
 
     public void setNomeEmpresa(String nomeEmpresa) {
         this.nomeEmpresa = nomeEmpresa;
+    }
+
+    public String getResposta() {
+        return resposta;
+    }
+
+    public void setResposta(String resposta) {
+        this.resposta = resposta;
     }
 }

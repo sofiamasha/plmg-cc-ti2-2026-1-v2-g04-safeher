@@ -1,54 +1,50 @@
-## 📁 Artefatos do Projeto
+## Artefatos do Projeto
 
 Aqui estão os principais artefatos desenvolvidos ao longo do projeto **SafeHer**, representando a modelagem e prototipação do sistema.
 
 ---
 
-### 🌷 DER (Diagrama Entidade-Relacionamento)
-📌 Representação conceitual da estrutura do banco de dados.
-
-🔗 [Acessar DER](./Artefatos/DER/modelo_conceitual.jpeg)
-
----
-
-### 🌼 DSC (Diagrama de Esquema)
-📌 Visão estrutural dos fluxos e organização do sistema.
-
-🔗 [Acessar DSC](./Artefatos/DSC/diagrama_esquema.jpeg)
+### DER (Diagrama Entidade-Relacionamento)
+Representação conceitual da estrutura do banco de dados.
+- [Acessar DER](./DER/modelo_conceitual.jpeg)
 
 ---
 
-### 🌺 Modelo Lógico
-📌 Modelagem de implementação do banco de dados.
-
-🔗 [Acessar modelo lógico](./Artefatos/Modelo%20Lógico/modelo_implementacao.jpeg)
-
----
-
-### 🌸 Wireframes
-📌 Protótipos das principais telas da aplicação.
-
-- 🔗 Cadastro de Empresa: [Acessar](./Artefatos/Wireframe/cadastro-empresa.png)  
-- 🔗 Cadastro de Usuária: [Acessar](./Artefatos/Wireframe/cadastro-usuario.png)  
-- 🔗 Home: [Acessar](./Artefatos/Wireframe/home.png)  
-- 🔗 Login: [Acessar](./Artefatos/Wireframe/login.png)  
-- 🔗 Modal: [Acessar](./Artefatos/Wireframe/modal.png)  
+### DSC (Diagrama de Esquema)
+Visão estrutural dos fluxos e organização do sistema.
+- [Acessar DSC](./DSC/diagrama_esquema.jpeg)
 
 ---
 
-## 🖼️ Pré-visualização dos Wireframes
+### Modelo Lógico
+Modelagem de implementação do banco de dados.
+- [Acessar modelo lógico](./Modelo%20Lógico/modelo_implementacao.jpeg)
 
-### 🏠 Home
-![Home](./Artefatos/Wireframe/home.png)
+---
 
-### 🔐 Login
-![Login](./Artefatos/Wireframe/login.png)
+### Wireframes
+Protótipos das principais telas da aplicação.
+- Cadastro de Empresa: [Acessar](./Wireframe/cadastro-empresa.png)  
+-  Cadastro de Usuária: [Acessar](./Wireframe/cadastro-usuario.png)  
+-  Home: [Acessar](./Wireframe/home.png)  
+-  Login: [Acessar](./Wireframe/login.png)  
+-  Modal: [Acessar](./Wireframe/modal.png)  
 
-### 📝 Cadastro de Usuária
-![Cadastro de Usuária](./Artefatos/Wireframe/cadastro-usuario.png)
+---
 
-### 🏢 Cadastro de Empresa
-![Cadastro de Empresa](./Artefatos/Wireframe/cadastro-empresa.png)
+## Pré-visualização dos Wireframes
 
-### 💬 Modal
-![Modal](./Artefatos/Wireframe/modal.png)
+### Home
+![Home](./Wireframe/Home.png)
+
+###  Login
+![Login](./Wireframe/Login.png)
+
+### Cadastro de Usuária
+![Cadastro de Usuária](./Wireframe/cadastro-usuario.png)
+
+### Cadastro de Empresa
+![Cadastro de Empresa](./Wireframe/cadastro-empresa.png)
+
+### Modal
+![Modal](./Wireframe/Modal.png)
