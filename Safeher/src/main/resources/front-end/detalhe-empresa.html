@@ -385,6 +385,270 @@
         .form-group input:focus, .form-group textarea:focus { border-color: var(--pink-primary); outline: none; box-shadow: 0 0 0 3px rgba(227, 58, 127, 0.08); }
         .form-group textarea { resize: vertical; min-height: 110px; }
 
+        .profile-tabs {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin: -18px 0 26px;
+            border-bottom: 1px solid var(--border-light);
+            padding-bottom: 12px;
+        }
+
+        .profile-tab-btn {
+            border: 1px solid var(--border-light);
+            background: #ffffff;
+            color: var(--text-gray);
+            border-radius: 8px;
+            padding: 10px 16px;
+            font-family: var(--font-body);
+            font-size: 13px;
+            font-weight: 800;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+
+        .profile-tab-btn.active,
+        .profile-tab-btn:hover {
+            border-color: var(--pink-primary);
+            background: var(--pink-lighter);
+            color: var(--pink-dark);
+        }
+
+        .profile-section {
+            display: none;
+        }
+
+        .profile-section.active {
+            display: block;
+        }
+
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .overview-stat {
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .overview-stat strong {
+            display: block;
+            font-size: 28px;
+            line-height: 1;
+            color: var(--pink-dark);
+            margin-bottom: 6px;
+        }
+
+        .overview-stat span {
+            color: var(--text-gray);
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .score-xray {
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .score-xray h3,
+        .complaints-panel h3 {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .score-xray p,
+        .complaints-panel .section-copy {
+            color: var(--text-gray);
+            font-size: 13.5px;
+            line-height: 1.6;
+            margin-bottom: 18px;
+        }
+
+        .xray-row {
+            display: grid;
+            grid-template-columns: 150px 1fr 52px;
+            gap: 12px;
+            align-items: center;
+            margin-top: 12px;
+            font-size: 13px;
+            color: var(--text-dark);
+            font-weight: 700;
+        }
+
+        .xray-track {
+            height: 10px;
+            background: #f1f1f5;
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .xray-fill {
+            height: 100%;
+            background: linear-gradient(135deg, var(--pink-primary), var(--pink-dark));
+            border-radius: 999px;
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        .contribute-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 18px;
+        }
+
+        .contribute-choice {
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            padding: 18px;
+            background: #ffffff;
+            cursor: pointer;
+            text-align: left;
+            width: 100%;
+            font-family: var(--font-body);
+            transition: var(--transition);
+        }
+
+        .contribute-choice:hover {
+            border-color: var(--pink-primary);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .contribute-choice strong {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            color: var(--pink-dark);
+            font-size: 15px;
+            margin-bottom: 6px;
+        }
+
+        .contribute-choice span {
+            color: var(--text-gray);
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .complaints-panel {
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .complaint-summary {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
+            margin-bottom: 22px;
+        }
+
+        .complaint-stat {
+            background: var(--pink-lighter);
+            border-radius: 8px;
+            padding: 14px;
+            border: 1px solid var(--pink-light);
+        }
+
+        .complaint-stat strong {
+            display: block;
+            font-size: 24px;
+            color: var(--pink-dark);
+            line-height: 1;
+        }
+
+        .complaint-stat span {
+            font-size: 11.5px;
+            color: var(--text-gray);
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .complaint-card {
+            border: 1px solid var(--border-light);
+            border-left: 4px solid #ef4444;
+            border-radius: 8px;
+            padding: 18px;
+            margin-top: 14px;
+            background: #ffffff;
+        }
+
+        .complaint-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+
+        .type-pill,
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 5px 10px;
+            border-radius: 999px;
+            font-size: 11.5px;
+            font-weight: 800;
+        }
+
+        .type-pill.complaint {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .status-pill.open {
+            background: #f3f4f6;
+            color: #4b5563;
+        }
+
+        .status-pill.answered {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .status-pill.resolved {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .complaint-text {
+            color: var(--text-gray);
+            font-size: 13.5px;
+            line-height: 1.65;
+        }
+
+        .contribution-feed-card {
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            padding: 18px;
+            margin-bottom: 14px;
+            box-shadow: var(--shadow-sm);
+        }
+
         @media (max-width: 992px) {
             .profile-container {
                 grid-template-columns: 1fr;
@@ -398,6 +662,18 @@
                 border-bottom: 1.5px solid var(--pink-lighter);
                 padding-right: 0;
                 padding-bottom: 20px;
+            }
+            .overview-grid,
+            .complaint-summary {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 640px) {
+            .overview-grid,
+            .complaint-summary,
+            .xray-row {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -442,8 +718,26 @@
                             </span>
                         </div>
                         <p class="sh-subtitle" style="margin: 8px 0 0; text-align: left;" id="compResumo">Estatísticas, informações cadastrais e avaliações gerais.</p>
+                        <div class="contribute-actions">
+                            <button id="btnContribuirEmpresaDetalhe" class="sh-btn" style="display:none; padding:12px 22px; font-size:14px; margin:0;" onclick="abrirContribuir()">
+                                <i class="fa-solid fa-plus"></i> Contribuir
+                            </button>
+                        </div>
                     </div>
 
+                    <nav class="profile-tabs" aria-label="Seções do perfil da empresa">
+                        <button type="button" class="profile-tab-btn active" onclick="trocarSecaoPerfil('visao', this)">
+                            <i class="fa-solid fa-chart-pie"></i> Visão geral
+                        </button>
+                        <button type="button" class="profile-tab-btn" onclick="trocarSecaoPerfil('avaliacoes', this)">
+                            <i class="fa-solid fa-star"></i> Avaliações
+                        </button>
+                        <button type="button" class="profile-tab-btn" onclick="trocarSecaoPerfil('denuncias', this)">
+                            <i class="fa-solid fa-triangle-exclamation"></i> Denúncias
+                        </button>
+                    </nav>
+
+                    <section id="secao-visao" class="profile-section active">
                     <div class="profile-container">
                         <!-- Left Panel: Cadastro & Score -->
                         <div class="side-panel" id="sidePanelCard">
@@ -492,74 +786,114 @@
                             </ul>
                         </div>
 
-                        <!-- Right Panel: Avaliações -->
+                        <!-- Right Panel: Visão Geral -->
                         <div class="main-panel">
-                            <!-- Widget de Estatísticas de Avaliações (Amazon Style) -->
-                            <div class="rating-breakdown-card" id="ratingBreakdownWidget" style="display: none;">
-                                <div class="breakdown-summary">
-                                    <div class="breakdown-summary-num" id="breakdownMedia">0.0</div>
-                                    <div class="breakdown-summary-stars" id="breakdownEstrelas">☆☆☆☆☆</div>
-                                    <div class="breakdown-summary-total" id="breakdownTotalText">0 avaliações</div>
+                            <div class="overview-grid">
+                                <div class="overview-stat">
+                                    <strong id="overviewAvaliacoes">0</strong>
+                                    <span>Avaliações</span>
                                 </div>
-                                <div class="breakdown-bars">
-                                    <!-- 5 Estrelas -->
-                                    <div class="breakdown-bar-row">
-                                        <span class="breakdown-bar-label">5 estrelas</span>
-                                        <div class="breakdown-bar-track">
-                                            <div class="breakdown-bar-fill" id="breakdown-fill-5"></div>
-                                        </div>
-                                        <span class="breakdown-bar-percent" id="breakdown-pct-5">0%</span>
-                                    </div>
-                                    <!-- 4 Estrelas -->
-                                    <div class="breakdown-bar-row">
-                                        <span class="breakdown-bar-label">4 estrelas</span>
-                                        <div class="breakdown-bar-track">
-                                            <div class="breakdown-bar-fill" id="breakdown-fill-4"></div>
-                                        </div>
-                                        <span class="breakdown-bar-percent" id="breakdown-pct-4">0%</span>
-                                    </div>
-                                    <!-- 3 Estrelas -->
-                                    <div class="breakdown-bar-row">
-                                        <span class="breakdown-bar-label">3 estrelas</span>
-                                        <div class="breakdown-bar-track">
-                                            <div class="breakdown-bar-fill" id="breakdown-fill-3"></div>
-                                        </div>
-                                        <span class="breakdown-bar-percent" id="breakdown-pct-3">0%</span>
-                                    </div>
-                                    <!-- 2 Estrelas -->
-                                    <div class="breakdown-bar-row">
-                                        <span class="breakdown-bar-label">2 estrelas</span>
-                                        <div class="breakdown-bar-track">
-                                            <div class="breakdown-bar-fill" id="breakdown-fill-2"></div>
-                                        </div>
-                                        <span class="breakdown-bar-percent" id="breakdown-pct-2">0%</span>
-                                    </div>
-                                    <!-- 1 Estrelas -->
-                                    <div class="breakdown-bar-row">
-                                        <span class="breakdown-bar-label">1 estrela</span>
-                                        <div class="breakdown-bar-track">
-                                            <div class="breakdown-bar-fill" id="breakdown-fill-1"></div>
-                                        </div>
-                                        <span class="breakdown-bar-percent" id="breakdown-pct-1">0%</span>
-                                    </div>
+                                <div class="overview-stat">
+                                    <strong id="overviewDenuncias">0</strong>
+                                    <span>Denúncias</span>
+                                </div>
+                                <div class="overview-stat">
+                                    <strong id="overviewResolucao">100%</strong>
+                                    <span>Índice de resolução</span>
                                 </div>
                             </div>
 
-                            <div class="rating-feed-title" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-                                <div style="display:flex; align-items:center; gap:10px;">
-                                    <i class="fa-solid fa-comments" style="color: var(--pink-primary);"></i>
-                                    <span>Relatos e Avaliações de Colaboradoras</span>
+                            <div class="score-xray">
+                                <h3><i class="fa-solid fa-magnifying-glass-chart" style="color: var(--pink-primary);"></i> Raio-x do score</h3>
+                                <p>O score combina a média das avaliações, o peso das denúncias e o índice de resolução das tratativas públicas.</p>
+                                <div class="xray-row">
+                                    <span>Avaliações</span>
+                                    <div class="xray-track"><div class="xray-fill" id="xrayAvaliacoes"></div></div>
+                                    <strong id="xrayAvaliacoesVal">0</strong>
                                 </div>
-                                <button id="btnAvaliarEmpresaDetalhe" class="sh-btn" style="display:none; padding:10px 20px; font-size:13.5px; margin:0;" onclick="abrirNovaAvaliacao()"><i class="fa-solid fa-star"></i> Avaliar Empresa</button>
-                            </div>
-
-                            <div id="avaliacoesLista">
-                                <div style="text-align: center; padding: 40px; background: white; border-radius: var(--radius-md); border: 1px solid var(--border-light);">
-                                    <p style="color: var(--text-gray);">Carregando avaliações...</p>
+                                <div class="xray-row">
+                                    <span>Denúncias</span>
+                                    <div class="xray-track"><div class="xray-fill" id="xrayDenuncias"></div></div>
+                                    <strong id="xrayDenunciasVal">0</strong>
+                                </div>
+                                <div class="xray-row">
+                                    <span>Resolução</span>
+                                    <div class="xray-track"><div class="xray-fill" id="xrayResolucao"></div></div>
+                                    <strong id="xrayResolucaoVal">0</strong>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    </section>
+
+                    <section id="secao-avaliacoes" class="profile-section">
+                        <!-- Widget de Estatísticas de Avaliações (Amazon Style) -->
+                        <div class="rating-breakdown-card" id="ratingBreakdownWidget" style="display: none;">
+                            <div class="breakdown-summary">
+                                <div class="breakdown-summary-num" id="breakdownMedia">0.0</div>
+                                <div class="breakdown-summary-stars" id="breakdownEstrelas">☆☆☆☆☆</div>
+                                <div class="breakdown-summary-total" id="breakdownTotalText">0 avaliações</div>
+                            </div>
+                            <div class="breakdown-bars">
+                                <div class="breakdown-bar-row">
+                                    <span class="breakdown-bar-label">5 estrelas</span>
+                                    <div class="breakdown-bar-track"><div class="breakdown-bar-fill" id="breakdown-fill-5"></div></div>
+                                    <span class="breakdown-bar-percent" id="breakdown-pct-5">0%</span>
+                                </div>
+                                <div class="breakdown-bar-row">
+                                    <span class="breakdown-bar-label">4 estrelas</span>
+                                    <div class="breakdown-bar-track"><div class="breakdown-bar-fill" id="breakdown-fill-4"></div></div>
+                                    <span class="breakdown-bar-percent" id="breakdown-pct-4">0%</span>
+                                </div>
+                                <div class="breakdown-bar-row">
+                                    <span class="breakdown-bar-label">3 estrelas</span>
+                                    <div class="breakdown-bar-track"><div class="breakdown-bar-fill" id="breakdown-fill-3"></div></div>
+                                    <span class="breakdown-bar-percent" id="breakdown-pct-3">0%</span>
+                                </div>
+                                <div class="breakdown-bar-row">
+                                    <span class="breakdown-bar-label">2 estrelas</span>
+                                    <div class="breakdown-bar-track"><div class="breakdown-bar-fill" id="breakdown-fill-2"></div></div>
+                                    <span class="breakdown-bar-percent" id="breakdown-pct-2">0%</span>
+                                </div>
+                                <div class="breakdown-bar-row">
+                                    <span class="breakdown-bar-label">1 estrela</span>
+                                    <div class="breakdown-bar-track"><div class="breakdown-bar-fill" id="breakdown-fill-1"></div></div>
+                                    <span class="breakdown-bar-percent" id="breakdown-pct-1">0%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="rating-feed-title" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-top:24px;">
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <i class="fa-solid fa-comments" style="color: var(--pink-primary);"></i>
+                                <span>Avaliações de colaboradoras</span>
+                            </div>
+                        </div>
+
+                        <div id="avaliacoesLista">
+                            <div style="text-align: center; padding: 40px; background: white; border-radius: var(--radius-md); border: 1px solid var(--border-light);">
+                                <p style="color: var(--text-gray);">Carregando avaliações...</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="secao-denuncias" class="profile-section">
+                        <div class="complaints-panel">
+                            <h3><i class="fa-solid fa-triangle-exclamation" style="color:#ef4444;"></i> Denúncias e tratativas</h3>
+                            <p class="section-copy">Casos registrados contra esta empresa aparecem com status público. A resposta oficial incentiva transparência e resolução.</p>
+                            <div class="complaint-summary">
+                                <div class="complaint-stat"><strong id="denunciaTotal">0</strong><span>Total</span></div>
+                                <div class="complaint-stat"><strong id="denunciaAberta">0</strong><span>Abertas</span></div>
+                                <div class="complaint-stat"><strong id="denunciaRespondida">0</strong><span>Respondidas</span></div>
+                                <div class="complaint-stat"><strong id="denunciaResolvida">0</strong><span>Resolvidas</span></div>
+                            </div>
+                            <div id="denunciasLista">
+                                <div style="text-align: center; padding: 40px; color: var(--text-gray);">
+                                    Carregando denúncias...
+                                </div>
+                            </div>
+                        </div>
+                    </section>
                 </div>
             </main>
         </div>
@@ -622,6 +956,56 @@
         </div>
     </div>
 
+    <!-- modal de Contribuição -->
+    <div class="modal-overlay" id="modal-contribuir">
+        <div class="modal">
+            <button class="modal-close" onclick="fecharContribuir()">&times;</button>
+            <h2><i class="fa-solid fa-plus" style="color: var(--pink-primary);"></i> Como você quer contribuir?</h2>
+            <button type="button" class="contribute-choice" onclick="escolherContribuicao('avaliacao')">
+                <strong><i class="fa-solid fa-star"></i> Quer compartilhar como é trabalhar nessa empresa?</strong>
+                <span>Use uma avaliação com nota e comentário para ajudar outras mulheres a entenderem o ambiente de trabalho.</span>
+            </button>
+            <button type="button" class="contribute-choice" style="margin-top:12px;" onclick="escolherContribuicao('denuncia')">
+                <strong><i class="fa-solid fa-triangle-exclamation"></i> Sofreu ou presenciou algo grave?</strong>
+                <span>Registre uma denúncia anônima para iniciar uma tratativa pública com status e resposta da empresa.</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- modal de Denúncia -->
+    <div class="modal-overlay" id="modal-denuncia">
+        <div class="modal">
+            <button class="modal-close" onclick="fecharDenunciaEmpresa()">&times;</button>
+            <h2><i class="fa-solid fa-shield-heart" style="color:#ef4444;"></i> Registrar denúncia</h2>
+
+            <div class="form-group">
+                <label>Empresa</label>
+                <input type="text" id="denuncia-empresa" disabled style="background:#f9f9f9;">
+            </div>
+
+            <div class="form-group">
+                <label>Tipo de ocorrência</label>
+                <select id="denuncia-tipo" class="sh-input" style="margin-bottom:0;">
+                    <option value="Assédio Moral">Assédio Moral</option>
+                    <option value="Assédio Sexual">Assédio Sexual</option>
+                    <option value="Desigualdade Salarial">Desigualdade Salarial</option>
+                    <option value="Machismo / Misoginia">Machismo / Misoginia</option>
+                    <option value="Maternidade Desrespeitada">Maternidade Desrespeitada</option>
+                    <option value="Outro">Outro</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Relato</label>
+                <textarea id="denuncia-relato" placeholder="Conte o que aconteceu com o máximo de detalhes que se sentir confortável. Sua identidade será protegida."></textarea>
+            </div>
+
+            <button class="sh-btn" style="width: 100%; padding: 14px; font-size: 16px; color: white;" onclick="enviarDenunciaEmpresa()">
+                <i class="fa-solid fa-paper-plane"></i> Enviar denúncia anônima
+            </button>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer class="sh-footer">
         <div class="container footer-content">
@@ -648,9 +1032,99 @@
         let notaSelecionada = 0;
         let editandoId = null;
         let avaliacoesCache = [];
+        let denunciasCache = [];
         let empresaIdGlobal = null;
         const sessao = getSessao();
         const tipo = getTipoSessao();
+
+        function trocarSecaoPerfil(secao, botao) {
+            document.querySelectorAll('.profile-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.profile-tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(`secao-${secao}`).classList.add('active');
+            botao.classList.add('active');
+        }
+
+        function abrirContribuir() {
+            if (!sessao || tipo !== 'mulher') {
+                showToast('Você precisa estar logada como mulher para contribuir.', 'error');
+                return;
+            }
+            document.getElementById('modal-contribuir').classList.add('active');
+        }
+
+        function fecharContribuir() {
+            document.getElementById('modal-contribuir').classList.remove('active');
+        }
+
+        function escolherContribuicao(opcao) {
+            fecharContribuir();
+            if (opcao === 'avaliacao') {
+                abrirNovaAvaliacao();
+            } else {
+                abrirDenunciaEmpresa();
+            }
+        }
+
+        function abrirDenunciaEmpresa() {
+            if (!sessao || tipo !== 'mulher') {
+                showToast('Você precisa estar logada como mulher para denunciar.', 'error');
+                return;
+            }
+            document.getElementById('denuncia-empresa').value = document.getElementById('compNome').textContent;
+            document.getElementById('denuncia-tipo').value = 'Assédio Moral';
+            document.getElementById('denuncia-relato').value = '';
+            document.getElementById('modal-denuncia').classList.add('active');
+        }
+
+        function fecharDenunciaEmpresa() {
+            document.getElementById('modal-denuncia').classList.remove('active');
+        }
+
+        function normalizarStatusDenuncia(status) {
+            if (!status || status === 'Pendente') return 'Aberta';
+            if (status === 'Em Investigação') return 'Respondida';
+            if (status === 'Resolvido') return 'Resolvida';
+            return status;
+        }
+
+        function statusDenunciaClass(status) {
+            const normalizado = normalizarStatusDenuncia(status);
+            if (normalizado === 'Respondida') return 'answered';
+            if (normalizado === 'Resolvida') return 'resolved';
+            return 'open';
+        }
+
+        async function enviarDenunciaEmpresa() {
+            const relato = document.getElementById('denuncia-relato').value.trim();
+            const tipoOcorrencia = document.getElementById('denuncia-tipo').value;
+            const nomeEmpresa = document.getElementById('compNome').textContent.trim();
+
+            if (!relato) {
+                showToast('Escreva o relato da denúncia antes de enviar.', 'error');
+                return;
+            }
+
+            const denuncia = {
+                descricao: `[${tipoOcorrencia}] ${relato}`,
+                data: new Date().toISOString().split('T')[0],
+                anonima: true,
+                usuarioId: sessao.id,
+                empresaId: empresaIdGlobal,
+                empresaNome: nomeEmpresa,
+                status: 'Aberta'
+            };
+
+            try {
+                await cadastrarDenuncia(denuncia);
+                showToast('Denúncia registrada. A empresa poderá responder pela tratativa pública.', 'success', 4500);
+                fecharDenunciaEmpresa();
+                await carregarDadosEmpresa(empresaIdGlobal);
+                const btn = Array.from(document.querySelectorAll('.profile-tab-btn')).find(el => el.textContent.includes('Denúncias'));
+                if (btn) trocarSecaoPerfil('denuncias', btn);
+            } catch (e) {
+                showToast('Erro ao enviar denúncia: ' + e.message, 'error');
+            }
+        }
 
         function setNota(n) {
             notaSelecionada = n;
@@ -842,6 +1316,84 @@
             }
         }
 
+        function atualizarRaioXScore(scoreObj, avaliacoes, denuncias) {
+            const totalAvaliacoes = avaliacoes.length;
+            const totalDenuncias = denuncias.length;
+            const respondidas = denuncias.filter(d => normalizarStatusDenuncia(d.status) === 'Respondida').length;
+            const resolvidas = denuncias.filter(d => normalizarStatusDenuncia(d.status) === 'Resolvida').length;
+            const indiceResolucao = totalDenuncias > 0 ? Math.round(((respondidas * 0.5 + resolvidas) / totalDenuncias) * 100) : 100;
+
+            const media = totalAvaliacoes > 0
+                ? avaliacoes.reduce((acc, a) => acc + (a.nota || 0), 0) / totalAvaliacoes
+                : 5;
+            const scoreAvaliacoes = scoreObj && scoreObj.scoreAvaliacoes !== undefined ? Number(scoreObj.scoreAvaliacoes) : Math.round(media * 20);
+            const scoreDenuncias = scoreObj && scoreObj.scoreDenuncias !== undefined ? Number(scoreObj.scoreDenuncias) : Math.max(0, 100 - (totalDenuncias * 10));
+            const scoreResolucao = scoreObj && scoreObj.indiceResolucao !== undefined ? Number(scoreObj.indiceResolucao) : indiceResolucao;
+
+            document.getElementById('overviewAvaliacoes').textContent = totalAvaliacoes;
+            document.getElementById('overviewDenuncias').textContent = totalDenuncias;
+            document.getElementById('overviewResolucao').textContent = `${indiceResolucao}%`;
+
+            const rows = [
+                ['xrayAvaliacoes', scoreAvaliacoes],
+                ['xrayDenuncias', scoreDenuncias],
+                ['xrayResolucao', scoreResolucao]
+            ];
+            rows.forEach(([id, val]) => {
+                const clamped = Math.max(0, Math.min(100, Math.round(val || 0)));
+                document.getElementById(id).style.width = `${clamped}%`;
+                document.getElementById(`${id}Val`).textContent = clamped;
+            });
+        }
+
+        function renderizarDenunciasEmpresa(denuncias) {
+            const lista = document.getElementById('denunciasLista');
+            const total = denuncias.length;
+            const abertas = denuncias.filter(d => normalizarStatusDenuncia(d.status) === 'Aberta').length;
+            const respondidas = denuncias.filter(d => normalizarStatusDenuncia(d.status) === 'Respondida').length;
+            const resolvidas = denuncias.filter(d => normalizarStatusDenuncia(d.status) === 'Resolvida').length;
+
+            document.getElementById('denunciaTotal').textContent = total;
+            document.getElementById('denunciaAberta').textContent = abertas;
+            document.getElementById('denunciaRespondida').textContent = respondidas;
+            document.getElementById('denunciaResolvida').textContent = resolvidas;
+
+            if (total === 0) {
+                lista.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: var(--text-gray); border:1px solid var(--border-light); border-radius:8px;">
+                        <i class="fa-regular fa-circle-check" style="font-size:38px;color:#22c55e;margin-bottom:12px;"></i>
+                        <p>Esta empresa ainda não possui denúncias registradas.</p>
+                    </div>`;
+                return;
+            }
+
+            lista.innerHTML = denuncias.map(d => {
+                const status = normalizarStatusDenuncia(d.status);
+                const data = d.data ? new Date(d.data).toLocaleDateString('pt-BR') : 'Data não informada';
+                const resposta = d.planoAcao ? `
+                    <div class="av-reply">
+                        <div class="av-reply-title">
+                            <i class="fa-solid fa-reply"></i> Resposta pública da empresa
+                        </div>
+                        <div style="color: var(--text-dark); font-weight: 500;">"${d.planoAcao}"</div>
+                    </div>` : '';
+
+                return `
+                    <article class="complaint-card">
+                        <div class="complaint-card-header">
+                            <span class="type-pill complaint"><i class="fa-solid fa-triangle-exclamation"></i> Denúncia</span>
+                            <span class="status-pill ${statusDenunciaClass(status)}">${status}</span>
+                        </div>
+                        <p class="complaint-text">"${d.descricao || 'Relato sem descrição'}"</p>
+                        <p style="font-size:12px;color:var(--text-gray);margin-top:10px;">
+                            <i class="fa-solid fa-calendar"></i> ${data}
+                            <span style="margin-left:12px;"><i class="fa-solid fa-fire"></i> Gravidade ${d.score || 0}/100</span>
+                        </p>
+                        ${resposta}
+                    </article>`;
+            }).join('');
+        }
+
         // Função reutilizável para carregar dados e recalcular tudo
         async function carregarDadosEmpresa(id) {
             // Carregar detalhes cadastrais
@@ -890,8 +1442,9 @@
             }
 
             // Carregar Score Consolidado da API
+            let scoreObj = null;
             try {
-                const scoreObj = await fetch(`${API}/empresa/score?nome=${encodeURIComponent(empresa.nome)}`).then(r => r.json());
+                scoreObj = await fetch(`${API}/empresa/score?nome=${encodeURIComponent(empresa.nome)}`).then(r => r.json());
                 if (scoreObj && scoreObj.encontrada) {
                     const score = scoreObj.score;
                     document.getElementById('scoreVal').textContent = score;
@@ -924,18 +1477,22 @@
                 console.error('Erro ao buscar score da empresa:', e);
             }
 
-            // Carregar avaliações e usuários
-            const [avaliacoes, usuarios] = await Promise.all([
+            // Carregar avaliações, denúncias e usuários
+            const [avaliacoes, denuncias, usuarios] = await Promise.all([
                 listarAvaliacoesPorEmpresa(id),
+                listarDenunciasPorEmpresa(id),
                 listarUsuarios()
             ]);
             
             avaliacoesCache = avaliacoes || [];
+            denunciasCache = denuncias || [];
             const usuarioMap = new Map((usuarios || []).map(u => [u.id, u]));
             const listEl = document.getElementById('avaliacoesLista');
 
             // Atualizar o Breakdown Widget
             atualizarBreakdownEstatisticas(avaliacoesCache);
+            renderizarDenunciasEmpresa(denunciasCache);
+            atualizarRaioXScore(scoreObj, avaliacoesCache, denunciasCache);
 
             if (!avaliacoes || avaliacoes.length === 0) {
                 listEl.innerHTML = `
@@ -1013,10 +1570,10 @@
             }
             empresaIdGlobal = id;
 
-            // Se for mulher logada, mostrar botão de avaliar
+            // Se for mulher logada, mostrar botão de contribuição
             if (sessao && (tipo === 'mulher' || tipo === 'usuario')) {
-                const btnAvaliar = document.getElementById('btnAvaliarEmpresaDetalhe');
-                if (btnAvaliar) btnAvaliar.style.display = 'inline-flex';
+                const btnContribuir = document.getElementById('btnContribuirEmpresaDetalhe');
+                if (btnContribuir) btnContribuir.style.display = 'inline-flex';
             }
 
             try {
