@@ -17,8 +17,11 @@ public class DenunciaDAO extends ConexaoDAO {
         try {
             abrirConexao();
             Statement stmt = getConexao().createStatement();
-            stmt.executeUpdate("ALTER TABLE Denuncia ADD COLUMN IF NOT EXISTS status VARCHAR(50) DEFAULT 'Pendente'");
+            stmt.executeUpdate("ALTER TABLE Denuncia ADD COLUMN IF NOT EXISTS status VARCHAR(50) DEFAULT 'Aberta'");
             stmt.executeUpdate("ALTER TABLE Denuncia ADD COLUMN IF NOT EXISTS planoAcao TEXT DEFAULT ''");
+            stmt.executeUpdate("UPDATE Denuncia SET status='Aberta' WHERE status IS NULL OR status='' OR status IN ('Pendente', 'Em aberto')");
+            stmt.executeUpdate("UPDATE Denuncia SET status='Respondida' WHERE status IN ('Em Investigação', 'Em Investigacao')");
+            stmt.executeUpdate("UPDATE Denuncia SET status='Resolvida' WHERE status IN ('Resolvido')");
             stmt.close();
         } catch (Exception e) {
             System.err.println("Erro ao rodar migracao da tabela Denuncia: " + e.getMessage());
@@ -27,6 +30,25 @@ public class DenunciaDAO extends ConexaoDAO {
                 fecharConexao();
             } catch (Exception ex) {}
         }
+    }
+
+    private String normalizarStatus(String status) {
+        if (status == null || status.isBlank() || status.equalsIgnoreCase("Pendente") || status.equalsIgnoreCase("Em aberto")) {
+            return "Aberta";
+        }
+        if (status.equalsIgnoreCase("Em Investigação") || status.equalsIgnoreCase("Em Investigacao")) {
+            return "Respondida";
+        }
+        if (status.equalsIgnoreCase("Resolvido")) {
+            return "Resolvida";
+        }
+        if (status.equalsIgnoreCase("Respondida")) {
+            return "Respondida";
+        }
+        if (status.equalsIgnoreCase("Resolvida")) {
+            return "Resolvida";
+        }
+        return "Aberta";
     }
 
     public void insert(Denuncia denuncia) throws SQLException {
@@ -44,7 +66,7 @@ public class DenunciaDAO extends ConexaoDAO {
                 stmt.setInt(5, denuncia.getEmpresaId());
             }
             stmt.setInt(6, denuncia.getScore());
-            stmt.setString(7, denuncia.getStatus() != null ? denuncia.getStatus() : "Pendente");
+            stmt.setString(7, normalizarStatus(denuncia.getStatus()));
             stmt.setString(8, denuncia.getPlanoAcao() != null ? denuncia.getPlanoAcao() : "");
             stmt.executeUpdate();
             stmt.close();
@@ -64,7 +86,7 @@ public class DenunciaDAO extends ConexaoDAO {
             stmt.setInt(4, denuncia.getUsuarioId());
             stmt.setInt(5, denuncia.getEmpresaId());
             stmt.setInt(6, denuncia.getScore());
-            stmt.setString(7, denuncia.getStatus() != null ? denuncia.getStatus() : "Pendente");
+            stmt.setString(7, normalizarStatus(denuncia.getStatus()));
             stmt.setString(8, denuncia.getPlanoAcao() != null ? denuncia.getPlanoAcao() : "");
             stmt.setInt(9, denuncia.getId());
             stmt.executeUpdate();
@@ -80,6 +102,21 @@ public class DenunciaDAO extends ConexaoDAO {
             abrirConexao();
             PreparedStatement stmt = getConexao().prepareStatement(sql);
             stmt.setInt(1, id);
+            stmt.executeUpdate();
+            stmt.close();
+        } finally {
+            fecharConexao();
+        }
+    }
+
+    public void atualizarResposta(int id, String resposta, String status) throws SQLException {
+        String sql = "UPDATE Denuncia SET planoAcao=?, status=? WHERE id=?";
+        try {
+            abrirConexao();
+            PreparedStatement stmt = getConexao().prepareStatement(sql);
+            stmt.setString(1, resposta);
+            stmt.setString(2, normalizarStatus(status));
+            stmt.setInt(3, id);
             stmt.executeUpdate();
             stmt.close();
         } finally {
@@ -104,7 +141,7 @@ public class DenunciaDAO extends ConexaoDAO {
                 denuncia.setUsuarioId(rs.getInt("Usuario_id"));
                 denuncia.setEmpresaId(rs.getInt("Empresa_id"));
                 denuncia.setScore(rs.getInt("score"));
-                denuncia.setStatus(rs.getString("status"));
+                denuncia.setStatus(normalizarStatus(rs.getString("status")));
                 denuncia.setPlanoAcao(rs.getString("planoAcao"));
             }
             rs.close();
@@ -131,7 +168,7 @@ public class DenunciaDAO extends ConexaoDAO {
                 denuncia.setUsuarioId(rs.getInt("Usuario_id"));
                 denuncia.setEmpresaId(rs.getInt("Empresa_id"));
                 denuncia.setScore(rs.getInt("score"));
-                denuncia.setStatus(rs.getString("status"));
+                denuncia.setStatus(normalizarStatus(rs.getString("status")));
                 denuncia.setPlanoAcao(rs.getString("planoAcao"));
                 lista.add(denuncia);
             }
@@ -160,7 +197,7 @@ public class DenunciaDAO extends ConexaoDAO {
                 denuncia.setUsuarioId(rs.getInt("Usuario_id"));
                 denuncia.setEmpresaId(rs.getInt("Empresa_id"));
                 denuncia.setScore(rs.getInt("score"));
-                denuncia.setStatus(rs.getString("status"));
+                denuncia.setStatus(normalizarStatus(rs.getString("status")));
                 denuncia.setPlanoAcao(rs.getString("planoAcao"));
                 lista.add(denuncia);
             }
@@ -189,7 +226,7 @@ public class DenunciaDAO extends ConexaoDAO {
                 denuncia.setUsuarioId(rs.getInt("Usuario_id"));
                 denuncia.setEmpresaId(rs.getInt("Empresa_id"));
                 denuncia.setScore(rs.getInt("score"));
-                denuncia.setStatus(rs.getString("status"));
+                denuncia.setStatus(normalizarStatus(rs.getString("status")));
                 denuncia.setPlanoAcao(rs.getString("planoAcao"));
                 lista.add(denuncia);
             }
@@ -217,7 +254,7 @@ public class DenunciaDAO extends ConexaoDAO {
                 denuncia.setUsuarioId(rs.getInt("Usuario_id"));
                 denuncia.setEmpresaId(rs.getInt("Empresa_id"));
                 denuncia.setScore(rs.getInt("score"));
-                denuncia.setStatus(rs.getString("status"));
+                denuncia.setStatus(normalizarStatus(rs.getString("status")));
                 denuncia.setPlanoAcao(rs.getString("planoAcao"));
                 lista.add(denuncia);
             }
