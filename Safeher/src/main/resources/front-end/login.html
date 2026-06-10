@@ -356,77 +356,6 @@
             color: var(--pink-primary);
         }
 
-        .google-auth-box {
-            margin-top: 24px;
-        }
-
-        .login-separator {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            color: var(--text-gray);
-            font-size: 12px;
-            font-weight: 700;
-            margin-bottom: 16px;
-            text-align: center;
-        }
-
-        .login-separator::before,
-        .login-separator::after {
-            content: '';
-            height: 1px;
-            flex: 1;
-            background: var(--border-light);
-        }
-
-        .google-native-btn {
-            display: flex;
-            justify-content: center;
-            min-height: 44px;
-        }
-
-        .google-login-btn {
-            width: 100%;
-            min-height: 48px;
-            border: 1px solid #dadce0;
-            border-radius: 8px;
-            background: #ffffff;
-            color: #3c4043;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            font-family: var(--font-body);
-            font-size: 14px;
-            font-weight: 800;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .google-login-btn:hover {
-            border-color: #c4c7c5;
-            box-shadow: 0 4px 14px rgba(60, 64, 67, 0.12);
-            transform: translateY(-1px);
-        }
-
-        .google-login-btn i {
-            color: #DB4437;
-            font-size: 18px;
-        }
-
-        .google-config-hint {
-            display: none;
-            color: var(--text-gray);
-            font-size: 11.5px;
-            line-height: 1.45;
-            text-align: center;
-            margin-top: 10px;
-        }
-
-        .google-auth-box.needs-config .google-config-hint {
-            display: block;
-        }
-
         .is-hidden {
             display: none;
         }
@@ -561,28 +490,13 @@
                 </a>
             </form>
 
-            <div id="googleAuthBox" class="google-auth-box">
-                <div class="login-separator"><span>ou</span></div>
-                <div id="googleSignInButton" class="google-native-btn"></div>
-                <button type="button" id="googleFallbackButton" class="google-login-btn" onclick="entrarComGoogle()">
-                    <i class="fa-brands fa-google"></i>
-                    <span>Entrar com Google</span>
-                </button>
-                <p id="googleConfigHint" class="google-config-hint">
-                    Configure o Client ID do Google no arquivo login.html para ativar o login real.
-                </p>
-            </div>
         </section>
     </main>
 
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="api.js"></script>
     <script src="usuario-session.js"></script>
     <script>
         let tipoLogin = 'mulher';
-        const GOOGLE_CLIENT_ID = 'COLE_AQUI_SEU_CLIENT_ID_GOOGLE.apps.googleusercontent.com';
-        const GOOGLE_CLIENT_ID_CONFIGURADO = GOOGLE_CLIENT_ID && !GOOGLE_CLIENT_ID.includes('COLE_AQUI');
-        let googleLoginInicializado = false;
 
         function trocarTab(tipo) {
             tipoLogin = tipo === 'empresa' ? 'empresa' : 'mulher';
@@ -597,7 +511,6 @@
             const icon = document.getElementById('loginIcon');
             const submitText = document.getElementById('loginSubmitText');
             const cadastroLink = document.getElementById('cadastroLink');
-            const googleAuthBox = document.getElementById('googleAuthBox');
 
             if (tipoLogin === 'mulher') {
                 painel.classList.remove('company-mode');
@@ -613,7 +526,6 @@
                 submitText.textContent = 'Entrar como mulher';
                 cadastroLink.href = 'cadastro-mulher.html';
                 cadastroLink.textContent = 'Não tenho conta ainda - Criar conta de mulher';
-                googleAuthBox.classList.remove('is-hidden');
             } else {
                 painel.classList.add('company-mode');
                 tabEmpresa.classList.add('active');
@@ -628,7 +540,6 @@
                 submitText.textContent = 'Entrar como empresa';
                 cadastroLink.href = 'cadastro-empresa.html';
                 cadastroLink.textContent = 'Não tenho conta ainda - Criar conta de empresa';
-                googleAuthBox.classList.add('is-hidden');
             }
         }
 
@@ -680,132 +591,6 @@
             }
         }
 
-        function prepararGoogleLogin() {
-            const googleAuthBox = document.getElementById('googleAuthBox');
-            const googleButton = document.getElementById('googleSignInButton');
-            const fallbackButton = document.getElementById('googleFallbackButton');
-
-            if (!googleAuthBox || !googleButton || !fallbackButton) return;
-
-            if (!GOOGLE_CLIENT_ID_CONFIGURADO) {
-                googleAuthBox.classList.add('needs-config');
-                googleButton.classList.add('is-hidden');
-                fallbackButton.classList.remove('is-hidden');
-                return;
-            }
-
-            if (!window.google || !google.accounts || !google.accounts.id) {
-                setTimeout(prepararGoogleLogin, 350);
-                return;
-            }
-
-            google.accounts.id.initialize({
-                client_id: GOOGLE_CLIENT_ID,
-                callback: finalizarLoginGoogle
-            });
-
-            google.accounts.id.renderButton(googleButton, {
-                theme: 'outline',
-                size: 'large',
-                type: 'standard',
-                shape: 'rectangular',
-                text: 'continue_with',
-                width: 320
-            });
-
-            googleLoginInicializado = true;
-            googleAuthBox.classList.remove('needs-config');
-            googleButton.classList.remove('is-hidden');
-            fallbackButton.classList.add('is-hidden');
-        }
-
-        function entrarComGoogle() {
-            if (!GOOGLE_CLIENT_ID_CONFIGURADO) {
-                showToast('Para entrar com Google, configure primeiro o Client ID no login.html.', 'info', 6000);
-                return;
-            }
-
-            if (!googleLoginInicializado) {
-                prepararGoogleLogin();
-                showToast('Carregando login do Google. Tente novamente em instantes.', 'info');
-                return;
-            }
-
-            google.accounts.id.prompt();
-        }
-
-        function decodificarJwtGoogle(token) {
-            const payload = token.split('.')[1];
-            const base64 = payload.replace(/-/g, '+').replace(/_/g, '/');
-            const json = decodeURIComponent(atob(base64).split('').map(char => {
-                return '%' + ('00' + char.charCodeAt(0).toString(16)).slice(-2);
-            }).join(''));
-            return JSON.parse(json);
-        }
-
-        async function obterOuCriarUsuarioGoogle(perfilGoogle) {
-            const email = (perfilGoogle.email || '').trim().toLowerCase();
-            const nome = perfilGoogle.name || email.split('@')[0] || 'Usuária Google';
-            const foto = perfilGoogle.picture || '';
-
-            const usuarios = await listarUsuarios();
-            const existente = (usuarios || []).find(usuario =>
-                (usuario.email || '').trim().toLowerCase() === email
-            );
-
-            if (existente) {
-                return {
-                    ...existente,
-                    foto: existente.foto || foto
-                };
-            }
-
-            const novoUsuario = {
-                id: Math.floor(Date.now() % 900000000),
-                nome: nome,
-                email: email,
-                senha: 'google-' + (perfilGoogle.sub || Date.now()),
-                data: new Date().toISOString().split('T')[0],
-                foto: foto
-            };
-
-            await cadastrarUsuario(novoUsuario);
-
-            const usuariosAtualizados = await listarUsuarios();
-            return (usuariosAtualizados || []).find(usuario =>
-                (usuario.email || '').trim().toLowerCase() === email
-            ) || {
-                id: novoUsuario.id,
-                nome: nome,
-                email: email,
-                foto: foto
-            };
-        }
-
-        async function finalizarLoginGoogle(respostaGoogle) {
-            try {
-                if (!respostaGoogle || !respostaGoogle.credential) {
-                    showToast('Não foi possível receber os dados do Google.', 'error');
-                    return;
-                }
-
-                const perfilGoogle = decodificarJwtGoogle(respostaGoogle.credential);
-
-                if (!perfilGoogle.email || perfilGoogle.email_verified === false) {
-                    showToast('Use uma conta Google com email verificado.', 'error');
-                    return;
-                }
-
-                const usuario = await obterOuCriarUsuarioGoogle(perfilGoogle);
-                localStorage.setItem('safeher_usuario', JSON.stringify(usuario));
-                localStorage.setItem('safeher_tipo', 'mulher');
-                showToast('Bem-vinda, ' + (usuario.nome || 'Usuária') + '!', 'success');
-                setTimeout(() => window.location.href = 'inicio-mulher.html', 900);
-            } catch (e) {
-                showToast('Erro ao entrar com Google: ' + e.message, 'error');
-            }
-        }
-
         window.addEventListener('DOMContentLoaded', () => {
             const params = new URLSearchParams(window.location.search);
             const perfil = params.get('perfil');
@@ -815,8 +600,6 @@
             } else if (perfil === 'mulher' || perfil === 'consumidora') {
                 escolherPerfil('mulher');
             }
-
-            prepararGoogleLogin();
         });
     </script>
 </body>
