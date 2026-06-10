@@ -498,15 +498,15 @@
                 <div class="form-group">
                     <label for="statusDenuncia">Status da Tratativa</label>
                     <select id="statusDenuncia" class="form-control" required>
-                        <option value="Pendente">Pendente</option>
-                        <option value="Em Investigação">Em Investigação</option>
-                        <option value="Resolvido">Resolvido</option>
+                        <option value="Aberta">Aberta</option>
+                        <option value="Respondida">Respondida</option>
+                        <option value="Resolvida">Resolvida</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label for="planoAcaoDenuncia">Plano de Ação Corretiva</label>
-                    <textarea id="planoAcaoDenuncia" class="form-control" placeholder="Redija a resposta e as ações corretivas tomadas pela diretoria/RH para tratar esse caso..." required></textarea>
+                    <label for="planoAcaoDenuncia">Resposta pública e ação corretiva</label>
+                    <textarea id="planoAcaoDenuncia" class="form-control" placeholder="Redija a resposta oficial e as ações corretivas tomadas pela diretoria/RH para tratar esse caso..."></textarea>
                 </div>
 
                 <button type="submit" class="sh-btn" style="width: 100%; padding: 14px; font-size: 16px; color: white;">
@@ -553,6 +553,13 @@
             carregarDenunciasCompliance();
         });
 
+        function normalizarStatusDenuncia(status) {
+            if (!status || status === 'Pendente') return 'Aberta';
+            if (status === 'Em Investigação') return 'Respondida';
+            if (status === 'Resolvido') return 'Resolvida';
+            return status;
+        }
+
         async function carregarDenunciasCompliance() {
             const tbody = document.getElementById('denunciasTbody');
             try {
@@ -561,8 +568,8 @@
 
                 // Atualizar Métricas Dinâmicas
                 const total = denunciasCache.length;
-                const pendentes = denunciasCache.filter(d => !d.status || d.status === 'Pendente').length;
-                const resolvidos = denunciasCache.filter(d => d.status === 'Resolvido').length;
+                const pendentes = denunciasCache.filter(d => normalizarStatusDenuncia(d.status) === 'Aberta').length;
+                const resolvidos = denunciasCache.filter(d => normalizarStatusDenuncia(d.status) === 'Resolvida').length;
                 const scoreMedio = total > 0 
                     ? Math.round(denunciasCache.reduce((acc, d) => acc + (d.score || 0), 0) / total) 
                     : 0;
@@ -596,13 +603,14 @@
                     }
 
                     let statusClass = 'status-pending';
-                    if (d.status === 'Em Investigação') {
+                    const statusNormalizado = normalizarStatusDenuncia(d.status);
+                    if (statusNormalizado === 'Respondida') {
                         statusClass = 'status-investigating';
-                    } else if (d.status === 'Resolvido') {
+                    } else if (statusNormalizado === 'Resolvida') {
                         statusClass = 'status-resolved';
                     }
 
-                    const planoTexto = d.planoAcao ? `"${d.planoAcao.substring(0, 45)}${d.planoAcao.length > 45 ? '...' : ''}"` : '<i style="color:#aaa;">Nenhum plano de ação</i>';
+                    const planoTexto = d.planoAcao ? `"${d.planoAcao.substring(0, 45)}${d.planoAcao.length > 45 ? '...' : ''}"` : '<i style="color:#aaa;">Nenhuma resposta publicada</i>';
                     const dataFormat = d.data ? new Date(d.data).toLocaleDateString('pt-BR') : 'Não informada';
                     
                     const plano = usuario ? (usuario.plano || 'Free') : 'Free';
@@ -622,8 +630,8 @@
                             </td>
                             <td data-label="Data">${dataFormat}</td>
                             <td data-label="Gravidade"><span class="badge-gravity ${gravidadeClass}">${gravidadeText} (${d.score})</span></td>
-                            <td data-label="Status"><span class="badge-status ${statusClass}">${d.status || 'Pendente'}</span></td>
-                            <td data-label="Plano de Ação">${planoTexto}</td>
+                            <td data-label="Status"><span class="badge-status ${statusClass}">${statusNormalizado}</span></td>
+                            <td data-label="Resposta pública">${planoTexto}</td>
                             <td data-label="Ações" style="text-align: right;">
                                 ${botaoTratar}
                             </td>
@@ -642,7 +650,7 @@
             document.getElementById('modalTratativa').classList.add('active');
             document.getElementById('denunciaId').value = id;
             document.getElementById('modalDescricaoDenuncia').textContent = `"${denuncia.descricao}"`;
-            document.getElementById('statusDenuncia').value = denuncia.status || 'Pendente';
+            document.getElementById('statusDenuncia').value = normalizarStatusDenuncia(denuncia.status);
             document.getElementById('planoAcaoDenuncia').value = denuncia.planoAcao || '';
         }
 
@@ -659,22 +667,19 @@
             const original = denunciasCache.find(d => d.id === id);
             if (!original) return;
 
-            // Criar payload completo com dados necessários para o PUT
-            const payload = {
-                id: original.id,
-                descricao: original.descricao,
-                data: original.data,
-                anonima: original.anonima,
-                usuarioId: original.usuarioId,
-                empresaId: original.empresaId,
-                score: original.score,
-                status: status,
-                planoAcao: planoAcao
-            };
+            if (status !== 'Aberta' && !planoAcao) {
+                showToast('Escreva uma resposta pública antes de marcar como respondida ou resolvida.', 'error');
+                return;
+            }
 
             try {
-                await atualizarDenuncia(id, payload);
-                showToast('Caso atualizado e Plano de Ação Corretiva registrado!', 'success');
+                if (status === 'Aberta') {
+                    await excluirRespostaDenuncia(id);
+                    showToast('Caso reaberto e resposta pública removida.', 'success');
+                } else {
+                    await responderDenuncia(id, planoAcao, status);
+                    showToast('Caso atualizado e resposta pública registrada!', 'success');
+                }
                 fecharModalTratativa();
                 carregarDenunciasCompliance();
             } catch (err) {
