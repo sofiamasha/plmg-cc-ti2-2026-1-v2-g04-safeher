@@ -3,138 +3,659 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SafeHer</title>
+    <title>SafeHer - Entrar</title>
     <link rel="stylesheet" href="global.css">
     <style>
-        .back-link {
-            position: absolute;
-            top: 28px;
-            left: 32px;
+        :root {
+            --consumer-green: var(--pink-primary);
+            --consumer-green-dark: var(--pink-dark);
+            --consumer-green-soft: var(--pink-light);
+            --company-blue: var(--pink-primary);
+            --company-blue-dark: var(--pink-dark);
+            --company-blue-soft: var(--pink-light);
+            --login-border: #f0d5e2;
+            --login-page: #fdf8fb;
+        }
+
+        body.login-page {
+            background: var(--login-page);
+            min-height: 100vh;
+        }
+
+        .login-topbar {
+            min-height: 54px;
+            border-bottom: 1px solid #dcdcdc;
+            background: #ffffff;
             display: flex;
             align-items: center;
-            gap: 8px;
-            color: var(--text-gray);
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.2s;
-            z-index: 10;
+            justify-content: space-between;
+            padding: 0 32px;
         }
-        .back-link:hover { color: var(--pink-primary); }
-        .close-btn {
-            position: absolute;
-            top: 28px;
-            right: 32px;
+
+        .login-brand,
+        .login-top-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
             color: var(--text-gray);
             text-decoration: none;
-            font-size: 22px;
-            transition: all 0.2s;
-            z-index: 10;
-            background: none;
-            border: none;
+            font-size: 13px;
+            font-weight: 700;
+            transition: var(--transition);
+        }
+
+        .login-brand:hover,
+        .login-top-action:hover {
+            color: var(--pink-primary);
+        }
+
+        .login-brand img {
+            width: 30px;
+            height: 30px;
+            object-fit: contain;
+        }
+
+        .login-top-actions {
+            display: inline-flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .profile-auth-main {
+            min-height: calc(100vh - 55px);
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 44px 24px 64px;
+        }
+
+        .profile-choice {
+            width: min(100%, 900px);
+            text-align: center;
+        }
+
+        .profile-choice h1 {
+            font-size: 26px;
+            line-height: 1.25;
+            font-weight: 800;
+            color: #101010;
+            margin: 0 0 36px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(280px, 360px));
+            justify-content: center;
+            gap: 32px;
+            align-items: stretch;
+        }
+
+        .profile-card {
+            min-height: 360px;
+            background: #ffffff;
+            border: 2px solid var(--login-border);
+            border-radius: 8px;
+            padding: 32px 30px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+
+        .profile-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 18px 38px rgba(227, 58, 127, 0.12);
+        }
+
+        .profile-card.consumer:hover,
+        .profile-card.company:hover {
+            border-color: rgba(227, 58, 127, 0.45);
+        }
+
+        .profile-icon {
+            width: 98px;
+            height: 98px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 18px;
+        }
+
+        .profile-icon i {
+            font-size: 46px;
+        }
+
+        .consumer .profile-icon,
+        .company .profile-icon {
+            background: var(--pink-light);
+            color: var(--pink-primary);
+        }
+
+        .profile-card h2 {
+            font-size: 25px;
+            line-height: 1.2;
+            font-weight: 800;
+            margin: 0 0 12px;
+        }
+
+        .consumer h2,
+        .company h2 {
+            color: var(--pink-dark);
+        }
+
+        .profile-card p {
+            color: #50505a;
+            font-size: 15px;
+            line-height: 1.45;
+            margin: 0 auto 20px;
+            max-width: 270px;
+            min-height: 88px;
+        }
+
+        .profile-btn {
+            width: 100%;
+            min-height: 56px;
+            border: 0;
+            border-radius: 8px;
+            color: #ffffff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-family: var(--font-body);
+            font-size: 16px;
+            font-weight: 800;
             cursor: pointer;
-            padding: 4px;
+            transition: background 0.2s ease, transform 0.2s ease;
+            margin-top: auto;
         }
-        .close-btn:hover { color: var(--pink-primary); transform: scale(1.1); }
+
+        .profile-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        .consumer .profile-btn,
+        .company .profile-btn {
+            background: linear-gradient(135deg, var(--pink-primary), var(--pink-dark));
+            box-shadow: 0 8px 18px rgba(227, 58, 127, 0.22);
+        }
+
+        .consumer .profile-btn:hover,
+        .company .profile-btn:hover {
+            filter: brightness(1.05);
+        }
+
+        .profile-login-panel {
+            width: min(100%, 520px);
+            background: #ffffff;
+            border: 1px solid var(--login-border);
+            border-radius: 14px;
+            padding: 30px;
+            box-shadow: 0 18px 42px rgba(0, 0, 0, 0.08);
+            border-top: 5px solid var(--consumer-green);
+        }
+
+        .profile-login-panel.company-mode {
+            border-top-color: var(--company-blue);
+        }
+
+        .choice-back {
+            border: 0;
+            background: transparent;
+            color: var(--text-gray);
+            font-family: var(--font-body);
+            font-size: 13px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            cursor: pointer;
+            padding: 0;
+            margin-bottom: 18px;
+        }
+
+        .choice-back:hover {
+            color: var(--pink-primary);
+        }
+
+        .login-panel-heading {
+            text-align: center;
+            margin-bottom: 22px;
+        }
+
+        .login-mini-icon {
+            width: 74px;
+            height: 74px;
+            border-radius: 50%;
+            background: var(--consumer-green-soft);
+            color: var(--consumer-green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 13px;
+            font-size: 34px;
+        }
+
+        .company-mode .login-mini-icon {
+            background: var(--company-blue-soft);
+            color: var(--company-blue);
+        }
+
+        .profile-login-panel h1 {
+            color: #101010;
+            font-size: 25px;
+            line-height: 1.25;
+            font-weight: 800;
+            margin: 0 0 8px;
+        }
+
+        .login-panel-heading p {
+            color: var(--text-gray);
+            font-size: 14px;
+            line-height: 1.55;
+            margin: 0 auto;
+            max-width: 410px;
+        }
+
+        .login-tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 20px;
+            background: #f0f0f0;
+            border-radius: 8px;
+            padding: 5px;
+        }
+
+        .login-tab {
+            min-height: 42px;
+            border: 0;
+            border-radius: 6px;
+            background: transparent;
+            color: #6b6b76;
+            cursor: pointer;
+            font-family: var(--font-body);
+            font-size: 13px;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+
+        .login-tab.active {
+            background: var(--consumer-green);
+            color: #ffffff;
+            box-shadow: 0 8px 16px rgba(227, 58, 127, 0.18);
+        }
+
+        .company-mode .login-tab.active {
+            background: var(--company-blue);
+            box-shadow: 0 8px 16px rgba(227, 58, 127, 0.18);
+        }
+
+        .profile-login-panel .sh-input {
+            background: #ffffff;
+            border: 1px solid #dcdcdc;
+            margin-bottom: 16px;
+        }
+
+        .profile-login-panel .sh-input:focus {
+            border-color: var(--consumer-green);
+            box-shadow: 0 0 0 3px rgba(227, 58, 127, 0.12);
+        }
+
+        .company-mode .sh-input:focus {
+            border-color: var(--company-blue);
+            box-shadow: 0 0 0 3px rgba(227, 58, 127, 0.13);
+        }
+
+        .login-submit {
+            width: 100%;
+            min-height: 50px;
+            border: 0;
+            border-radius: 5px;
+            background: var(--consumer-green);
+            color: #ffffff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            font-family: var(--font-body);
+            font-size: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.2s ease;
+        }
+
+        .login-submit:hover {
+            background: var(--consumer-green-dark);
+            transform: translateY(-1px);
+        }
+
+        .company-mode .login-submit {
+            background: var(--company-blue);
+        }
+
+        .company-mode .login-submit:hover {
+            background: var(--company-blue-dark);
+        }
+
+        .profile-login-panel .auth-link-bottom {
+            color: var(--text-gray);
+            font-size: 13px;
+            font-weight: 700;
+            margin-top: 16px;
+        }
+
+        .profile-login-panel .auth-link-bottom:hover {
+            color: var(--pink-primary);
+        }
+
+        .google-auth-box {
+            margin-top: 24px;
+        }
+
+        .login-separator {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            color: var(--text-gray);
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .login-separator::before,
+        .login-separator::after {
+            content: '';
+            height: 1px;
+            flex: 1;
+            background: var(--border-light);
+        }
+
+        .google-native-btn {
+            display: flex;
+            justify-content: center;
+            min-height: 44px;
+        }
+
+        .google-login-btn {
+            width: 100%;
+            min-height: 48px;
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            background: #ffffff;
+            color: #3c4043;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-family: var(--font-body);
+            font-size: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .google-login-btn:hover {
+            border-color: #c4c7c5;
+            box-shadow: 0 4px 14px rgba(60, 64, 67, 0.12);
+            transform: translateY(-1px);
+        }
+
+        .google-login-btn i {
+            color: #DB4437;
+            font-size: 18px;
+        }
+
+        .google-config-hint {
+            display: none;
+            color: var(--text-gray);
+            font-size: 11.5px;
+            line-height: 1.45;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .google-auth-box.needs-config .google-config-hint {
+            display: block;
+        }
+
+        .is-hidden {
+            display: none;
+        }
+
+        @media (max-width: 840px) {
+            .profile-grid {
+                gap: 24px;
+            }
+
+            .profile-card {
+                padding: 28px 24px;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .login-topbar {
+                padding: 0 18px;
+            }
+
+            .login-brand span {
+                display: none;
+            }
+
+            .profile-auth-main {
+                padding: 34px 16px 48px;
+            }
+
+            .profile-choice h1 {
+                font-size: 24px;
+                margin-bottom: 28px;
+            }
+
+            .profile-grid {
+                grid-template-columns: minmax(0, 1fr);
+                max-width: 430px;
+                margin: 0 auto;
+            }
+
+            .profile-card p {
+                min-height: auto;
+            }
+
+            .profile-login-panel {
+                padding: 24px 18px;
+            }
+        }
     </style>
 </head>
-<body>
+<body class="login-page">
     <div id="toast-container"></div>
-    <main>
-        <div class="auth-container">
-            <div>
-                <img src="resources/images/login_illustration.jpeg" class="auth-illustration" alt="Mulheres se apoiando">
-            </div>
-            <div class="auth-form-wrapper" style="position:relative;">
-                <a href="index.html" class="back-link">
-                    <i class="fa-solid fa-arrow-left"></i> Voltar
-                </a>
-                <a href="index.html" class="close-btn" title="Fechar">
-                    <i class="fa-solid fa-xmark"></i>
-                </a>
 
-                <div class="auth-card">
-                    <div class="auth-shield">
-                        <img src="resources/images/logo-escudo.png" alt="Escudo SafeHer">
-                    </div>
-                    <h2>Entrar</h2>
-
-                    <div class="login-tabs">
-                        <button id="tabMulher" onclick="trocarTab('mulher')" class="login-tab active">
-                            <i class="fa-solid fa-heart"></i> Mulher
-                        </button>
-                        <button id="tabEmpresa" onclick="trocarTab('empresa')" class="login-tab">
-                            <i class="fa-solid fa-building"></i> Empresa
-                        </button>
-                    </div>
-
-                    <form id="formLogin" onsubmit="return false;">
-                        <label class="sh-label" id="labelIdentificacao">Email</label>
-                        <input type="email" id="loginEmail" class="sh-input" placeholder="seuemail@email.com"
-                            onkeydown="if(event.key==='Enter') fazerLogin()">
-                        <label class="sh-label">Senha</label>
-                        <input type="password" id="loginSenha" class="sh-input" placeholder="Sua senha"
-                            onkeydown="if(event.key==='Enter') fazerLogin()">
-                        <button type="submit" class="sh-btn" onclick="fazerLogin()">
-                            <i class="fa-solid fa-right-to-bracket"></i> Entrar
-                        </button>
-                        <a href="escolha-cadastro.html" class="auth-link-bottom">
-                            Não tenho conta ainda — Criar conta grátis
-                        </a>
-                    </form>
-                </div>
-
-                <div class="social-login-container">
-                    <h3 class="social-login-title">ou continue com</h3>
-                    <div class="social-btns">
-                        <a href="#" class="social-btn">
-                            <i class="fa-brands fa-google" style="color:#DB4437;"></i> Google
-                        </a>
-                        <a href="#" class="social-btn">
-                            <i class="fa-brands fa-linkedin" style="color:#0077B5;"></i> LinkedIn
-                        </a>
-                    </div>
-                </div>
-            </div>
+    <header class="login-topbar">
+        <a href="index.html" class="login-brand">
+            <img src="resources/images/logo-escudo.png" alt="SafeHer">
+            <span>SafeHer</span>
+        </a>
+        <div class="login-top-actions">
+            <a href="index.html" class="login-top-action">
+                <i class="fa-solid fa-arrow-left"></i> Voltar
+            </a>
+            <a href="index.html" class="login-top-action" title="Fechar" aria-label="Fechar">
+                <i class="fa-solid fa-xmark"></i>
+            </a>
         </div>
+    </header>
+
+    <main class="profile-auth-main">
+        <section id="escolhaPerfil" class="profile-choice" aria-labelledby="tituloEscolhaPerfil">
+            <h1 id="tituloEscolhaPerfil">Escolha o seu perfil:</h1>
+
+            <div class="profile-grid">
+                <article class="profile-card consumer">
+                    <div class="profile-icon" aria-hidden="true">
+                        <i class="fa-regular fa-circle-user"></i>
+                    </div>
+                    <h2>Mulher</h2>
+                    <p>Quero avaliar e denunciar empresas e acompanhar meus relatos.</p>
+                    <button type="button" class="profile-btn" onclick="escolherPerfil('mulher')">
+                        Acessar área da mulher
+                    </button>
+                </article>
+
+                <article class="profile-card company">
+                    <div class="profile-icon" aria-hidden="true">
+                        <i class="fa-solid fa-store"></i>
+                    </div>
+                    <h2>Empresa</h2>
+                    <p>Quero responder avaliações e denúncias e fortalecer a confiança da minha marca.</p>
+                    <button type="button" class="profile-btn" onclick="escolherPerfil('empresa')">
+                        Acessar área da empresa
+                    </button>
+                </article>
+            </div>
+        </section>
+
+        <section id="loginStep" class="profile-login-panel is-hidden" aria-labelledby="loginTitulo">
+            <button type="button" class="choice-back" onclick="voltarEscolha()">
+                <i class="fa-solid fa-arrow-left"></i> Escolher outro perfil
+            </button>
+
+            <div class="login-panel-heading">
+                <div class="login-mini-icon" id="loginIcon" aria-hidden="true">
+                    <i class="fa-regular fa-circle-user"></i>
+                </div>
+                <h1 id="loginTitulo">Área da Mulher</h1>
+                <p id="loginSubtitulo">Entre para avaliar empresas, registrar denúncias e acompanhar seus relatos com segurança.</p>
+            </div>
+
+            <div class="login-tabs" aria-label="Tipo de login">
+                <button id="tabMulher" type="button" onclick="trocarTab('mulher')" class="login-tab active">
+                    <i class="fa-solid fa-user"></i> Mulher
+                </button>
+                <button id="tabEmpresa" type="button" onclick="trocarTab('empresa')" class="login-tab">
+                    <i class="fa-solid fa-building"></i> Empresa
+                </button>
+            </div>
+
+            <form id="formLogin" onsubmit="fazerLogin(); return false;">
+                <label class="sh-label" id="labelIdentificacao" for="loginEmail">Email</label>
+                <input type="email" id="loginEmail" class="sh-input" placeholder="seuemail@email.com" autocomplete="email">
+
+                <label class="sh-label" for="loginSenha">Senha</label>
+                <input type="password" id="loginSenha" class="sh-input" placeholder="Sua senha" autocomplete="current-password">
+
+                <button type="submit" id="loginSubmit" class="login-submit">
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                    <span id="loginSubmitText">Entrar como mulher</span>
+                </button>
+
+                <a href="cadastro-mulher.html" id="cadastroLink" class="auth-link-bottom">
+                    Não tenho conta ainda - Criar conta grátis
+                </a>
+            </form>
+
+            <div id="googleAuthBox" class="google-auth-box">
+                <div class="login-separator"><span>ou</span></div>
+                <div id="googleSignInButton" class="google-native-btn"></div>
+                <button type="button" id="googleFallbackButton" class="google-login-btn" onclick="entrarComGoogle()">
+                    <i class="fa-brands fa-google"></i>
+                    <span>Entrar com Google</span>
+                </button>
+                <p id="googleConfigHint" class="google-config-hint">
+                    Configure o Client ID do Google no arquivo login.html para ativar o login real.
+                </p>
+            </div>
+        </section>
     </main>
 
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="api.js"></script>
     <script src="usuario-session.js"></script>
     <script>
         let tipoLogin = 'mulher';
+        const GOOGLE_CLIENT_ID = 'COLE_AQUI_SEU_CLIENT_ID_GOOGLE.apps.googleusercontent.com';
+        const GOOGLE_CLIENT_ID_CONFIGURADO = GOOGLE_CLIENT_ID && !GOOGLE_CLIENT_ID.includes('COLE_AQUI');
+        let googleLoginInicializado = false;
 
         function trocarTab(tipo) {
-            tipoLogin = tipo;
-            const tabMulher  = document.getElementById('tabMulher');
+            tipoLogin = tipo === 'empresa' ? 'empresa' : 'mulher';
+
+            const tabMulher = document.getElementById('tabMulher');
             const tabEmpresa = document.getElementById('tabEmpresa');
-            const label      = document.getElementById('labelIdentificacao');
-            const input      = document.getElementById('loginEmail');
-            if (tipo === 'mulher') {
+            const label = document.getElementById('labelIdentificacao');
+            const input = document.getElementById('loginEmail');
+            const painel = document.getElementById('loginStep');
+            const titulo = document.getElementById('loginTitulo');
+            const subtitulo = document.getElementById('loginSubtitulo');
+            const icon = document.getElementById('loginIcon');
+            const submitText = document.getElementById('loginSubmitText');
+            const cadastroLink = document.getElementById('cadastroLink');
+            const googleAuthBox = document.getElementById('googleAuthBox');
+
+            if (tipoLogin === 'mulher') {
+                painel.classList.remove('company-mode');
                 tabMulher.classList.add('active');
                 tabEmpresa.classList.remove('active');
-                label.textContent  = 'Email';
-                input.type         = 'email';
-                input.placeholder  = 'seuemail@email.com';
+                label.textContent = 'Email';
+                input.type = 'email';
+                input.placeholder = 'seuemail@email.com';
+                input.autocomplete = 'email';
+                titulo.textContent = 'Área da Mulher';
+                subtitulo.textContent = 'Entre para avaliar empresas, registrar denúncias e acompanhar seus relatos com segurança.';
+                icon.innerHTML = '<i class="fa-regular fa-circle-user"></i>';
+                submitText.textContent = 'Entrar como mulher';
+                cadastroLink.href = 'cadastro-mulher.html';
+                cadastroLink.textContent = 'Não tenho conta ainda - Criar conta de mulher';
+                googleAuthBox.classList.remove('is-hidden');
             } else {
+                painel.classList.add('company-mode');
                 tabEmpresa.classList.add('active');
                 tabMulher.classList.remove('active');
                 label.textContent = 'Nome da Empresa';
-                input.type        = 'text';
+                input.type = 'text';
                 input.placeholder = 'Nome da sua empresa';
+                input.autocomplete = 'organization';
+                titulo.textContent = 'Área da Empresa';
+                subtitulo.textContent = 'Entre para responder avaliações e denúncias, cuidar da reputação e fortalecer a confiança na sua marca.';
+                icon.innerHTML = '<i class="fa-solid fa-store"></i>';
+                submitText.textContent = 'Entrar como empresa';
+                cadastroLink.href = 'cadastro-empresa.html';
+                cadastroLink.textContent = 'Não tenho conta ainda - Criar conta de empresa';
+                googleAuthBox.classList.add('is-hidden');
             }
         }
 
+        function escolherPerfil(tipo) {
+            document.getElementById('escolhaPerfil').classList.add('is-hidden');
+            document.getElementById('loginStep').classList.remove('is-hidden');
+            trocarTab(tipo);
+            document.getElementById('loginEmail').focus();
+        }
+
+        function voltarEscolha() {
+            document.getElementById('loginStep').classList.add('is-hidden');
+            document.getElementById('escolhaPerfil').classList.remove('is-hidden');
+        }
+
         async function fazerLogin() {
-            const email = document.getElementById('loginEmail').value.trim();
+            const identificacao = document.getElementById('loginEmail').value.trim();
             const senha = document.getElementById('loginSenha').value;
-            if (!email || !senha) {
+
+            if (!identificacao || !senha) {
                 showToast('Preencha todos os campos.', 'error');
                 return;
             }
+
             try {
-            if (tipoLogin === 'mulher') {
-                    const usuario = await loginUsuario(email, senha);
+                if (tipoLogin === 'mulher') {
+                    const usuario = await loginUsuario(identificacao, senha);
                     if (usuario && usuario.id) {
                         localStorage.setItem('safeher_usuario', JSON.stringify(usuario));
                         localStorage.setItem('safeher_tipo', 'mulher');
@@ -144,7 +665,7 @@
                         showToast('Email ou senha inválidos.', 'error');
                     }
                 } else {
-                    const empresa = await loginEmpresa(email, senha);
+                    const empresa = await loginEmpresa(identificacao, senha);
                     if (empresa && empresa.id) {
                         localStorage.setItem('safeher_usuario', JSON.stringify(empresa));
                         localStorage.setItem('safeher_tipo', 'empresa');
@@ -158,6 +679,145 @@
                 showToast('Erro ao fazer login: ' + e.message, 'error');
             }
         }
+
+        function prepararGoogleLogin() {
+            const googleAuthBox = document.getElementById('googleAuthBox');
+            const googleButton = document.getElementById('googleSignInButton');
+            const fallbackButton = document.getElementById('googleFallbackButton');
+
+            if (!googleAuthBox || !googleButton || !fallbackButton) return;
+
+            if (!GOOGLE_CLIENT_ID_CONFIGURADO) {
+                googleAuthBox.classList.add('needs-config');
+                googleButton.classList.add('is-hidden');
+                fallbackButton.classList.remove('is-hidden');
+                return;
+            }
+
+            if (!window.google || !google.accounts || !google.accounts.id) {
+                setTimeout(prepararGoogleLogin, 350);
+                return;
+            }
+
+            google.accounts.id.initialize({
+                client_id: GOOGLE_CLIENT_ID,
+                callback: finalizarLoginGoogle
+            });
+
+            google.accounts.id.renderButton(googleButton, {
+                theme: 'outline',
+                size: 'large',
+                type: 'standard',
+                shape: 'rectangular',
+                text: 'continue_with',
+                width: 320
+            });
+
+            googleLoginInicializado = true;
+            googleAuthBox.classList.remove('needs-config');
+            googleButton.classList.remove('is-hidden');
+            fallbackButton.classList.add('is-hidden');
+        }
+
+        function entrarComGoogle() {
+            if (!GOOGLE_CLIENT_ID_CONFIGURADO) {
+                showToast('Para entrar com Google, configure primeiro o Client ID no login.html.', 'info', 6000);
+                return;
+            }
+
+            if (!googleLoginInicializado) {
+                prepararGoogleLogin();
+                showToast('Carregando login do Google. Tente novamente em instantes.', 'info');
+                return;
+            }
+
+            google.accounts.id.prompt();
+        }
+
+        function decodificarJwtGoogle(token) {
+            const payload = token.split('.')[1];
+            const base64 = payload.replace(/-/g, '+').replace(/_/g, '/');
+            const json = decodeURIComponent(atob(base64).split('').map(char => {
+                return '%' + ('00' + char.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+            return JSON.parse(json);
+        }
+
+        async function obterOuCriarUsuarioGoogle(perfilGoogle) {
+            const email = (perfilGoogle.email || '').trim().toLowerCase();
+            const nome = perfilGoogle.name || email.split('@')[0] || 'Usuária Google';
+            const foto = perfilGoogle.picture || '';
+
+            const usuarios = await listarUsuarios();
+            const existente = (usuarios || []).find(usuario =>
+                (usuario.email || '').trim().toLowerCase() === email
+            );
+
+            if (existente) {
+                return {
+                    ...existente,
+                    foto: existente.foto || foto
+                };
+            }
+
+            const novoUsuario = {
+                id: Math.floor(Date.now() % 900000000),
+                nome: nome,
+                email: email,
+                senha: 'google-' + (perfilGoogle.sub || Date.now()),
+                data: new Date().toISOString().split('T')[0],
+                foto: foto
+            };
+
+            await cadastrarUsuario(novoUsuario);
+
+            const usuariosAtualizados = await listarUsuarios();
+            return (usuariosAtualizados || []).find(usuario =>
+                (usuario.email || '').trim().toLowerCase() === email
+            ) || {
+                id: novoUsuario.id,
+                nome: nome,
+                email: email,
+                foto: foto
+            };
+        }
+
+        async function finalizarLoginGoogle(respostaGoogle) {
+            try {
+                if (!respostaGoogle || !respostaGoogle.credential) {
+                    showToast('Não foi possível receber os dados do Google.', 'error');
+                    return;
+                }
+
+                const perfilGoogle = decodificarJwtGoogle(respostaGoogle.credential);
+
+                if (!perfilGoogle.email || perfilGoogle.email_verified === false) {
+                    showToast('Use uma conta Google com email verificado.', 'error');
+                    return;
+                }
+
+                const usuario = await obterOuCriarUsuarioGoogle(perfilGoogle);
+                localStorage.setItem('safeher_usuario', JSON.stringify(usuario));
+                localStorage.setItem('safeher_tipo', 'mulher');
+                showToast('Bem-vinda, ' + (usuario.nome || 'Usuária') + '!', 'success');
+                setTimeout(() => window.location.href = 'inicio-mulher.html', 900);
+            } catch (e) {
+                showToast('Erro ao entrar com Google: ' + e.message, 'error');
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const perfil = params.get('perfil');
+
+            if (perfil === 'empresa') {
+                escolherPerfil('empresa');
+            } else if (perfil === 'mulher' || perfil === 'consumidora') {
+                escolherPerfil('mulher');
+            }
+
+            prepararGoogleLogin();
+        });
     </script>
 </body>
 </html>
