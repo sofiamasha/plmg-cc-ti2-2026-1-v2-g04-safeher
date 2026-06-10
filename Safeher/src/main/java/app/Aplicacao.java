@@ -125,6 +125,8 @@ public class Aplicacao {
         get("/denuncias", (req, res) -> denunciaService.listar(req, res));
         get("/denuncias/usuario/:usuarioId", (req, res) -> denunciaService.listarPorUsuario(req, res));
         get("/denuncias/empresa/:empresaId", (req, res) -> denunciaService.listarPorEmpresa(req, res));
+        post("/denuncias/:id/resposta", (req, res) -> denunciaService.salvarResposta(req, res));
+        delete("/denuncias/:id/resposta", (req, res) -> denunciaService.excluirResposta(req, res));
 
         System.out.println("SafeHer API rodando na porta 8080");
     }
