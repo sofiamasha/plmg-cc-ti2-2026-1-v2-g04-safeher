@@ -125,9 +125,14 @@ public class EmpresaService {
             int totalAvaliacoes = 0;
             double somaNotas = 0.0;
             int totalDenuncias = 0;
+            int denunciasRespondidas = 0;
+            int denunciasResolvidas = 0;
 
             String sqlAval = "SELECT COUNT(*) as total, SUM(nota) as soma FROM Avaliacao WHERE empresa_id = ? OR (nome_empresa ILIKE ? AND (empresa_id IS NULL OR empresa_id = 0))";
-            String sqlDenuncia = "SELECT COUNT(*) as total FROM Denuncia WHERE Empresa_id = ?";
+            String sqlDenuncia = "SELECT COUNT(*) as total, " +
+                    "SUM(CASE WHEN status IN ('Respondida', 'Em Investigação') THEN 1 ELSE 0 END) as respondidas, " +
+                    "SUM(CASE WHEN status IN ('Resolvida', 'Resolvido') THEN 1 ELSE 0 END) as resolvidas " +
+                    "FROM Denuncia WHERE Empresa_id = ?";
 
             java.sql.Connection conn = null;
             try {
@@ -150,6 +155,8 @@ public class EmpresaService {
                 ResultSet rsD = stmtD.executeQuery();
                 if (rsD.next()) {
                     totalDenuncias = rsD.getInt("total");
+                    denunciasRespondidas = rsD.getInt("respondidas");
+                    denunciasResolvidas = rsD.getInt("resolvidas");
                 }
                 rsD.close();
                 stmtD.close();
@@ -159,9 +166,14 @@ public class EmpresaService {
             }
 
             double mediaAvaliacoes = totalAvaliacoes > 0 ? somaNotas / totalAvaliacoes : 0.0;
-            double baseScore = totalAvaliacoes > 0 ? mediaAvaliacoes * 20.0 : 100.0;
-            double penalidade = totalDenuncias * 10.0;
-            int scoreFinal = (int) Math.max(0, Math.min(100, baseScore - penalidade));
+            double scoreAvaliacoes = totalAvaliacoes > 0 ? mediaAvaliacoes * 20.0 : 100.0;
+            double scoreDenuncias = Math.max(0, 100.0 - (totalDenuncias * 10.0));
+            double indiceResolucao = totalDenuncias > 0
+                    ? ((denunciasRespondidas * 0.5 + denunciasResolvidas) / totalDenuncias) * 100.0
+                    : 100.0;
+            int scoreFinal = (int) Math.round(Math.max(0, Math.min(100,
+                    (scoreAvaliacoes * 0.55) + (scoreDenuncias * 0.25) + (indiceResolucao * 0.20)
+            )));
 
             String status = "Segura";
             String resumo = "Excelente reputação. Ambiente de trabalho altamente seguro e recomendado.";
@@ -180,6 +192,12 @@ public class EmpresaService {
             payload.put("mediaAvaliacoes", mediaAvaliacoes);
             payload.put("totalAvaliacoes", totalAvaliacoes);
             payload.put("denuncias", totalDenuncias);
+            payload.put("denunciasRespondidas", denunciasRespondidas);
+            payload.put("denunciasResolvidas", denunciasResolvidas);
+            payload.put("scoreAvaliacoes", Math.round(scoreAvaliacoes));
+            payload.put("scoreDenuncias", Math.round(scoreDenuncias));
+            payload.put("indiceResolucao", Math.round(indiceResolucao));
+            payload.put("formula", "55% avaliações + 25% volume de denúncias + 20% índice de resolução");
             payload.put("status", status);
             payload.put("resumo", resumo);
             payload.put("encontrada", true);
