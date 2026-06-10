@@ -15,6 +15,8 @@ import spark.Response;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
+import dao.EmpresaDAO;
+import model.Empresa;
 
 public class DenunciaService {
 
@@ -33,10 +35,27 @@ public class DenunciaService {
             .create();
     }
 
-    public String insert(Request req, Response res) {
+    
+public String insert(Request req, Response res) {
         res.type("application/json");
         try {
             Denuncia denuncia = gson.fromJson(req.body(), Denuncia.class);
+
+            // Auto-cadastro: se a denuncia nao tem empresa vinculada mas veio um nome,
+            // procura uma empresa existente; se nao houver, cria um registro minimo.
+            if (denuncia.getEmpresaId() <= 0
+                    && denuncia.getEmpresaNome() != null
+                    && !denuncia.getEmpresaNome().isBlank()) {
+                EmpresaDAO empresaDAO = new EmpresaDAO();
+                Empresa existente = empresaDAO.buscarPorNomeExato(denuncia.getEmpresaNome());
+                if (existente != null) {
+                    denuncia.setEmpresaId(existente.getId());
+                } else {
+                    int novoId = empresaDAO.criarMinima(denuncia.getEmpresaNome());
+                    denuncia.setEmpresaId(novoId);
+                }
+            }
+
             ScoreService scoreService = new ScoreService();
             denuncia.setScore(scoreService.calcularScore(denuncia.getDescricao()));
             denunciaDAO.insert(denuncia);
@@ -46,7 +65,6 @@ public class DenunciaService {
             return gson.toJson("{\"erro\":\"" + e.getMessage() + "\"}");
         }
     }
-
     public String update(Request req, Response res) {
         res.type("application/json");
         try {
