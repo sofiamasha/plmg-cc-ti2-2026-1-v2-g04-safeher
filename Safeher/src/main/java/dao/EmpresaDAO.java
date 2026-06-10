@@ -210,4 +210,54 @@ public class EmpresaDAO extends ConexaoDAO {
         }
         return empresa;
     }
+
+
+
+     // Busca empresa por nome com correspondencia exata (case-insensitive).
+    public Empresa buscarPorNomeExato(String nome) throws SQLException {
+        String sql = "SELECT id, nome FROM Empresa WHERE LOWER(nome) = LOWER(?)";
+        Empresa empresa = null;
+        try {
+            abrirConexao();
+            PreparedStatement stmt = getConexao().prepareStatement(sql);
+            stmt.setString(1, nome.trim());
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                empresa = new Empresa();
+                empresa.setId(rs.getInt("id"));
+                empresa.setNome(rs.getString("nome"));
+            }
+            rs.close();
+            stmt.close();
+        } finally {
+            fecharConexao();
+        }
+        return empresa;
+    }
+
+    // Cria um registro minimo de empresa (auto-cadastro a partir de uma denuncia)
+    // e devolve o id gerado. Usa MAX+1 para ser compativel com o id manual legado.
+    public int criarMinima(String nome) throws SQLException {
+        int novoId;
+        try {
+            abrirConexao();
+            PreparedStatement maxStmt = getConexao().prepareStatement(
+                    "SELECT COALESCE(MAX(id), 0) + 1 AS prox FROM Empresa");
+            ResultSet rsMax = maxStmt.executeQuery();
+            rsMax.next();
+            novoId = rsMax.getInt("prox");
+            rsMax.close();
+            maxStmt.close();
+
+            PreparedStatement stmt = getConexao().prepareStatement(
+                    "INSERT INTO Empresa (id, nome, plano) VALUES (?, ?, 'Free')");
+            stmt.setInt(1, novoId);
+            stmt.setString(2, nome.trim());
+            stmt.executeUpdate();
+            stmt.close();
+        } finally {
+            fecharConexao();
+        }
+        return novoId;
+    }
 }
