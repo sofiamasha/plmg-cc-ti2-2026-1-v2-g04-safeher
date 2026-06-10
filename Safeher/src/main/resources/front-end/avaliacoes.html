@@ -53,10 +53,31 @@
 
         /* selo tags no card da empresa */
         .empresa-actions { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; justify-content: center; }
-        .btn-avaliar-empresa { background: var(--pink-primary); color: white; border: none; padding: 8px 18px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.3s; }
-        .btn-avaliar-empresa:hover { background: var(--pink-dark); }
-        .btn-denunciar-empresa { background: #FCE8E8; color: #D32F2F; border: none; padding: 8px 18px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; transition: 0.3s; }
-        .btn-denunciar-empresa:hover { background: #f5c6c6; }
+        .btn-contribuir-empresa { background: var(--pink-primary); color: white; border: none; padding: 8px 18px; border-radius: 20px; font-size: 13px; font-weight: 700; cursor: pointer; transition: 0.3s; }
+        .btn-contribuir-empresa:hover { background: var(--pink-dark); }
+
+        .feed-type-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 11.5px;
+            font-weight: 800;
+        }
+        .feed-type-badge.review { background: #fff7ed; color: #c2410c; }
+        .feed-type-badge.complaint { background: #fee2e2; color: #b91c1c; }
+        .status-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 3px 9px;
+            border-radius: 999px;
+            background: #f3f4f6;
+            color: #4b5563;
+            font-size: 11px;
+            font-weight: 800;
+        }
 
         .info-cadastrada { font-size: 11px; color: var(--text-gray); margin-top: 6px; text-align: center; }
     </style>
@@ -99,8 +120,8 @@
                     </div>
                 </div>
 
-                <!-- avaliações recentes -->
-                <h3 class="section-title"><i class="fa-solid fa-comments"></i> Avaliações Recentes</h3>
+                <!-- contribuições recentes -->
+                <h3 class="section-title"><i class="fa-solid fa-clock-rotate-left"></i> Contribuições Recentes</h3>
                 <div id="avaliacoes-container">
                     <div style="text-align: center; padding: 40px;">
                         <i class="fa-solid fa-spinner fa-spin" style="font-size: 32px; color: var(--pink-primary);"></i>
@@ -110,10 +131,26 @@
         </div>
     </div>
 
-    <!-- botão flutuante para avaliar -->
-    <button class="fab-avaliar" id="fab-avaliar" onclick="abrirModal()" title="Fazer uma avaliação">
+    <!-- botão flutuante para contribuir -->
+    <button class="fab-avaliar" id="fab-avaliar" onclick="abrirContribuir()" title="Contribuir">
         <i class="fa-solid fa-plus"></i>
     </button>
+
+    <!-- modal de Contribuição -->
+    <div class="modal-overlay" id="modal-contribuir">
+        <div class="modal">
+            <button class="modal-close" onclick="fecharContribuir()">&times;</button>
+            <h2><i class="fa-solid fa-plus" style="color: var(--pink-primary);"></i> Como você quer contribuir?</h2>
+            <button type="button" class="btn-contribuir-empresa" style="width:100%; border-radius:12px; padding:16px; margin-bottom:12px; text-align:left;" onclick="escolherContribuicao('avaliacao')">
+                <i class="fa-solid fa-star"></i> Quer compartilhar como é trabalhar nessa empresa?
+                <span style="display:block; font-size:12px; font-weight:500; margin-top:4px; color:rgba(255,255,255,0.9);">Use uma avaliação com nota para orientar outras mulheres.</span>
+            </button>
+            <button type="button" class="btn-contribuir-empresa" style="width:100%; border-radius:12px; padding:16px; background:#D32F2F; text-align:left;" onclick="escolherContribuicao('denuncia')">
+                <i class="fa-solid fa-triangle-exclamation"></i> Sofreu ou presenciou algo grave?
+                <span style="display:block; font-size:12px; font-weight:500; margin-top:4px; color:rgba(255,255,255,0.9);">Registre uma denúncia anônima para iniciar uma tratativa.</span>
+            </button>
+        </div>
+    </div>
 
     <!-- modal de Avaliação -->
     <div class="modal-overlay" id="modal-avaliacao">
@@ -209,6 +246,8 @@
         let empresasCache = [];
         let avaliacoesCache = [];
         let editandoId = null;
+        let empresaContribuicaoNome = '';
+        let empresaContribuicaoId = 0;
         const sessao = getSessao();
         const tipo = getTipoSessao();
 
@@ -285,6 +324,34 @@
                 iconReal.style.color = 'var(--pink-primary)';
                 titleReal.style.color = 'var(--pink-dark)';
             }
+        }
+
+        function abrirContribuir(nomeEmpresa = '', empresaId = 0) {
+            if (!sessao || tipo !== 'mulher') {
+                showToast('Você precisa estar logada como mulher para contribuir.', 'error');
+                setTimeout(() => window.location.href = 'login.html', 1800);
+                return;
+            }
+            empresaContribuicaoNome = nomeEmpresa || '';
+            empresaContribuicaoId = empresaId || 0;
+            document.getElementById('modal-contribuir').classList.add('active');
+        }
+
+        function fecharContribuir() {
+            document.getElementById('modal-contribuir').classList.remove('active');
+        }
+
+        function escolherContribuicao(opcao) {
+            fecharContribuir();
+            if (opcao === 'avaliacao') {
+                abrirModal(empresaContribuicaoNome, empresaContribuicaoId);
+                return;
+            }
+
+            const destino = empresaContribuicaoNome
+                ? `denuncias.html?empresa=${encodeURIComponent(empresaContribuicaoNome)}`
+                : 'denuncias.html';
+            window.location.href = destino;
         }
 
         function abrirModal(nomeEmpresa, empresaId) {
@@ -480,8 +547,7 @@
 
                     const botoes = (sessao && tipo === 'mulher') ? `
                         <div class="empresa-actions">
-                            <button class="btn-avaliar-empresa" onclick="abrirModal('${e.nome.replace(/'/g, "\\'")}', ${e.id})"><i class="fa-solid fa-star"></i> Avaliar</button>
-                            <button class="btn-denunciar-empresa" onclick="window.location.href='denuncias.html'"><i class="fa-solid fa-flag"></i> Denunciar</button>
+                            <button class="btn-contribuir-empresa" onclick="abrirContribuir('${e.nome.replace(/'/g, "\\'")}', ${e.id})"><i class="fa-solid fa-plus"></i> Contribuir</button>
                         </div>` : '';
 
                     const verPerfilBotao = `<a href="detalhe-empresa.html?id=${e.id}" class="sh-btn-outline" style="display: block; margin: 8px auto 0; text-decoration: none; padding: 6px 12px; font-size: 11px; width: fit-content;"><i class="fa-solid fa-eye"></i> Perfil Completo</a>`;
@@ -516,90 +582,101 @@
         async function carregarAvaliacoes() {
             const container = document.getElementById('avaliacoes-container');
             try {
-                const [avaliacoes, usuarios] = await Promise.all([
+                const [avaliacoes, denuncias, usuarios] = await Promise.all([
                     listarAvaliacoes(),
+                    listarDenuncias(),
                     listarUsuarios()
                 ]);
                 
                 avaliacoesCache = avaliacoes || [];
                 const usuarioMap = new Map((usuarios || []).map(u => [u.id, u]));
-                
-                if (avaliacoesCache.length === 0) {
+
+                const atividades = [
+                    ...avaliacoesCache.map(a => ({ tipo: 'avaliacao', ordem: a.id || 0, item: a })),
+                    ...(denuncias || []).map(d => ({ tipo: 'denuncia', ordem: d.id || 0, item: d }))
+                ].sort((a, b) => b.ordem - a.ordem).slice(0, 6);
+
+                if (atividades.length === 0) {
                     container.innerHTML = `
                         <div style="text-align: center; padding: 40px;">
                             <i class="fa-regular fa-comment-dots" style="font-size: 48px; color: #ddd; margin-bottom: 12px;"></i>
-                            <p style="color: var(--text-gray);">Nenhuma avaliação ainda. Seja a primeira a avaliar!</p>
+                            <p style="color: var(--text-gray);">Nenhuma contribuição ainda. Seja a primeira a contribuir!</p>
                         </div>`;
                     return;
                 }
 
                 container.innerHTML = '';
-                // Restringir feed geral público às 3 contribuições mais recentes
-                const recentes = avaliacoesCache.slice(0, 3);
+                atividades.forEach(({ tipo: tipoAtividade, item }) => {
+                    if (tipoAtividade === 'avaliacao') {
+                        const a = item;
+                        const empresaObj = empresasCache.find(e => Number(e.id) === Number(a.empresaId));
+                        const empresa = a.nomeEmpresa || (empresaObj ? empresaObj.nome : 'Empresa #' + a.empresaId);
+                        const empresaLink = a.empresaId ? `detalhe-empresa.html?id=${a.empresaId}` : '#';
+                        const respostaHtml = a.resposta ? `
+                            <div style="background: #fdf2f6; border-left: 3px solid var(--pink-primary); border-radius: 8px; padding: 14px; margin-top: 14px; font-size: 13px;">
+                                <strong style="color: var(--pink-primary); display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+                                    <i class="fa-solid fa-reply"></i> Resposta Oficial da Empresa:
+                                </strong>
+                                <span style="color: var(--text-dark); font-style: normal;">"${a.resposta}"</span>
+                            </div>` : '';
 
-                recentes.forEach(a => {
-                    const empresa = a.nomeEmpresa || 'Empresa #' + a.empresaId;
-                    const cadastrada = empresasCache.some(e => e.id === a.empresaId);
-                    const tagCadastrada = cadastrada
-                        ? `<span style="font-size:11px; background:#E8F5E9; color:#4CAF50; padding:2px 8px; border-radius:10px; cursor:pointer;" onclick="window.location.href='detalhe-empresa.html?id=${a.empresaId}'"><i class="fa-solid fa-check"></i> Cadastrada</span>`
-                        : '<span style="font-size:11px; background:#FFF3E0; color:#FF9800; padding:2px 8px; border-radius:10px;"><i class="fa-solid fa-arrow-up-right-from-square"></i> Externa</span>';
-                    
-                    const respostaHtml = a.resposta ? `
+                        const isOwner = (sessao && (tipo === 'mulher' || tipo === 'usuario') && Number(sessao.id) === Number(a.usuarioId));
+                        const ownerBotoes = isOwner ? `
+                            <div style="display:flex; justify-content: flex-end; gap: 12px; margin-top: 14px;">
+                                <button onclick="abrirEdicaoAvaliacao(${a.id})" class="sh-btn-outline" style="padding: 5px 12px; font-size: 11px; cursor:pointer;"><i class="fa-solid fa-edit"></i> Editar</button>
+                                <button onclick="excluirAvaliacao(${a.id})" class="sh-btn" style="padding: 5px 12px; font-size: 11px; background: #D32F2F; border: none; color: white; cursor:pointer;"><i class="fa-solid fa-trash"></i> Excluir</button>
+                            </div>` : '';
+
+                        let comentarioLimpo = a.comentario || '';
+                        comentarioLimpo = comentarioLimpo.replace("[IdentificadaComFoto] ", "").replace("[Identificada] ", "");
+
+                        const autorObj = usuarioMap.get(a.usuarioId);
+                        const autorNome = autorObj && comentarioLimpo !== (a.comentario || '') ? autorObj.nome : "Colaboradora Anônima";
+
+                        container.innerHTML += `
+                            <div class="avaliacao-card">
+                                <div class="av-header">
+                                    <span class="feed-type-badge review"><i class="fa-solid fa-star"></i> Avaliação</span>
+                                    <span class="av-nota"><span class="stars">${gerarEstrelas(a.nota)}</span> ${a.nota}/5</span>
+                                </div>
+                                <p class="av-empresa"><i class="fa-solid fa-building"></i> <a href="${empresaLink}" style="color:var(--pink-dark); text-decoration:none;">${empresa}</a></p>
+                                <p style="font-size:12.5px; color:var(--text-gray); margin-bottom:8px; font-weight:600;">
+                                    <i class="fa-solid fa-user-shield"></i> Escrito por: ${autorNome}
+                                </p>
+                                <p class="av-comentario">"${comentarioLimpo || 'Sem comentário'}"</p>
+                                ${respostaHtml}
+                                ${ownerBotoes}
+                            </div>`;
+                        return;
+                    }
+
+                    const d = item;
+                    const empresaObj = empresasCache.find(e => Number(e.id) === Number(d.empresaId));
+                    const empresa = empresaObj ? empresaObj.nome : 'Empresa #' + d.empresaId;
+                    const empresaLink = d.empresaId ? `detalhe-empresa.html?id=${d.empresaId}` : '#';
+                    const status = !d.status || d.status === 'Pendente' ? 'Aberta' : (d.status === 'Em Investigação' ? 'Respondida' : (d.status === 'Resolvido' ? 'Resolvida' : d.status));
+                    const respostaHtml = d.planoAcao ? `
                         <div style="background: #fdf2f6; border-left: 3px solid var(--pink-primary); border-radius: 8px; padding: 14px; margin-top: 14px; font-size: 13px;">
                             <strong style="color: var(--pink-primary); display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
-                                <i class="fa-solid fa-reply"></i> Resposta Oficial da Empresa:
+                                <i class="fa-solid fa-reply"></i> Resposta pública da empresa:
                             </strong>
-                            <span style="color: var(--text-dark); font-style: normal;">"${a.resposta}"</span>
+                            <span style="color: var(--text-dark); font-style: normal;">"${d.planoAcao}"</span>
                         </div>` : '';
-
-                    // Mostrar botões de edição/exclusão apenas para a usuária mulher que escreveu a avaliação
-                    const isOwner = (sessao && (tipo === 'mulher' || tipo === 'usuario') && Number(sessao.id) === Number(a.usuarioId));
-                    const ownerBotoes = isOwner ? `
-                        <div style="display:flex; justify-content: flex-end; gap: 12px; margin-top: 14px;">
-                            <button onclick="abrirEdicaoAvaliacao(${a.id})" class="sh-btn-outline" style="padding: 5px 12px; font-size: 11px; cursor:pointer;"><i class="fa-solid fa-edit"></i> Editar</button>
-                            <button onclick="excluirAvaliacao(${a.id})" class="sh-btn" style="padding: 5px 12px; font-size: 11px; background: #D32F2F; border: none; color: white; cursor:pointer;"><i class="fa-solid fa-trash"></i> Excluir</button>
-                        </div>` : '';
-
-                    const hasFoto = a.comentario.startsWith("[IdentificadaComFoto]");
-                    const isIdentified = a.comentario.startsWith("[Identificada]") || hasFoto;
-                    const isAnonimo = !isIdentified;
-
-                    let comentarioLimpo = a.comentario;
-                    if (a.comentario.startsWith("[IdentificadaComFoto] ")) {
-                        comentarioLimpo = a.comentario.replace("[IdentificadaComFoto] ", "");
-                    } else if (a.comentario.startsWith("[Identificada] ")) {
-                        comentarioLimpo = a.comentario.replace("[Identificada] ", "");
-                    }
-
-                    const autorObj = usuarioMap.get(a.usuarioId);
-                    const autorNome = isAnonimo ? "Colaboradora Anônima" : (autorObj ? autorObj.nome : "Usuária SafeHer");
-
-                    let autorFotoHtml = '';
-                    if (isIdentified && hasFoto && autorObj && autorObj.foto) {
-                        autorFotoHtml = `<img src="${autorObj.foto}" alt="${autorNome}" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--pink-primary); margin-right: 4px; vertical-align: middle;">`;
-                    } else if (isIdentified && hasFoto) {
-                        // Fallback default avatar icon
-                        autorFotoHtml = `<img src="https://cdn-icons-png.flaticon.com/512/147/147144.png" alt="${autorNome}" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--pink-primary); margin-right: 4px; vertical-align: middle;">`;
-                    } else {
-                        autorFotoHtml = '<i class="fa-solid fa-user-shield"></i>';
-                    }
 
                     container.innerHTML += `
                         <div class="avaliacao-card">
                             <div class="av-header">
-                                <span class="av-empresa"><i class="fa-solid fa-building"></i> ${empresa} ${tagCadastrada}</span>
-                                <span class="av-nota"><span class="stars">${gerarEstrelas(a.nota)}</span> ${a.nota}/5</span>
+                                <span class="feed-type-badge complaint"><i class="fa-solid fa-triangle-exclamation"></i> Denúncia</span>
+                                <span class="status-chip">${status}</span>
                             </div>
-                            <p style="font-size:12.5px; color:var(--text-gray); margin-bottom:8px; font-weight:600; display:flex; align-items:center; gap:6px;">
-                                ${autorFotoHtml} Escrito por: ${autorNome}
-                            </p>
-                            <p class="av-comentario">"${comentarioLimpo || 'Sem comentário'}"</p>
+                            <p class="av-empresa"><i class="fa-solid fa-building"></i> <a href="${empresaLink}" style="color:var(--pink-dark); text-decoration:none;">${empresa}</a></p>
+                            <p class="av-comentario">"${d.descricao || 'Relato sem descrição'}"</p>
+                            <p style="font-size:12px; color:var(--text-gray); margin-top:8px;"><i class="fa-solid fa-fire"></i> Gravidade ${d.score || 0}/100</p>
                             ${respostaHtml}
-                            ${ownerBotoes}
                         </div>`;
                 });
             } catch (e) {
-                container.innerHTML = `<p style="text-align:center; color:#D32F2F;">Erro ao carregar avaliações.</p>`;
+                container.innerHTML = `<p style="text-align:center; color:#D32F2F;">Erro ao carregar contribuições.</p>`;
             }
         }
 
