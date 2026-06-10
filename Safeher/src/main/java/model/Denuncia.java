@@ -13,6 +13,7 @@ public class Denuncia {
     private int score;
     private String status;
     private String planoAcao;
+    private String empresaNome;   // nome digitado quando a empresa nao esta cadastrada
 
     public Denuncia() {
     }
@@ -87,5 +88,15 @@ public class Denuncia {
 
     public void setPlanoAcao(String planoAcao) {
         this.planoAcao = planoAcao;
+    }
+
+  
+
+    public String getEmpresaNome() {
+        return empresaNome;
+    }
+
+    public void setEmpresaNome(String empresaNome) {
+        this.empresaNome = empresaNome;
     }
 }
