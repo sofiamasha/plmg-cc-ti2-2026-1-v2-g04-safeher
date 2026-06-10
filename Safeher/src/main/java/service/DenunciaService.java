@@ -9,14 +9,13 @@ import dao.DenunciaDAO;
 import dao.EmpresaDAO;
 import model.Denuncia;
 import model.Empresa;
+import com.google.gson.JsonObject;
 import spark.Request;
 import spark.Response;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
-import dao.EmpresaDAO;
-import model.Empresa;
 
 public class DenunciaService {
 
@@ -58,6 +57,9 @@ public String insert(Request req, Response res) {
 
             ScoreService scoreService = new ScoreService();
             denuncia.setScore(scoreService.calcularScore(denuncia.getDescricao()));
+            if (denuncia.getStatus() == null || denuncia.getStatus().isBlank()) {
+                denuncia.setStatus("Aberta");
+            }
             denunciaDAO.insert(denuncia);
             return gson.toJson("{\"msg\":\"Denuncia inserida com sucesso\"}");
         } catch (Exception e) {
@@ -155,6 +157,47 @@ public String insert(Request req, Response res) {
         res.type("application/json");
         try {
             return gson.toJson(denunciaDAO.listarOrdenadoPorRisco());
+        } catch (Exception e) {
+            res.status(500);
+            return gson.toJson("{\"erro\":\"" + e.getMessage() + "\"}");
+        }
+    }
+
+    public String salvarResposta(Request req, Response res) {
+        res.type("application/json");
+        try {
+            int id = Integer.parseInt(req.params(":id"));
+            JsonObject body = gson.fromJson(req.body(), JsonObject.class);
+            String resposta = body != null && body.has("resposta") && !body.get("resposta").isJsonNull()
+                    ? body.get("resposta").getAsString().trim()
+                    : "";
+            String status = body != null && body.has("status") && !body.get("status").isJsonNull()
+                    ? body.get("status").getAsString().trim()
+                    : "Respondida";
+
+            if (resposta.isBlank()) {
+                res.status(400);
+                return gson.toJson("{\"erro\":\"A resposta da empresa nao pode ficar vazia\"}");
+            }
+
+            if (!status.equals("Respondida") && !status.equals("Resolvida")) {
+                status = "Respondida";
+            }
+
+            denunciaDAO.atualizarResposta(id, resposta, status);
+            return gson.toJson("{\"msg\":\"Resposta da denuncia publicada com sucesso\"}");
+        } catch (Exception e) {
+            res.status(500);
+            return gson.toJson("{\"erro\":\"" + e.getMessage() + "\"}");
+        }
+    }
+
+    public String excluirResposta(Request req, Response res) {
+        res.type("application/json");
+        try {
+            int id = Integer.parseInt(req.params(":id"));
+            denunciaDAO.atualizarResposta(id, "", "Aberta");
+            return gson.toJson("{\"msg\":\"Resposta da denuncia removida com sucesso\"}");
         } catch (Exception e) {
             res.status(500);
             return gson.toJson("{\"erro\":\"" + e.getMessage() + "\"}");
