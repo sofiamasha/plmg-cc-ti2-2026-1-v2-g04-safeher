@@ -183,6 +183,22 @@ async function listarDenunciasPorEmpresa(empresaId) {
     return res.json();
 }
 
+async function responderDenuncia(denunciaId, resposta, status = "Respondida") {
+    const res = await fetch(`${API}/denuncias/${denunciaId}/resposta`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ resposta, status })
+    });
+    return res.json();
+}
+
+async function excluirRespostaDenuncia(denunciaId) {
+    const res = await fetch(`${API}/denuncias/${denunciaId}/resposta`, {
+        method: "DELETE"
+    });
+    return res.json();
+}
+
 // vagas
 
 async function cadastrarVaga(vaga) {
