@@ -1,7 +1,0 @@
-services:
-  - type: web
-    name: safeher-backend
-    runtime: java
-    plan: free
-    buildCommand: mvn clean package -DskipTests
-    startCommand: java -jar target/*.jar
